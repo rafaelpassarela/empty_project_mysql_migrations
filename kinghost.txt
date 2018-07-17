@@ -1,0 +1,15 @@
+fernandallopes75@gmail.com
+pg123456
+
+
+mysql.planetgraf.com.br
+planetgraf04
+hxEJ3m7UFzvVvxtr
+
+
+db = planetgraf04
+us = planetgraf
+pw = hxEJ3m7UFzvVvxtr
+
+mysql472.umbler.com
+mysql472.umbler.com:41890
