@@ -4,10 +4,11 @@
 
 This project was designed to allow the rapid creation of an API in [Microsoft ASP.Net](https://www.asp.net/), using [Entity Framework](https://docs.microsoft.com/pt-br/dotnet/framework/data/adonet/ef/overview) and [Migrations](https://msdn.microsoft.com/pt-br/library/jj591330.aspx?f=255&MSPPError=-2147217396) with [MySQL](https://www.mysql.com/) database.
 
-To the point:
+To the point:<br>
 [Warming up the System](#warming-up-the-system) <br>
 [Cloning This Repository](#cloning-this-repository) <br>
 [Loading the Project](#loading-the-project) <br>
+[Configuring the Database](#configuring-the-database)<br>
 
 ## Warming up the System
 To work, besides having VS installed, you will need a MySQL ADO connector, which can be downloaded from this [link](https://dev.mysql.com/downloads/connector/net/) and a MySQL server running on your system, for test purposes, you can use the incredible [USBWebServer](http://www.usbwebserver.net/webserver/), it is a combination of popular webserver software: Apache, MySQL, PHP and phpMyAdmin. With USBWebserver it is possible to develop and show your PHP websites everywhere and anytime. The main advantage of USBWebserver is that you can use it from USB.
@@ -27,3 +28,6 @@ When you load the Solution into VS, some Nuget packages will be downloaded, with
  - MySql.Data.Entities (v6.8.3.0)
 
 ![Nuget Packages](https://user-images.githubusercontent.com/13123625/42899242-d32a3be8-8a9b-11e8-8ceb-fec50f1e2f16.png)
+## Configuring the Database
+Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release.
+![Solution Configuration](https://user-images.githubusercontent.com/13123625/42908261-d50b344c-8ab6-11e8-80cf-1f54b210c8d0.png)
