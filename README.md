@@ -5,9 +5,9 @@
 This project was designed to allow the rapid creation of an API in [Microsoft ASP.Net](https://www.asp.net/), using [Entity Framework](https://docs.microsoft.com/pt-br/dotnet/framework/data/adonet/ef/overview) and [Migrations](https://msdn.microsoft.com/pt-br/library/jj591330.aspx?f=255&MSPPError=-2147217396) with [MySQL](https://www.mysql.com/) database.
 
 To the point:
-[Warming up the System](#warming-up-the-system)
-[Cloning This Repository](#cloning-this-repository)
-[Loading the Project](#loading-the-project)
+[Warming up the System](#warming-up-the-system) <br>
+[Cloning This Repository](#cloning-this-repository) <br>
+[Loading the Project](#loading-the-project) <br>
 
 ## Warming up the System
 To work, besides having VS installed, you will need a MySQL ADO connector, which can be downloaded from this [link](https://dev.mysql.com/downloads/connector/net/) and a MySQL server running on your system, for test purposes, you can use the incredible [USBWebServer](http://www.usbwebserver.net/webserver/), it is a combination of popular webserver software: Apache, MySQL, PHP and phpMyAdmin. With USBWebserver it is possible to develop and show your PHP websites everywhere and anytime. The main advantage of USBWebserver is that you can use it from USB.
