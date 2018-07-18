@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace ApiPlanet.Core
+namespace Api.Core
 {
     public interface ICrudPersistence<T>
     {

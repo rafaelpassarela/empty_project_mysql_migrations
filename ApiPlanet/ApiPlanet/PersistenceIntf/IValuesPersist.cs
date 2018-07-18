@@ -1,7 +1,7 @@
-﻿using ApiPlanet.Core;
-using ApiPlanet.Models;
+﻿using Api.Core;
+using Api.Models;
 
-namespace ApiPlanet.PersistenceIntf
+namespace Api.PersistenceIntf
 {
     public interface IValuesPersist : ICrudPersistence<Values>
     {

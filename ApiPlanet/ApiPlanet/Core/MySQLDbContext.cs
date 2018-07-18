@@ -1,22 +1,10 @@
-﻿using System;
-using ApiPlanet.Models;
-using ApiPlanet.Core;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using Api.Migrations;
+using Api.Models;
+using Api.MySQLMigrationHistory;
 using System.Data.Common;
-using ApiPlanet.Migrations;
-using ApiPlanet.MySQLMigrationHistory;
+using System.Data.Entity;
 
-
-
-/* enable-migrations
- * add-migration Initial
- * 
- * Constructor of Migrations/Config.cs -> SetSqlGenerator("MySql.Data.MySqlClient", new MySql.Data.Entity.MySqlMigrationSqlGenerator());
- * 
- * */
-
-namespace ApiPlanet.Core
+namespace Api.Core
 {
     public class MySQLDbContext : DbContext, IAppContext
     {

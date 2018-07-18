@@ -3,7 +3,7 @@ using System.Data.Entity;
 using System.Transactions;
 using System.Data.Common;
 
-namespace ApiPlanet.Core
+namespace Api.Core
 {
     public interface IAppContext
     {

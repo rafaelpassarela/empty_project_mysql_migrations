@@ -1,11 +1,11 @@
-using ApiPlanet.Core;
-using ApiPlanet.Persistence;
-using ApiPlanet.PersistenceIntf;
+using Api.Core;
+using Api.Persistence;
+using Api.PersistenceIntf;
 using System.Web.Http;
 using Unity;
 using Unity.WebApi;
 
-namespace ApiPlanet
+namespace Api
 {
     public static class UnityConfig
     {

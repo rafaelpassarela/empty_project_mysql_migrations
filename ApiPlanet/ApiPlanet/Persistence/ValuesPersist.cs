@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-using ApiPlanet.Core;
-using ApiPlanet.Models;
+using Api.Core;
+using Api.Models;
 using Dapper;
-using ApiPlanet.PersistenceIntf;
+using Api.PersistenceIntf;
 
-namespace ApiPlanet.Persistence
+namespace Api.Persistence
 {
     public class ValuesPersist : IValuesPersist
     {

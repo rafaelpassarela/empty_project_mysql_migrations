@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using Api.PersistenceIntf;
 using System.Web.Http;
-using ApiPlanet.Models;
-using ApiPlanet.Persistence;
-using ApiPlanet.PersistenceIntf;
 
-// Boomerang SOAP e REST Client
-// https://vnextcoder.wordpress.com/2015/10/04/mysql-net-entity-framework-code-first-migration/
-
-namespace ApiPlanet.Controllers
+namespace Api.Controllers
 {
     public class ValuesController : ApiController
     {

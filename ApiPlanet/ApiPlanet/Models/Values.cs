@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiPlanet.Models
+namespace Api.Models
 {
     public class Values
     {

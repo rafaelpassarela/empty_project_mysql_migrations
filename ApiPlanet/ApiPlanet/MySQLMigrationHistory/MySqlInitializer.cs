@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using ApiPlanet.Core;
+using Api.Core;
 
-namespace ApiPlanet.MySQLMigrationHistory
+namespace Api.MySQLMigrationHistory
 {
     public class MySqlInitializer : IDatabaseInitializer<MySQLDbContext>
     {

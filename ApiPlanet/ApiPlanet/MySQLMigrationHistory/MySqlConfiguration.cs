@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace ApiPlanet.MySQLMigrationHistory
+namespace Api.MySQLMigrationHistory
 {
     public class MySqlConfiguration : DbConfiguration
     {

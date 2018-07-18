@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Migrations.History;
 
-namespace ApiPlanet.MySQLMigrationHistory
+namespace Api.MySQLMigrationHistory
 {
     public class MySqlHistoryContext : HistoryContext
     {
