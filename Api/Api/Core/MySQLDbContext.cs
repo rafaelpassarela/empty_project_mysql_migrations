@@ -35,7 +35,7 @@ namespace Api.Core
             return Database.Connection;
         }
 
-        // List of all tables and models
+        // List of all tables/models
         public DbSet<Values> Values { get; set; }
     }
 }
