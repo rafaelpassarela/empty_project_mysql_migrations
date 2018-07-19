@@ -16,10 +16,10 @@ To work, besides having VS installed, you will need a MySQL ADO connector, which
 ## Cloning This Repository
 The easiest way is to create a local folder and clone this repo, type the follow command in the windows prompt (CMD):  
  `git clone https://github.com/rafaelpassarela/empty_project_mysql_migrations.git`
- ![git clone cmd](https://user-images.githubusercontent.com/13123625/42899528-bf03397a-8a9c-11e8-85d7-99b43c36717b.png)
- This will generate a new local copy, but you **can't commit there**.
- If you want to control your own repo, create one on [GitHub](https://github.com) or another version control and clone it to a new folder. Go to the folder where you made the clone of *empty_project_mysql_migrations* and copy/cut all files and folders, with the exception of the ".git" folder.
- Paste these files and folders into your new folder and you're done. Have fun!
+![git clone cmd](https://user-images.githubusercontent.com/13123625/42899528-bf03397a-8a9c-11e8-85d7-99b43c36717b.png)
+This will generate a new local copy, but you **can't commit there**.
+If you want to control your own repo, create one on [GitHub](https://github.com) or another version control and clone it to a new folder. Go to the folder where you made the clone of *empty_project_mysql_migrations* and copy/cut all files and folders, with the exception of the ".git" folder.
+Paste these files and folders into your new folder and you're done. Have fun!
 
 ## Loading the Project
 When you load the Solution into VS, some Nuget packages will be downloaded, with additional attention to these ones:
@@ -29,5 +29,5 @@ When you load the Solution into VS, some Nuget packages will be downloaded, with
 
 ![Nuget Packages](https://user-images.githubusercontent.com/13123625/42899242-d32a3be8-8a9b-11e8-8ceb-fec50f1e2f16.png)
 ## Configuring the Database
-Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release.
+Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release. <br>
 ![Solution Configuration](https://user-images.githubusercontent.com/13123625/42908261-d50b344c-8ab6-11e8-80cf-1f54b210c8d0.png)
