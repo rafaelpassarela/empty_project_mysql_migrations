@@ -35,7 +35,7 @@ Basically we need to provide only a valid connection string, you can consult var
 ```xml
 <connectionStrings>
 	<add name="MyConnectionName" 
-		 providerName="MySql.Data.MySqlClient" 
+	     providerName="MySql.Data.MySqlClient" 
 	     connectionString="Server=127.0.0.1;Port=3307;Database=sampleApi;Uid=root;Pwd=usbw;SslMode=none;"/>
 </connectionStrings>
 ```
