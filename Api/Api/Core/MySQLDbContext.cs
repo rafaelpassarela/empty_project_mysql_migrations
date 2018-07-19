@@ -13,7 +13,7 @@ namespace Api.Core
             Database.SetInitializer(new MySqlInitializer());
         }
 
-        public MySQLDbContext() : base("PlanetDB")
+        public MySQLDbContext() : base("MyConnectionName")
         {
             Configuration.AutoDetectChangesEnabled = false;
             Configuration.LazyLoadingEnabled = false;
