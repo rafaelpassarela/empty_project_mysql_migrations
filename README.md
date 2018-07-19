@@ -44,23 +44,23 @@ In the code above, we added a new connection string, the main attributes are: <b
 - `providerName` = Informs which class will be responsible for managing the connection<br>
 - `connectionString` = the connection string itself, this is the ** single ** that must be changed, according to its parameters.<br>
 
-Now imagine having to change the `Web.config` at all times, one hour pointing to the test db and another time pointing to the real db. To solve this, we have two extra configuration files: `Web.Debug.config` and `Web.Release.config`. They are pretty much the same `web.config` file, but only with the specific changes for each mode, the only detail is the use of the transform attribute `xdt:Transform="SetAttributes" xdt:Locator="Match(name)"`, which indicates what and when to change.
+Now imagine having to change the `Web.config` at all times, one hour pointing to the test db and another time pointing to the real db. To solve this, we have two extra configuration files: `Web.Debug.config` and `Web.Release.config`. They are pretty much the same `web.config` file, but only with the specific changes for each mode, the only detail is the use of the transform attribute `xdt:Transform="SetAttributes" xdt:Locator="Match(name)"`, which indicates what and when to change.<br>
 This is my *Release* config:
 ```xml
 <connectionStrings>
 	<add name="MyConnectionName"
-		 providerName="MySql.Data.MySqlClient"
-		 connectionString="Server=MySQLServer;Database=sampleApi;Uid=MySQLUser;Pwd=MySQLPwd;"
-		 xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
+	     providerName="MySql.Data.MySqlClient"
+	     connectionString="Server=MySQLServer;Database=sampleApi;Uid=MySQLUser;Pwd=MySQLPwd;"
+	     xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
 </connectionStrings>
 ```
 And this is my *Debug* config:
 ```xml
 <connectionStrings>
 	<add name="MyConnectionName"
-		 providerName="MySql.Data.MySqlClient"
-		 connectionString="Server=127.0.0.1;Port=3307;Database=sampleApi;Uid=root;Pwd=usbw;SslMode=none;"
-		 xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
+	     providerName="MySql.Data.MySqlClient"
+	     connectionString="Server=127.0.0.1;Port=3307;Database=sampleApi;Uid=root;Pwd=usbw;SslMode=none;"
+	     xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
 </connectionStrings>
 ```
 Did you notice the subtle difference? Only the `connectionString` attribute has changed. The `name` and `providerName` attributes must be the same.
