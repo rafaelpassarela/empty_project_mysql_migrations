@@ -41,9 +41,12 @@ namespace Api.Controllers
         {
         }
 
-        // DELETE api/values/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
+            if (_valuesPersist.Delete(id))
+                return Ok();
+
+            return NotFound();
         }
     }
 }

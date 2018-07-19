@@ -6,7 +6,7 @@ namespace Api.Core
     {
         T Save(T item);
         T Load(params object[] keys);
-        T Delete(params object[] keys);
+        bool Delete(params object[] keys);
         IQueryable<T> Query(params object[] keys);       
     }
 }

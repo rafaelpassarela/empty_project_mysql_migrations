@@ -1,41 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity;
-using Api.Core;
+﻿using Api.Core;
 using Api.Models;
-using Dapper;
 using Api.PersistenceIntf;
+using Dapper;
+using System;
+using System.Data.Common;
+using System.Linq;
 
 namespace Api.Persistence
 {
     public class ValuesPersist : IValuesPersist
     {
         private readonly IAppContext _context;
+        private DbConnection Db => _context.Connection();
 
         public ValuesPersist(IAppContext context)
         {
             _context = context;
         }
 
-        public Values Delete(params object[] keys)
+        public bool Delete(params object[] keys)
         {
-            throw new NotImplementedException();
+            var id = Convert.ToInt32(keys[0]);
+            var rowCount = Db.Execute($"delete from `values` where id = {id}");
+
+            return (rowCount > 0);
         }
 
         public Values Load(params object[] keys)
         {
             var id = Convert.ToInt32(keys[0]);
 
-            var obj = _context.Connection().Query<Values>($"select id, name from `values` where id = {id}").FirstOrDefault();
+            var obj = Db.Query<Values>($"select id, name from `values` where id = {id}").FirstOrDefault();
             
             return obj;
         }
 
         public IQueryable<Values> Query(params object[] keys)
         {
-            var list = _context.Connection().Query<Values>("select id, name from `values`").AsQueryable();
+            var list = Db.Query<Values>("select id, name from `values`").AsQueryable();
             return list;
         }
 
