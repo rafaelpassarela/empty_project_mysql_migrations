@@ -1,4 +1,5 @@
-﻿using Api.PersistenceIntf;
+﻿using Api.Models;
+using Api.PersistenceIntf;
 using System.Web.Http;
 
 namespace Api.Controllers
@@ -9,7 +10,7 @@ namespace Api.Controllers
 
         public ValuesController(IValuesPersist valuesPersist)
         {
-            _valuesPersist = valuesPersist;            
+            _valuesPersist = valuesPersist;
         }
 
         // GET api/values
@@ -37,8 +38,13 @@ namespace Api.Controllers
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        public IHttpActionResult Post([FromBody]Values value)
         {
+            _valuesPersist.Save(value);
+            if (value.Id > 0)
+                return Ok(value);
+
+            return NotFound();
         }
 
         public IHttpActionResult Delete(int id)

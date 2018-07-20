@@ -35,6 +35,11 @@ namespace Api.Core
             return Database.Connection;
         }
 
+        public MySQLDbContext DataContext()
+        {
+            return this;
+        }
+
         // List of all tables/models
         public DbSet<Values> Values { get; set; }
     }
