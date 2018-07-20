@@ -3,6 +3,7 @@ using Api.Models;
 using Api.PersistenceIntf;
 using Dapper;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Api.Persistence
             return obj;
         }
 
-        public IQueryable<Values> Query(params object[] keys)
+        public IEnumerable<Values> Query(params object[] keys)
         {
             var list = Db.Query<Values>("select id, name from `values`").AsQueryable();
             return list;

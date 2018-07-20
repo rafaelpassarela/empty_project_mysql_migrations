@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Api.Core
 {
@@ -7,6 +7,6 @@ namespace Api.Core
         T Save(T item);
         T Load(params object[] keys);
         bool Delete(params object[] keys);
-        IQueryable<T> Query(params object[] keys);       
+        IEnumerable<T> Query(params object[] keys);
     }
 }

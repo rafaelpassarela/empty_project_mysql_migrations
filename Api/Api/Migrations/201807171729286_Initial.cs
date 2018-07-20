@@ -12,7 +12,7 @@ namespace Api.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, unicode: false),
+                        Name = c.String(nullable: false, maxLength: 20, storeType: "nvarchar"),
                     })
                 .PrimaryKey(t => t.Id);
             

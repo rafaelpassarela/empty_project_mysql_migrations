@@ -19,10 +19,10 @@ namespace Api.Core
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
 
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MySQLDbContext, Configuration>());
+
             var init = new MySqlInitializer();
             init.InitializeDatabase(this);
-
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MySQLDbContext, Configuration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
