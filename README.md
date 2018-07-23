@@ -263,3 +263,6 @@ public class PetsController : ApiController{
 	}
 }
 ```
+
+> Please ignore small differences between the code and the images in this post. 
+> This is an open source hosted on [GitHub](https://github.com/rafaelpassarela/empty_project_mysql_migrations), any suggestions are welcome.
