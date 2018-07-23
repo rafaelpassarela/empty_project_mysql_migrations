@@ -1,3 +1,4 @@
+
 # Empty Project for MySQL and Migrations
 
 > This project was generated in [Visual Studio 2017](https://visualstudio.microsoft.com/pt-br/downloads/). 
@@ -6,10 +7,11 @@ This project was designed to allow the rapid creation of an API in [Microsoft AS
 To the point:<br/>
 [Warming up the System](#warming-up-the-system) <br/>
 [Cloning This Repository](#cloning-this-repository) <br/>
-[Loading the Project](#loading-the-project) <br/>
+[About The Project and Some Remarks](#about-the-project-and-some-remarks) <br/>
 [Configuring the Database](#configuring-the-database)<br/>
 [Setting up The Dependency Injection](#setting-up-the-dependency-injection)<br/>
 [Creating and Mapping a New Table and Class](#creating-and-mapping-a-new-table-and-class)<br/>
+[Adding a Path to the API Call](#adding-a-path-to-the-api-call)<br/>
 
 ## Warming up the System
 To work, besides having VS installed, you will need a MySQL ADO connector, which can be downloaded from this [link](https://dev.mysql.com/downloads/connector/net/) and a MySQL server running on your system, for test purposes, you can use the incredible [USBWebServer](http://www.usbwebserver.net/webserver/), it is a combination of popular webserver software: Apache, MySQL, PHP and phpMyAdmin. With USBWebserver it is possible to develop and show your PHP websites everywhere and anytime. The main advantage of USBWebserver is that you can use it from USB.
@@ -20,14 +22,19 @@ The easiest way is to create a local folder and clone this repo, type the follow
 ![git clone cmd](https://user-images.githubusercontent.com/13123625/42899528-bf03397a-8a9c-11e8-85d7-99b43c36717b.png)<br/>
 This will generate a new local copy, but you **can't commit there**. If you want to control your own repo, create one at [GitHub](https://github.com) or another version control and clone it to a new folder. Go to the folder where you made the clone of *empty_project_mysql_migrations* and copy/cut all files and folders, with the exception of the ".git" folder.<br/>Paste these files and folders into your new folder and you're done. Have fun!
 
-## Loading the Project
+## About The Project and Some Remarks
 When you load the Solution into VS, some Nuget packages will be downloaded, with additional attention to these ones:<br>
  - MySql.Data (v6.10.7.0): Beware, there are some [reports](https://stackoverflow.com/questions/48353585/the-provider-did-not-return-a-providermanifesttoken-string-mysql-with-entity-f) that with versions higher than 8.0 the migration does not work, so I used this one.
  - MySql.Data.Entity (v6.10.7.0)
  - MySql.Data.Entities (v6.8.3.0)
  - Unity.WebAPI (v5.3.0.0)
 
-![Nuget Packages](https://user-images.githubusercontent.com/13123625/42899242-d32a3be8-8a9b-11e8-8ceb-fec50f1e2f16.png)
+![Nuget Packages](https://user-images.githubusercontent.com/13123625/42899242-d32a3be8-8a9b-11e8-8ceb-fec50f1e2f16.png)<br/> 
+By default, the Migrations package does not support MySQL, so some changes need to be made before you start using, basically because the key size used in the `__migrationhistory` table, which is used by Migration to track database changes, is larger than the one supported by MySQL. 
+![MySQL Migration Support](https://user-images.githubusercontent.com/13123625/43049969-5deefc62-8dd7-11e8-89f9-180b6ecad23b.png)<br/>
+These three classes will solve the problem, I will not go into much detail, but just call the `MySqlInitializer` inside the `DbContext` constructor and everything is solved.
+![MySqlInitializer](https://user-images.githubusercontent.com/13123625/43050043-b7c72baa-8dd8-11e8-8aa9-aefa917999b8.png)
+
 ## Configuring the Database
 Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release. <br/>
 ![Solution Configuration](https://user-images.githubusercontent.com/13123625/42908261-d50b344c-8ab6-11e8-80cf-1f54b210c8d0.png)
@@ -64,7 +71,7 @@ And this is my *Debug* config:
 ```
 Did you notice the subtle difference? Only the `connectionString` attribute has changed. The `name` and `providerName` attributes must be the same.<br/>
 One last detail should be changed before actually starting to get your hands dirty. In the class responsible for the database context, we have to enter the same name assigned in the connection, inside the `Web.config` file. Locate the `Core\MySQLDbContext.cs` file and change the `base` name parameter, like the image below.<br/>
-![DbContext](https://user-images.githubusercontent.com/13123625/42949911-46c0ab70-8b49-11e8-8b86-11a5fb7d5c72.png) <br/>
+![DbContext](https://user-images.githubusercontent.com/13123625/43050051-fb2fbb64-8dd8-11e8-89cf-eb01abf3ee5f.png) <br/>
 ## Setting up The Dependency Injection
 To control Dependency Injection we will use the [Unity.WebAPI](https://github.com/devtrends/Unity.WebAPI) package. Unity.WebAPI allows the simple Integration of the Unity IoC container with ASP .NET Web API.<br/>But, What is dependency injection? Dependency injection is a technique for achieving loose coupling between objects and their dependencies or collaborators.  Rather than directly instantiating collaborators, or using static references, the objects that the class needs in order to perform its actions are provided to the class in some way. <br/> Most often, classes will declare their dependencies via their constructor, allowing them to follow the  [Explicit Dependencies Principle](http://deviq.com/explicit-dependencies-principle/).  This approach is known as "constructor injection" and it is the one we will use here.<br/>This registry is very simple, you only need a contract signature between an interface and a class. Let's assume that we have a "person" class and this class will use another class responsible for this person's "vehicles". We can not inject or refer directly to the `Vehicle` class in the `Person` class, we need to inject the signature, the interface that represents the `Vehicle` class, in this case, called `IVehicle`. 
 First, we need an interface, like this one:
@@ -200,6 +207,59 @@ public partial class PatsTable : DbMigration {
         
 	public override void Down() {
 		DropTable("dbo.Pets");
+	}
+}
+```
+You may receive the `Access denied for user 'root@localhost' (using password:NO)` error while adding the new migration, if this occurs, create a new user in MySQL, for example user = migration; pwd = 1234. Then be sure to change the `Web.config` file to use the new user.
+```sql
+CREATE USER 'migration'@'127.0.0.1' IDENTIFIED BY '1234';
+GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TABLESPACE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, INDEX, INSERT, REFERENCES, TRIGGER, UPDATE, CREATE USER, FILE, LOCK TABLES, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, SHUTDOWN, SUPER  ON *.* TO 'migration'@'127.0.0.1' WITH GRANT OPTION;
+```
+## Adding a Path to the API Call
+Now that everything is ready between the class mapping and the database, we need to add a way to access this information, and to do this, we'll add a new controller, which will respond when the requested path to the API matches this new. To add a new controller, right-click the `Controllers` folder, `Add -> Controller`.
+![Add Controller](https://user-images.githubusercontent.com/13123625/43054631-d8ba3750-8e08-11e8-9dd1-eba36475a05e.png)<br/>
+Then select `Web API Controller 2 with read/write actions` and call it `PetsController`. <br/>
+![Web API 2](https://user-images.githubusercontent.com/13123625/43054995-95c06148-8e0a-11e8-92c5-53615c4a82d2.png)<br/>
+Do not worry about Dependency Injection for the Controller, when passing a URL that looks for `Pets`, like this` http://localhost:57431/api/Pets`, the framework will automatically look for a controller that matches the name of the class and the word "controller" and will automatically load the class `PetsController`.<br/>
+Now, add the constructor for this new Controller and pass the Interface responsible for the persistence of this object in the database as a parameter, as following code:
+```d
+public class PetsController : ApiController{
+	private readonly IPetsPersist _petsPersist;
+
+	public PetsController(IPetsPersist petsPersist)	{
+		_petsPersist = petsPersist;
+	}
+
+	// GET: api/Pets
+	public IHttpActionResult Get(){
+		return Ok(_petsPersist.Query());
+	}
+
+	// GET: api/Pets/5
+	public IHttpActionResult Get(int id){
+		var obj = _petsPersist.Load(id);
+		if (obj == null)
+			return NotFound();
+
+		return Ok(obj);
+	}
+
+	// POST: api/Pets
+	public IHttpActionResult Post([FromBody]Pets value){
+		_petsPersist.Save(value);
+		if (value.Id > 0)
+			return Ok(value);
+		return NotFound();
+	}
+
+	// PUT: api/Pets/5
+	public void Put(int id, [FromBody]string value){ }
+
+	// DELETE: api/Pets/5
+	public IHttpActionResult Delete(int id){
+		if (_petsPersist.Delete(id))
+			return Ok();
+		return NotFound();
 	}
 }
 ```
