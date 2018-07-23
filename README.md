@@ -17,13 +17,13 @@ To the point:<br/>
 To work, besides having VS installed, you will need a MySQL ADO connector, which can be downloaded from this [link](https://dev.mysql.com/downloads/connector/net/) and a MySQL server running on your system, for test purposes, you can use the incredible [USBWebServer](http://www.usbwebserver.net/webserver/), it is a combination of popular web server software: Apache, MySQL, PHP, and phpMyAdmin. With USBWebserver it is possible to develop and show your PHP websites everywhere and anytime. The main advantage of USBWebserver is that you can use it from USB.
 
 ## Cloning This Repository
-The easiest way is to create a local folder and clone this repo, type the follow command in the windows prompt (CMD):  
+The easiest way is to create a local folder and clone this repo, type the following command in the windows prompt (CMD):  
  `git clone https://github.com/rafaelpassarela/empty_project_mysql_migrations.git`
 ![git clone cmd](https://user-images.githubusercontent.com/13123625/42899528-bf03397a-8a9c-11e8-85d7-99b43c36717b.png)<br/>
 This will generate a new local copy, but you **can't commit there**. If you want to control your own repo, create one at [GitHub](https://github.com) or another version control and clone it to a new folder. Go to the folder where you made the clone of *empty_project_mysql_migrations* and copy/cut all files and folders, with the exception of the ".git" folder.<br/>Paste these files and folders into your new folder and you're done. Have fun!
 
 ## About The Project and Some Remarks
-When you load the Solution into VS, some Nuget packages will be downloaded, with additional attention to these ones:<br>
+When you load the Solution into VS, some NuGet packages will be downloaded, with additional attention to these ones:<br>
  - MySql.Data (v6.10.7.0): Beware, there are some [reports](https://stackoverflow.com/questions/48353585/the-provider-did-not-return-a-providermanifesttoken-string-mysql-with-entity-f) that with versions higher than 8.0 the migration does not work, so I used this one.
  - MySql.Data.Entity (v6.10.7.0)
  - MySql.Data.Entities (v6.8.3.0)
@@ -36,9 +36,9 @@ These three classes will solve the problem, I will not go into much detail, but 
 ![MySqlInitializer](https://user-images.githubusercontent.com/13123625/43050043-b7c72baa-8dd8-11e8-8aa9-aefa917999b8.png)
 
 ## Configuring the Database
-Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release. <br/>
+Before starting to load and write data to the database, some things need to be adjusted. We need to configure the server path, database name, user, and password. This information is configured in the **Web.config** file. There is the possibility of setting up a database for Debug and another for Release. <br/>
 ![Solution Configuration](https://user-images.githubusercontent.com/13123625/42908261-d50b344c-8ab6-11e8-80cf-1f54b210c8d0.png)
-Basically we need to provide only a valid connection string, you can consult various types at [connectionstrings.com](https://www.connectionstrings.com/). In our case, we will provide a default MySQL connection string and define the provider name for this connection. <br/>
+Basically, we need to provide only a valid connection string, you can consult various types at [connectionstrings.com](https://www.connectionstrings.com/). In our case, we will provide a default MySQL connection string and define the provider name for this connection. <br/>
 ```xml
 <connectionStrings>
 	<add name="MyConnectionName" 
@@ -51,7 +51,7 @@ In the code above, we added a new connection string, the main attributes are: <b
 - `providerName` = Informs which class will be responsible for managing the connection<br/>
 - `connectionString` = the connection string itself, this is the ** single ** that must be changed, according to its parameters.<br/>
 
-Now imagine having to change the `Web.config` at all times, one hour pointing to the test db and another time pointing to the real db. To solve this, we have two extra configuration files: `Web.Debug.config` and `Web.Release.config`. They are pretty much the same `web.config` file, but only with the specific changes for each mode, the only detail is the use of the transform attribute `xdt:Transform="SetAttributes" xdt:Locator="Match(name)"`, which indicates what and when to change.<br/>This is my *Release* config:
+Now imagine having to change the `Web.config` at all times, one hour pointing to the test DB and another time pointing to the real DB. To solve this, we have two extra configuration files: `Web.Debug.config` and `Web.Release.config`. They are pretty much the same `web.config` file, but only with the specific changes for each mode, the only detail is the use of the transform attribute `xdt:Transform="SetAttributes" xdt:Locator="Match(name)"`, which indicates what and when to change.<br/>This is my *Release* config:
 ```xml
 <connectionStrings>
 	<add name="MyConnectionName"
@@ -69,8 +69,7 @@ And this is my *Debug* config:
 		 xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
 </connectionStrings>
 ```
-Did you notice the subtle difference? Only the `connectionString` attribute has changed. The `name` and `providerName` attributes must be the same.<br/>
-One last detail should be changed before actually starting to get your hands dirty. In the class responsible for the database context, we have to enter the same name assigned in the connection, inside the `Web.config` file. Locate the `Core\MySQLDbContext.cs` file and change the `base` name parameter, like the image below.<br/>
+Did you notice the subtle difference? Only the `connectionString` attribute has changed. The `name` and `providerName` attributes must be the same. One last detail should be changed before actually starting to get your hands dirty. In the class responsible for the database context, we have to enter the same name assigned in the connection, inside the `Web.config` file. Locate the `Core\MySQLDbContext.cs` file and change the `base` name parameter, like the image below.<br/>
 ![DbContext](https://user-images.githubusercontent.com/13123625/43050051-fb2fbb64-8dd8-11e8-89cf-eb01abf3ee5f.png) <br/>
 ## Setting up The Dependency Injection
 To control Dependency Injection we will use the [Unity.WebAPI](https://github.com/devtrends/Unity.WebAPI) package. Unity.WebAPI allows the simple Integration of the Unity IoC container with ASP .NET Web API.<br/>But, What is dependency injection? Dependency injection is a technique for achieving loose coupling between objects and their dependencies or collaborators.  Rather than directly instantiating collaborators, or using static references, the objects that the class needs in order to perform its actions are provided to the class in some way. <br/> Most often, classes will declare their dependencies via their constructor, allowing them to follow the  [Explicit Dependencies Principle](http://deviq.com/explicit-dependencies-principle/).  This approach is known as "constructor injection" and it is the one we will use here.<br/>This registry is very simple, you only need a contract signature between an interface and a class. Let's assume that we have a "person" class and this class will use another class responsible for this person's "vehicles". We can not inject or refer directly to the `Vehicle` class in the `Person` class, we need to inject the signature, the interface that represents the `Vehicle` class, in this case, called `IVehicle`. 
@@ -103,7 +102,7 @@ public class Person{
 	}
 }
 ```
-You may be wondering, how does the program know that when we want an interface of type `IVehicle` it should instantiate the class` Vehicle`, right? Well, we need to register this association in the `UnityConfig` class, in this case it looks like this:
+You may be wondering, how does the program know that when we want an interface of type `IVehicle` it should instantiate the class` Vehicle`, right? Well, we need to register this association in the `UnityConfig` class, in this case, it looks like this:
 ```d
 public static class UnityConfig{
 	public static void RegisterComponents(){
@@ -117,7 +116,7 @@ This is the code used in this example:
 ![Register Type sample](https://user-images.githubusercontent.com/13123625/42966333-2fbd8950-8b73-11e8-9dba-d240d9c8c386.png)
 
 ## Creating and Mapping a New Table and Class
-In this project there is a fully implemented class, its name is `Values`, as well as the table name in the database, you can use this class as a reference and create as many as you want.<br/>But by coincidence, I need to create a new table to record some pets, so I'll enjoy to explain a little better how to create a new class.<br/>First, go to the `Models` folder and create a new class, call it `Pets` and create two attributes, `Id` and `Name`.<br/>
+In this project there is a fully implemented class, its name is `Values`, as well as the table name in the database, you can use this class as a reference and create as many as you want.<br/>But by coincidence, I need to create a new table to record some pets, so I'll enjoy explaining a little better how to create a new class.<br/>First, go to the `Models` folder and create a new class, call it `Pets` and create two attributes, `Id` and `Name`.<br/>
 ![Add New Class](https://user-images.githubusercontent.com/13123625/43009053-faeb71b0-8c12-11e8-9ee4-11be8f15c112.png)<br/>And this is our new model class:<br/>
 ```d
 public class Pets {
@@ -210,7 +209,7 @@ public partial class PatsTable : DbMigration {
 	}
 }
 ```
-You may receive the `Access denied for user 'root@localhost' (using password:NO)` error while adding the new migration, if this occurs, create a new user in MySQL, for example user = migration; pwd = 1234. Then be sure to change the `Web.config` file to use the new user.
+You may receive the `Access denied for user 'root@localhost' (using password:NO)` error while adding the new migration, if this occurs, create a new user in MySQL, for example, user = migration; pwd = 1234. Then be sure to change the `Web.config` file to use the new user.
 ```sql
 CREATE USER 'migration'@'127.0.0.1' IDENTIFIED BY '1234';
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TABLESPACE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, INDEX, INSERT, REFERENCES, TRIGGER, UPDATE, CREATE USER, FILE, LOCK TABLES, RELOAD, REPLICATION CLIENT, REPLICATION SLAVE, SHUTDOWN, SUPER  ON *.* TO 'migration'@'127.0.0.1' WITH GRANT OPTION;
@@ -262,6 +261,12 @@ public class PetsController : ApiController{
 		return NotFound();
 	}
 }
+```
+Now, try to get a list of all pets just calling the API URL `http://localhost:57431/api/Pets` or post some new pet with the same URL, but providing a JSON in the request body.
+```
+    {
+        "Name": "Thor"
+    }
 ```
 
 > Please ignore small differences between the code and the images in this post. 
