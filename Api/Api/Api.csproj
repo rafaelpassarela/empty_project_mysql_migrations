@@ -242,9 +242,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807171729286_Initial.cs" />
-    <Compile Include="Migrations\201807171729286_Initial.Designer.cs">
-      <DependentUpon>201807171729286_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201807171729286_MyFirstMigration.cs" />
+    <Compile Include="Migrations\201807171729286_MyFirstMigration.Designer.cs">
+      <DependentUpon>201807171729286_MyFirstMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Values.cs" />
@@ -299,8 +299,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807171729286_Initial.resx">
-      <DependentUpon>201807171729286_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807171729286_MyFirstMigration.resx">
+      <DependentUpon>201807171729286_MyFirstMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

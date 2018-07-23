@@ -16,12 +16,7 @@ namespace Api.MySQLMigrationHistory
 
             isChecked = true;
 
-            if (!context.Database.Exists())
-            {
-                // if database did not exist before - create it
-                context.Database.Create();
-            }
-            else
+            if (context.Database.Exists())
             {
                 var dbName = context.Database.Connection.Database;
                 var sql = $"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{dbName}' AND table_name = '__MigrationHistory'";
