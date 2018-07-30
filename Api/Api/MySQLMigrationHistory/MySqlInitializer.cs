@@ -20,18 +20,13 @@ namespace Api.MySQLMigrationHistory
             {
                 var dbName = context.Database.Connection.Database;
                 var sql = $"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{dbName}' AND table_name = '__MigrationHistory'";
+
                 // query to check if MigrationHistory table is present in the database 
-                var migrationHistoryTableExists = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<int>(sql);
-
-                // the ExecuteStoreQuery above, will trigger the mogration process of our database
-
-
-                //// if MigrationHistory table is not there (which is the case first time we run) - create it
-                //if (migrationHistoryTableExists.FirstOrDefault() == 0)
-                //{
-                //    context.Database.Delete();
-                //    context.Database.Create();
-                //}
+                using (var migrationHistoryTableExists = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<int>(sql))
+                {
+                    // the ExecuteStoreQuery above, will trigger the mogration process of our database
+                    // this "using" block release the DataReader associated with this Connection
+                }
             }
         }
     }
