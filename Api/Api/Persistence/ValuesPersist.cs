@@ -10,15 +10,12 @@ using System.Linq;
 
 namespace Api.Persistence
 {
-    public class ValuesPersist : IValuesPersist
+    public class ValuesPersist : BasePersist, IValuesPersist
     {
         private readonly IAppContext _context;
         private DbConnection Db => _context.Connection();
 
-        public ValuesPersist(IAppContext context)
-        {
-            _context = context;
-        }
+        public ValuesPersist(IAppContext context) : base(context) { }
 
         public bool Delete(params object[] keys)
         {
