@@ -6,6 +6,7 @@ namespace Api.Models
     {
         [Key]
         [Required]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]
