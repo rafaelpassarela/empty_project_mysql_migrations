@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
+import {React, Component } from 'react';
+// import Grid from 'react-bootstrap/lib/Grid';
+// import Row from 'react-bootstrap/lib/Row';
+// import Col from 'react-bootstrap/lib/Col';
 import { getUser } from '../helpers/cookie.helper';
 
 class HomeHeader extends Component {
@@ -12,7 +12,8 @@ class HomeHeader extends Component {
 
         return (
             <header className="App-header">
-                <Grid>
+            <h1>Teste</h1>
+                {/* <Grid>
                     <Row className="show-grid">
                         <Col xs={12} sm={4} md={4} lg={1}>
                             <img src="http://mrrafael.ca/img/home_profile.png" className="App-logo center-block" alt="It's me, Rafael Passarela" />
@@ -28,7 +29,7 @@ class HomeHeader extends Component {
                             </p>
                         </Col>
                     </Row>
-                </Grid>
+                </Grid> */}
             </header>
         );
     }
