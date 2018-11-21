@@ -8,7 +8,8 @@
     "react-cookies": "^0.1.0",
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.2.2",
-    "react-scripts-ts": "^4.0.8"
+    "react-scripts-ts": "^4.0.8",
+    "universal-cookie": "^3.0.4"
   },
   "scripts": {
     "start": "react-scripts-ts start",
