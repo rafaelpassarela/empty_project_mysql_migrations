@@ -23,15 +23,15 @@ class HeaderComponent extends React.Component {
 
   public render() {
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
+      <div style={styles.root}>
+        <AppBar position="static" color="primary">
           <Toolbar>
 
-            <IconButton color="inherit" aria-label="Menu">
+            <IconButton style={styles.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="h6" color="inherit">
+            <Typography style={styles.grow} variant="h6" color="inherit">
               Teste
             </Typography>
 

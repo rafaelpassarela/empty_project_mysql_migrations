@@ -23,7 +23,8 @@
 }
 
 .Home {
-  background-color: red;
+  background-color: inherit;
+  margin: 10px;
 }
 
 @keyframes App-logo-spin {

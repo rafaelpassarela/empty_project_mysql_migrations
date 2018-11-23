@@ -5,11 +5,10 @@ class FooterComponent extends React.Component {
   public render() {
     return (
       <div>
-        Teste Footer
+        Page Footer
       </div>
-    );
+      );
   }
-
 
 }
 
