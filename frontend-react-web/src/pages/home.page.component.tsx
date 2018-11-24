@@ -29,7 +29,7 @@ class HomePage extends React.Component {
         <Button variant="contained" color="primary" onClick={this.handleSave}>
           Test User Save
         </Button> &nbsp;
-        <Button variant="contained" color="primary" onClick={this.handleLoad}>
+        <Button variant="contained" color="secondary" onClick={this.handleLoad}>
           Test User Load
         </Button>
       </div>
