@@ -1,8 +1,7 @@
 import * as React from 'react';
-import '../inc/App.css';
-import Button from '@material-ui/core/Button';
+import { Button } from 'react-bootstrap';
 import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
-
+import '../inc/App.css';
 
 class HomePage extends React.Component {
 
@@ -24,14 +23,10 @@ class HomePage extends React.Component {
       <div className="Home">
         <p>
           This is the default page!
-          We use Material-UI .
+          We use Boostrap. <br/>
+          <Button bsStyle="primary" onClick={this.handleSave}>Save</Button>&nbsp;
+          <Button bsStyle="success" onClick={this.handleLoad}>Load</Button>
         </p>
-        <Button variant="contained" color="primary" onClick={this.handleSave}>
-          Test User Save
-        </Button> &nbsp;
-        <Button variant="contained" color="secondary" onClick={this.handleLoad}>
-          Test User Load
-        </Button>
       </div>
     );
   }

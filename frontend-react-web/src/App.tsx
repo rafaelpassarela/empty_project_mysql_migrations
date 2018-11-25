@@ -1,25 +1,24 @@
 import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './inc/App.css';
 
 // import logo from './logo.svg';
-import HomePage from './pages/home.page.component';
+import RouterPlaceHolder from './helpers/router.place.holder';
 import HeaderComponent from './components/header.component';
 import FooterComponent from './components/footer.component';
-
-// set brand colors
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import theme from './inc/theme';
 
 class App extends React.Component {
   public render() {
     return (
-      <div>
-        <MuiThemeProvider theme={theme}>
+      <Router>
+        <div className="Home">
           <HeaderComponent/>
-          <HomePage/>
+          <div className="din-content">
+            <RouterPlaceHolder />
+          </div>          
           <FooterComponent/>
-        </MuiThemeProvider>
-      </div>
+        </div>
+      </Router>
     );
   }
 }
