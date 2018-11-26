@@ -2,14 +2,16 @@ import * as React from 'react';
 
 class Error404Page extends React.Component {
 
-  Render() {
+  render() {
     return (
       <div>
-Not Found, sorry!
+        <br/>
+        Not Found, sorry!
+        <br/>
       </div>
     );
   }
 
 }
 
-export default Error404Page
+export default Error404Page;

@@ -3,9 +3,10 @@ import * as React from 'react';
 class FooterComponent extends React.Component {
 
   public render() {
+    let datetime = new Date().toLocaleString();
     return (
       <div>
-        Page Footer
+        Page Footer - Date/Time = {datetime}
       </div>
     );
   }
