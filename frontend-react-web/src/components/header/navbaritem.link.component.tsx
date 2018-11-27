@@ -12,8 +12,7 @@ type NavBarItemProps = {
 };
 type NavBarItemStates = {
 	to: string,
-	redir: any,
-	needRender: boolean
+	redirectTo: any
 };
 
 class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> {
@@ -25,42 +24,35 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 
 		this.state = {
 			to: this.props.to,
-			redir: undefined,
-			needRender: false
+			redirectTo: undefined
 		}
 	}
 
 	handleClick() {
 		let destination = <Redirect to={this.state.to} />;
 		this.setState({
-			redir: destination,
-			needRender: true
+			redirectTo: destination
 		});
 	}
 
 	componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
-		if (this.state.redir != undefined || this.state.needRender === true) {
+		if (this.state.redirectTo != undefined) {
 			this.setState({
-				redir: undefined,
-				needRender: false
+				redirectTo: undefined
 			});
 		}
 	}
-
-	// shouldComponentUpdate(nextProps:any, nextState:any) {
-	// 	return (nextState.redir == undefined)
-	// 	    || (nextState.to != window.location.pathname);
-	// }
 
 	render() {
 
 		const caption = this.props.caption;
 		const key = this.props.eventKey;
 
-		const validURL = (this.state.redir != undefined)
-			&& (this.state.needRender)
-			&& (this.state.to != window.location.pathname);
-		const redirect = (validURL) ? this.state.redir : null;
+		const validURL =
+			(this.state.redirectTo != undefined) &&
+			(this.state.to != window.location.pathname);
+			
+		const redirect = (validURL) ? this.state.redirectTo : null;
 
 		return (
 			<NavItem eventKey={key} href='#' onClick={this.handleClick}>{caption}{redirect}</NavItem>
