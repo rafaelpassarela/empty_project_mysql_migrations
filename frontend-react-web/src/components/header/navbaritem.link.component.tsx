@@ -39,7 +39,7 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 	}
 
 	componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
-		if (prevState.redir != undefined || prevState.needRender === true) {
+		if (this.state.redir != undefined || this.state.needRender === true) {
 			this.setState({
 				redir: undefined,
 				needRender: false
