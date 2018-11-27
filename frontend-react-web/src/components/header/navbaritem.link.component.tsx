@@ -12,7 +12,8 @@ type NavBarItemProps = {
 };
 type NavBarItemStates = {
 	to: string,
-	redir: any
+	redir: any,
+	needRender: boolean
 };
 
 class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> {
@@ -24,20 +25,25 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 
 		this.state = {
 			to: this.props.to,
-			redir: undefined
+			redir: undefined,
+			needRender: false
 		}
 	}
 
 	handleClick() {
 		let destination = <Redirect to={this.state.to} />;
 		this.setState({
-			redir: destination
+			redir: destination,
+			needRender: true
 		});
 	}
 
 	componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
-		if (prevState.redir != undefined) {
-			this.setState({ redir: undefined });
+		if (prevState.redir != undefined || prevState.needRender === true) {
+			this.setState({
+				redir: undefined,
+				needRender: false
+			});
 		}
 	}
 
@@ -51,7 +57,10 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		const caption = this.props.caption;
 		const key = this.props.eventKey;
 
-		const redirect = (this.state.redir != undefined && this.state.to != window.location.pathname) ? this.state.redir : null;
+		const validURL = (this.state.redir != undefined)
+			&& (this.state.needRender)
+			&& (this.state.to != window.location.pathname);
+		const redirect = (validURL) ? this.state.redir : null;
 
 		return (
 			<NavItem eventKey={key} href='#' onClick={this.handleClick}>{caption}{redirect}</NavItem>
