@@ -8,7 +8,8 @@ import { NavItem } from 'react-bootstrap';
 type NavBarItemProps = {
 	caption: string,
 	to: string,
-	eventKey: number
+	eventKey: number,
+	navbarControll: Function
 };
 type NavBarItemStates = {
 	to: string,
@@ -33,6 +34,9 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		this.setState({
 			redirectTo: destination
 		});
+		if (this.props.navbarControll != undefined) {
+			this.props.navbarControll();
+		}
 	}
 
 	componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
@@ -51,7 +55,7 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		const validURL =
 			(this.state.redirectTo != undefined) &&
 			(this.state.to != window.location.pathname);
-			
+
 		const redirect = (validURL) ? this.state.redirectTo : null;
 
 		return (

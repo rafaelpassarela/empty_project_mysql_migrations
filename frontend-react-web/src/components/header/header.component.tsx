@@ -4,17 +4,37 @@ import { Navbar } from 'react-bootstrap/';
 import { Nav } from 'react-bootstrap';
 import '../../inc/App.css';
 
-import NavBarItemLink  from './navbaritem.link.component';
+import NavBarItemLink from './navbaritem.link.component';
 // custom logo
 import logo from '../../img/logo_small.png';
 
-class HeaderComponent extends React.Component {
+class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
+
+	constructor(props: any) {
+		super(props);
+
+		this.navbarToggle = this.navbarToggle.bind(this);
+		this.navbarItemSelect = this.navbarItemSelect.bind(this);
+
+		this.state = { expanded: false };
+	}
+
+	navbarToggle() {
+		this.setState({
+			expanded: !this.state.expanded
+		});
+	}
+
+	navbarItemSelect() {
+		this.setState({
+			expanded: false
+		});
+	}
 
 	render() {
-
 		return (
 			<div>
-				<Navbar fixedTop>
+				<Navbar fixedTop fluid expanded={this.state.expanded} onToggle={this.navbarToggle}>
 					<Navbar.Header>
 						<Navbar.Brand className="NavbarImg">
 							<Link to="/">
@@ -25,8 +45,8 @@ class HeaderComponent extends React.Component {
 					</Navbar.Header>
 					<Navbar.Collapse>
 						<Nav>
-							<NavBarItemLink eventKey={1} to="/" caption="Home" />
-							<NavBarItemLink eventKey={1} to="/about" caption="About" />
+							<NavBarItemLink eventKey={1} to="/" caption="Home" navbarControll={this.navbarItemSelect}/>
+							<NavBarItemLink eventKey={1} to="/about" caption="About" navbarControll={this.navbarItemSelect} />
 						</Nav>
 
 					</Navbar.Collapse>
