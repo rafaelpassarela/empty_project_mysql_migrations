@@ -1,4 +1,19 @@
-.Home {
-  background-color: inherit;
-  margin: 10px;
+.DefaultAppStyle {
+	background-color: inherit;
+	margin: 10px;
+	margin-top: 65px;
 }
+
+.Teste {
+	padding: 50px;
+}
+
+.NavbarImg {
+	padding: 4px;
+}
+
+/*@media (min-width: 768px) {
+    NavbarImg {
+        width: 900px;
+    }
+}*/

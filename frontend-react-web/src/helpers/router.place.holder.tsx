@@ -12,19 +12,19 @@ import Error404Page from '../pages/notfound404.page.component';
 
 class RouterPlaceHolder extends React.Component {
 
-  render() {
+	render() {
 
-    return (
-      <div>
-        <Switch>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/about" component={AboutPage} />
-          <Route component={Error404Page} />
-        </Switch>
-      </div>
-    );
+		return (
+			<div>
+				<Switch>
+					<Route path="/" exact component={HomePage} />
+					<Route path="/about" component={AboutPage} />
+					<Route component={Error404Page} />
+				</Switch>
+			</div>
+		);
 
-  }
+	}
 
 }
 
