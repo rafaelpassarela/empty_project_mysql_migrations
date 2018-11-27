@@ -6,7 +6,7 @@ import logo from '../img/logo_small.png';
 
 class HeaderComponent extends React.Component {
 
-  public render() {
+  render() {
 
     return (
       <div>

@@ -6,7 +6,7 @@ class Error404Page extends React.Component {
     return (
       <div>
         <br/>
-        Not Found, sorry!
+          Not Found, sorry!
         <br/>
       </div>
     );

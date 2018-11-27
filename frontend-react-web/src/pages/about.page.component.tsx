@@ -2,7 +2,7 @@ import * as React from 'react';
 
 class AboutPage extends React.Component {
 
-  public render() {
+  render() {
     return (
       <div>
         It's me, React!

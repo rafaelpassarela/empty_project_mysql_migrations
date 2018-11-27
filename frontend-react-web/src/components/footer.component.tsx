@@ -2,7 +2,9 @@ import * as React from 'react';
 
 class FooterComponent extends React.Component {
 
-  public render() {
+
+
+  render() {
     let datetime = new Date().toLocaleString();
     return (
       <div>

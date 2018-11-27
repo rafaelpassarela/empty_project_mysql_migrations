@@ -19,12 +19,12 @@ export function setUser(userId:any) {
 }
 
 export function getUser() {
-    return get('userId');
+  return get('userId');
 }
 
 export function getIsUserLogged() {
-    const userName = getUser();
-    return ((userName && userName !== ''));
+  const userName = getUser();
+  return ((userName && userName !== ''));
 }
 
 export function removeUser() {
