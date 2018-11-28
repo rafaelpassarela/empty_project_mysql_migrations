@@ -4,12 +4,12 @@
 	margin-top: 65px;
 }
 
-.Teste {
-	padding: 50px;
-}
-
 .NavbarImg {
 	padding: 4px;
+}
+
+.Footer {
+	text-align: center;
 }
 
 /*@media (min-width: 768px) {

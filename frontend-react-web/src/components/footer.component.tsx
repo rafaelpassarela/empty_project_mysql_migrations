@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Panel } from 'react-bootstrap';
+import '../inc/App.css';
 
 type FooterProps = {};
 type FooterStates = {
@@ -19,8 +21,12 @@ class FooterComponent extends React.Component<FooterProps, FooterStates> {
 	render() {
 
 		return (
-			<div>
-				<hr />
+			<div className="Footer">
+<Panel className="footer hidden-print">
+
+</Panel>
+
+
 				Page Footer <small>Date/Time = <b>{this.state.creationTime}</b></small>
 			</div>
 		);
