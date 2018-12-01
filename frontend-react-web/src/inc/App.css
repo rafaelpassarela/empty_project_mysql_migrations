@@ -1,19 +1,92 @@
-.DefaultAppStyle {
+.defaultAppStyle {
 	background-color: inherit;
 	margin: 10px;
-	margin-top: 65px;
+	margin-top: 70px;
 }
 
-.NavbarImg {
+.navbarImg {
 	padding: 4px;
 }
 
-.Footer {
-	text-align: center;
+.footer {
+	background-color: #f8f8f8;
+	border-color: #e7e7e7;
+ 	text-align: center;
+ 	padding: 10px;
+ 	margin-top: 20px;
+	/*border-top: 1px outset #e7e7e7; */
+	position: fixed;
+	left: 0;
+	right: 0;
+}
+
+.footerLinks {
+	padding-top: 10px;
+}
+
+.footerLinksLeft {
+	text-align: left;
+}
+
+.footerLinksRight {
+	text-align: right;
+}
+
+.shadow {
+    -moz-box-shadow: 2px 2px 15px #ccc;
+    -webkit-box-shadow: 2px 2px 15px #ccc;
+    box-shadow: 2px 2px 15px #ccc;
+}
+
+.divCenterEx {
+    /* z-order test */
+    /* position: absolute; */
+    /* default */
+    position: fixed;
+    z-index: 256;
+    top: 50%;
+    left: 50%;
+    width: 30em;
+    height: 18em;
+    /*set to a negative number 1/2 of your height*/
+    margin-top: -9em;
+    /*set to a negative number 1/2 of your width*/
+    margin-left: -15em;
+    /* border: 1px solid #ccc; */
+    /* background-color: #f3f3f3; */
+}
+
+.size24 {
+    width: 24px;
+    height: 24px;
+}
+
+.linkimg {
+    -webkit-filter: grayscale(100%);
+    /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+}
+
+.linkimg:hover {
+    -webkit-filter: grayscale(0%);
+    /* Safari 6.0 - 9.0 */
+    filter: grayscale(0%);
+}
+
+.sixFive {
+	font-size: 65%;
 }
 
 /*@media (min-width: 768px) {
-    NavbarImg {
-        width: 900px;
-    }
+	NavbarImg {
+		width: 900px;
+	}
+}*/
+
+/*@media all {
+	.hidden-print   { display: none; }
+}
+
+@media print {
+	.hidden-print   { display: block; page-break-before: always; }
 }*/
