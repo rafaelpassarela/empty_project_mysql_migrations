@@ -34,7 +34,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 	render() {
 		return (
 			<div>
-				<Navbar fixedTop fluid expanded={this.state.expanded} onToggle={this.navbarToggle}>
+				<Navbar className="shadow" fixedTop fluid expanded={this.state.expanded} onToggle={this.navbarToggle}>
 					<Navbar.Header>
 						<Navbar.Brand className="navbarImg">
 							<Link to="/">
