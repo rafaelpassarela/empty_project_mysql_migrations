@@ -5,6 +5,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 [TypeScript React Starter](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter)
 [React-Router Samples](https://reacttraining.com/react-router/web/example/url-params)
+[React-History](https://github.com/ReactTraining/history)
 
 ## Table of Contents
 

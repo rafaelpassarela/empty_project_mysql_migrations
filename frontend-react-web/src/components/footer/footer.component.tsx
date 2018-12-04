@@ -9,7 +9,6 @@ class FooterComponent extends React.Component {
 
 		return (
 			<div className="footer shadow hidden-print">
-
 				<div className="container footerLinks">
 					<div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 footerLinksRight">
 						<small className="sixFive">&copy; 2017 <strong>Rafael Passarela </strong></small><br />

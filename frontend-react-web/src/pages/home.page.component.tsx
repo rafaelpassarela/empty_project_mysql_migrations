@@ -1,10 +1,15 @@
 import * as React from 'react';
+import BaseViewComponent from '../components/base.view.component';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
 
-class HomePage extends React.Component {
+class HomePage extends BaseViewComponent {
+
+	protected getTitle(): string {
+		return 'Home';
+	}
 
 	handleSave = () => {
 		setUser('Luke');
