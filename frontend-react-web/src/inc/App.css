@@ -77,6 +77,19 @@
 	font-size: 65%;
 }
 
+.notFoundPanel {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.notFoundImage {
+    border-radius: 50%;
+    padding: 5px;
+    border:3px solid lavenderblush;
+    cursor: pointer;    
+}
+
 /*@media (min-width: 768px) {
 	NavbarImg {
 		width: 900px;

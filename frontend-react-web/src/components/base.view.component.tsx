@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-class BaseViewComponent extends React.Component{
+class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 
 	componentDidMount() {
 		let name = this.getTitle();
@@ -13,7 +13,7 @@ class BaseViewComponent extends React.Component{
 		document.title = 'Mr Rafael.ca' + name;
 	}
 
-	protected getTitle() : string {
+	protected getTitle(): string {
 		return '';
 	}
 

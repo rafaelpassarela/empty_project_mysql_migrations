@@ -1,25 +1,67 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 
-class Error404Page extends BaseViewComponent {
+import '../inc/App.css';
+
+const ERROR_IMAGE_COUNT = 6;
+
+class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
+
+	constructor(props: any) {
+		super(props);
+
+		this.handleImageClick = this.handleImageClick.bind(this);
+		this.getErrorImage = this.getErrorImage.bind(this);
+
+		this.state = {
+			imageNumber: this.getErrorImage(ERROR_IMAGE_COUNT)
+		};
+	}
 
 	protected getTitle(): string {
 		return 'Page Not Found (404)';
 	}
 
+	getErrorImage(maxImageCount: number): number {
+
+		let imgNum = (this.state == undefined) ? 0 : this.state.imageNumber;
+
+		while (imgNum == (this.state == undefined ? 0 : this.state.imageNumber)) {
+			// return a random number, from 0 to maxImg - 1;			
+			imgNum = Math.floor(Math.random() * maxImageCount) + 1;
+		}
+		this.setState({ imageNumber: imgNum });
+
+		return imgNum;
+	}
+
+	handleImageClick() {
+		this.getErrorImage(ERROR_IMAGE_COUNT);
+	}
+
 	render() {
+
+		let imgName = "./img/404/404_" + this.state.imageNumber + ".gif";
+
 		return (
 			<div>
 				<Row>
 					<Col xs={12} sm={12} md={12} lg={12}>
-						TESTE<br />
-						TESTE<br />
-						TESTE<br />
-						TESTE<br />
-						TESTE<br />
-						TESTE<br />
-						TESTE<br />
+						<Row>
+							<Col xsHidden smHidden md={3} lg={3}></Col>
+							<Col xs={12} sm={12} md={6} lg={6} className="shadow notFoundPanel">
+								<Alert bsStyle="danger">
+									Oops, an error occurred ! !
+								</Alert>
+								<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} />
+								<h3>
+									The server indicates an error "404 Not Found".
+								</h3>
+								Probably a page that really does not exist.
+							</Col>
+							<Col xsHidden smHidden md={3} lg={3}></Col>
+						</Row>
 					</Col>
 				</Row>
 			</div>
@@ -27,34 +69,5 @@ class Error404Page extends BaseViewComponent {
 	}
 
 }
-
-// IMG HERE = <img src="{{imageName}}" style="border-radius: 50%; padding: 5px; border:3px solid #337ab7;" />
-
-// <div className="col-md-12">
-// 	<div className="col-md-3"></div>
-// 	<div className="col-md-6">
-// 		<div className="panel panel-primary">
-// 			<div className="panel-body">
-// 				<div className="alert alert-danger" role="alert">
-// 					<h3>MENS HEADER</h3>
-// 				</div>
-// 				IMG HERE
-// 				<h2>Mens 02</h2>
-// 				Mens 03
-//         </div>
-// 		</div>
-// 	</div>
-// 	<div className="col-md-3"></div>
-// </div>
-
-// <div className="col-md-3"></div>
-
-// <div className="col-md-6 text-center">
-// 	<div className="btn-group">
-// 		BTN VOLTAR -> <span className="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-// 	</div>
-// </div>
-
-// <div className="col-md-3"></div>
 
 export default Error404Page;
