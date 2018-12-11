@@ -20,7 +20,7 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 	}
 
 	componentDidMount() {
-		// super();
+		super.componentDidMount();
 		this.getErrorImage(ERROR_IMAGE_COUNT);
 	}
 
