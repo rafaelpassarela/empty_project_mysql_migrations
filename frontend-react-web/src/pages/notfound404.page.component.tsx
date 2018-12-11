@@ -15,8 +15,13 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 		this.getErrorImage = this.getErrorImage.bind(this);
 
 		this.state = {
-			imageNumber: this.getErrorImage(ERROR_IMAGE_COUNT)
+			imageNumber: 0
 		};
+	}
+
+	componentDidMount() {
+		// super();
+		this.getErrorImage(ERROR_IMAGE_COUNT);
 	}
 
 	protected getTitle(): string {
@@ -55,6 +60,8 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 									Oops, an error occurred ! !
 								</Alert>
 								<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} />
+								<br />
+								<small>(Image {this.state.imageNumber} of {ERROR_IMAGE_COUNT}, click image to change)</small>
 								<h3>
 									The server indicates an error "404 Not Found".
 								</h3>
