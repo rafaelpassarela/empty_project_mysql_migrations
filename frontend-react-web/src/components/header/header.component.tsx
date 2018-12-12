@@ -46,6 +46,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 					<Navbar.Collapse>
 						<Nav>
 							<NavBarItemLink eventKey={1} to="/" caption="Home" navbarControll={this.navbarItemSelect}/>
+							<NavBarItemLink eventKey={1} to="/values" caption="Some Values" navbarControll={this.navbarItemSelect} />
 							<NavBarItemLink eventKey={1} to="/about" caption="About" navbarControll={this.navbarItemSelect} />
 						</Nav>
 

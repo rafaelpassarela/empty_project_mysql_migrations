@@ -28,13 +28,13 @@ class HomePage extends BaseViewComponent {
 		return (
 			<div>
 				<p>
-					This is the default page!
+					This is the default page! <br />
 					We use Boostrap. <br />
-					<Button bsStyle="primary" onClick={this.handleSave}>Save</Button>&nbsp;
-					<Button bsStyle="success" onClick={this.handleLoad}>Load</Button>
+					<Button bsStyle="primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
+					<Button bsStyle="success" onClick={this.handleLoad}>Load Cookie</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
-				To <Link to="/PageNotFound">Error</Link> Page.<br />
+				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
 			</div>
 		);
 	}
