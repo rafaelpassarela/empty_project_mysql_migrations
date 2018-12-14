@@ -4,8 +4,8 @@ namespace Api.Core
 {
     public class BasePersist
     {
-        private readonly IAppContext _context;
-        private DbConnection Db => _context.Connection();
+        protected readonly IAppContext _context;
+        protected DbConnection Db => _context.Connection();
 
         public BasePersist(IAppContext context)
         {
