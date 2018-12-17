@@ -17,7 +17,7 @@ class ValuesPage extends BaseViewComponent {
 	}
 
 	protected getTitle(): string {
-		return 'Pets';
+		return 'Some Values List';
 	}
 
 	render() {
