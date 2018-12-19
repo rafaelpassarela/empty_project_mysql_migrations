@@ -1,22 +1,23 @@
 ﻿using Api.Models;
 using Api.PersistenceIntf;
+using System;
 using System.Web.Http;
 
 namespace Api.Controllers
 {
     public class ValuesController : ApiController
     {
-        private readonly IValuesPersist _valuesPersist;
+        private readonly IValuesPersist _crud;
 
         public ValuesController(IValuesPersist valuesPersist)
         {
-            _valuesPersist = valuesPersist;
+            _crud = valuesPersist;
         }
 
         // GET api/values
         public IHttpActionResult Get()
         {
-            var list = _valuesPersist.Query();
+            var list = _crud.Query();
 
             return Ok(list);
         }
@@ -24,7 +25,7 @@ namespace Api.Controllers
         // GET api/values/5
         public IHttpActionResult Get(int id)
         {
-            var obj = _valuesPersist.Load(id);
+            var obj = _crud.Load(id);
 
             if (obj == null)
                 return NotFound();
@@ -33,23 +34,24 @@ namespace Api.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
         public IHttpActionResult Post([FromBody]Values value)
         {
-            _valuesPersist.Save(value);
+            _crud.Save(value);
             if (value.Id > 0)
                 return Ok(value);
 
             return NotFound();
         }
 
+        // PUT api/values/5
+        public IHttpActionResult Put([FromBody]Values value)
+        {
+            throw new NotImplementedException();
+        }
+
         public IHttpActionResult Delete(int id)
         {
-            if (_valuesPersist.Delete(id))
+            if (_crud.Delete(id))
                 return Ok();
 
             return NotFound();
