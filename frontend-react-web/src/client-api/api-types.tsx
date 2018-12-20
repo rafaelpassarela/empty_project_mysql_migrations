@@ -1,3 +1,6 @@
+export type ApiDataCallback = (data: any) => any;
+export type ApiErrorCallback = (error: any) => any;
+
 export enum ApiMethod {
 	GET = 'GET',
 	POST = 'POST',

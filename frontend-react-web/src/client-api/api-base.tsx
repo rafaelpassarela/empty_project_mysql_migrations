@@ -38,12 +38,14 @@ class ApiBase<T> { //implements IApi<Values>{
 		return ApiConfig.URL + this.getPath() + ((endPath != undefined) ? endPath : '');
 	}
 
-	public get(endPath?: string) {
-		this.doFetch(ApiMethod.GET, this.translatePath(endPath));
+	public get(dataCallback : any, errorCallback : any, endPath?: string) {
+		this.doFetch(ApiMethod.GET, this.translatePath(endPath), dataCallback, errorCallback);
 		// return 'Get from [' + ApiConfig.URL + ']' + this.getPath();
 	}
 
-	doFetch(requestMethod: ApiMethod, url: string, bodyData?: any) {
+	doFetch(
+		requestMethod: ApiMethod, url: string,
+		dataCallback: any, errorCallback: any, bodyData?: any) {
 
 		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 			console.log(requestMethod + ' -> ' + url);
@@ -70,7 +72,7 @@ class ApiBase<T> { //implements IApi<Values>{
 				}
 			})
 			.then(data => console.log(data))
-			.catch(error => console.error(error));
+			.catch(error => errorCallback(error));
 	}
 
 }
