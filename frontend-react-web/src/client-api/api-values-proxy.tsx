@@ -4,11 +4,11 @@ import { Values } from './api-models';
 class ApiValuesProxy extends ApiBase<Values> {
 
     protected getPath() : string {
-    	return 'values';
+    	return 'Values';
     }
 
 }
 
-const ApiValues = new ApiValuesProxy();
+// const ApiValues = new ApiValuesProxy();
 
-export default ApiValues;
+export default ApiValuesProxy;

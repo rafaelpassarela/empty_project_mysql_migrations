@@ -1,9 +1,11 @@
-import ApiValues from './api-values-proxy';
+import ApiValuesProxy from './api-values-proxy';
 
 class ApiHelper {
 
-	public Values() {
-		return ApiValues;
+	apiValues = new ApiValuesProxy();
+
+	public Values() : ApiValuesProxy{
+		return this.apiValues;
 	}
 
 }
