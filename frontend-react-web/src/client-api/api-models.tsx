@@ -1,4 +1,4 @@
 export class Values {
-	id: number;
-	name: string;
+	Id: number;
+	Name: string;
 }

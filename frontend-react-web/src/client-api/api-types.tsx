@@ -1,5 +1,5 @@
 export type ApiDataCallback = (data: any) => any;
-export type ApiErrorCallback = (error: any) => any;
+export type ApiErrorCallback = (error: Error) => any;
 
 export enum ApiMethod {
 	GET = 'GET',

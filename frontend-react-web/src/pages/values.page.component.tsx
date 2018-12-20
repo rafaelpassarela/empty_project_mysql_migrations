@@ -1,23 +1,51 @@
 import * as React from 'react';
-import BaseViewComponent from '../components/base.view.component';
 import { Row, Col } from 'react-bootstrap';
+import BaseViewComponent from '../components/base.view.component';
+import ErrorBox, { ErrorMode } from '../components/error.box.component';
 
 import Api from '../client-api/api';
+import { Values } from '../client-api/api-models';
 
 import '../inc/App.css';
 
-class ValuesPage extends BaseViewComponent<{}, { list: any }> {
+type ValuesPageState = {
+	list: Values[],
+	isLoading: boolean,
+	errorMsg: string
+};
+
+class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 
 	constructor(props: any) {
 		super(props);
-		this.state = { list: [] };
+
+		this.getData = this.getData.bind(this);
+
+		this.state = {
+			list: [],
+			errorMsg: '',
+			isLoading: true
+		};
 	}
 
 	componentDidMount() {
 		super.componentDidMount();
 		Api.Values().get(
-			this.getData, 
-			(error: any) => { console.log('ERROOO: ' + error) });
+			(data: any) => {
+				this.setState({
+					list: data,
+					isLoading: false,
+					errorMsg: ''
+				});
+			},
+			(error: Error) => {
+				this.setState({
+					list: [],
+					isLoading: false,
+					errorMsg: error.message
+				});
+			}
+		);
 	}
 
 	protected getTitle(): string {
@@ -26,15 +54,20 @@ class ValuesPage extends BaseViewComponent<{}, { list: any }> {
 
 	getData(data: any) {
 		console.log("recebimento -> " + data);
-		this.setState({ list: data });
+
 	}
 
 	render() {
 
-		const listItems = this.state.list.map((d:any) => <div>{d.Name}</div>);
+		const loading = (this.state.isLoading) ? <div>Loading...</div> : undefined;
+		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-sign" mode={ErrorMode.EM_FIXED} />
+
+		const listItems = this.state.list.map((d: Values) => <div>{d.Id} - {d.Name}</div>);
 
 		return (
 			<div>
+				{loading}
+				{error}
 				<Row><Col md={6}>
 					<h3>Some Values Simple List</h3>
 					Test: {listItems}

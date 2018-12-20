@@ -1,5 +1,5 @@
 import { ApiConfig } from './api-config';
-import { ApiMode, ApiCache, ApiCredentials, ApiMethod, ApiRedirect } from './api-types';
+import { ApiMode, ApiCache, ApiCredentials, ApiMethod, ApiRedirect, ApiDataCallback, ApiErrorCallback } from './api-types';
 
 // import { Values } from './api-models';
 
@@ -13,6 +13,16 @@ import { ApiMode, ApiCache, ApiCredentials, ApiMethod, ApiRedirect } from './api
 // https://www.robinwieruch.de/react-fetching-data/
 
 class ApiBase<T> { //implements IApi<Values>{
+
+	desenvMode : number = -1;
+
+	protected isDesenvMode() : boolean {
+		if (this.desenvMode == -1) {
+			this.desenvMode = ((!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 1 : 0);
+		}
+
+		return this.desenvMode == 1;
+	}
 
 	protected getPath(): string {
 		throw new Error("getPath is not implemented!");
@@ -38,16 +48,16 @@ class ApiBase<T> { //implements IApi<Values>{
 		return ApiConfig.URL + this.getPath() + ((endPath != undefined) ? endPath : '');
 	}
 
-	public get(dataCallback : any, errorCallback : any, endPath?: string) {
+	public get(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, endPath?: string) {
 		this.doFetch(ApiMethod.GET, this.translatePath(endPath), dataCallback, errorCallback);
 		// return 'Get from [' + ApiConfig.URL + ']' + this.getPath();
 	}
 
 	doFetch(
 		requestMethod: ApiMethod, url: string,
-		dataCallback: any, errorCallback: any, bodyData?: any) {
+		dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, bodyData?: any) {
 
-		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+		if (this.isDesenvMode()) {
 			console.log(requestMethod + ' -> ' + url);
 		}
 
@@ -71,7 +81,7 @@ class ApiBase<T> { //implements IApi<Values>{
 					throw new Error(response.status + ' - ' + response.statusText);
 				}
 			})
-			.then(data => console.log(data))
+			.then(data => dataCallback(data))
 			.catch(error => errorCallback(error));
 	}
 
