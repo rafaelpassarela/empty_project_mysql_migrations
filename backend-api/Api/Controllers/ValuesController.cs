@@ -2,9 +2,12 @@
 using Api.PersistenceIntf;
 using System;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Api.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("")]
     public class ValuesController : ApiController
     {
         private readonly IValuesPersist _crud;

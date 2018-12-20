@@ -27,7 +27,7 @@ class ApiBase<T> { //implements IApi<Values>{
 	}
 
 	protected getCredentials(): ApiCredentials {
-		return ApiCredentials.INCLUDE;
+		return ApiCredentials.SAME_ORIGIN;
 	}
 
 	protected getRedirect(): ApiRedirect {
@@ -45,9 +45,9 @@ class ApiBase<T> { //implements IApi<Values>{
 
 	doFetch(requestMethod: ApiMethod, url: string, bodyData?: any) {
 
-        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        	console.log(requestMethod + ' -> ' + url);
-        }
+		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+			console.log(requestMethod + ' -> ' + url);
+		}
 
 		return fetch(url, {
 			method: requestMethod,
@@ -62,7 +62,15 @@ class ApiBase<T> { //implements IApi<Values>{
 			redirect: this.getRedirect(),
 			body: ((bodyData != undefined) ? JSON.stringify(bodyData) : undefined)
 		})
-			.then(response => response.json()); // parses response to JSON
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error(response.status + ' - ' + response.statusText);
+				}
+			})
+			.then(data => console.log(data))
+			.catch(error => console.error(error));
 	}
 
 }
