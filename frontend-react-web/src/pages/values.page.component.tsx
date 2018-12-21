@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import BaseViewComponent from '../components/base.view.component';
 import ErrorBox, { ErrorMode } from '../components/error.box.component';
-// import Loading from '../components/loading.component';
+import Loading from '../components/loading.component';
 
 import Api from '../client-api/api';
 import { Values } from '../client-api/api-models';
@@ -60,9 +60,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 
 	render() {
 
-		const loading = (this.state.isLoading) ? <div>Loading...</div> : undefined;
-		// const loading = <Loading active={false}/>
-
+		const loading = <Loading active={this.state.isLoading}/>
 
 		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-sign" mode={ErrorMode.EM_DYNAMIC} />
 

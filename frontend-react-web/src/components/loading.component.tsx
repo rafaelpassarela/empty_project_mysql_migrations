@@ -7,6 +7,12 @@ import '../inc/App.css';
   https://loading.io/animation/icon/
 */
 
+// use this setting to adjust your loader at center of the screen
+const PositionOverlay = {
+	top: '30%',
+	left: '47%'
+}
+
 class Loading extends React.Component<{ active: boolean }, {}> {
 
 	render() {
@@ -14,7 +20,7 @@ class Loading extends React.Component<{ active: boolean }, {}> {
 		let img = null;
 		if (this.props.active) {
 			img = (
-				<div className="divCenterEx">
+				<div className="divCenterEx" style={PositionOverlay}>
 					<p className="pCenter">
 						<img className="imgCenter" src={LoadImage} alt="Loading..." />
 					</p>

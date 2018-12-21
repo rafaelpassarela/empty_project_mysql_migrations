@@ -24,7 +24,7 @@ class App extends React.Component {
 			<Router>
 				<div className="defaultAppStyle" >
 					<HeaderComponent />
-					<Row>
+					<Row style={{'marginRight': -10}}>
 						<Col lg={12} md={12} sm={12} xs={12}>
 							<div className="din-content">
 								<RouterPlaceHolder />
@@ -39,7 +39,7 @@ class App extends React.Component {
 						closeOnClick
 						rtl={false}
 						draggable
-						pauseOnHover
+						pauseOnHover={false}
 					/>
 					<FooterComponent />
 				</div>
