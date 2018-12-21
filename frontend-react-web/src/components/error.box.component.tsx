@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Alert, Glyphicon } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 export enum ErrorMode {
 	EM_FIXED,
@@ -15,22 +16,12 @@ type ErrorComponentProp = {
 
 class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 
-	constructor(props: any) {
-		super(props);
-
-		this.isValid = this.isValid.bind(this);
-		this.getFixedMode = this.getFixedMode.bind(this);
-		this.getDynamicMode = this.getDynamicMode.bind(this);
-	}
-
-	isValid(value?: string) {
+	isValid = (value?: string) => {
 		return (value != '' && value != undefined);
 	}
 
-	getFixedMode() {
-		if (!this.isValid(this.props.errorMessage)) return null;
-
-		let icon = (this.isValid(this.props.icon)) ? <Glyphicon glyph={String(this.props.icon)} style={{paddingRight: 10}}/> : null;
+	generateMessage = () => {
+		let icon = (this.isValid(this.props.icon)) ? <Glyphicon glyph={String(this.props.icon)} style={{ paddingRight: 10 }} /> : null;
 
 		let caption = null;
 		if (this.isValid(this.props.caption)) {
@@ -45,18 +36,31 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 		}
 
 		return (
-			<Alert bsStyle="danger">
+			<div>
 				<div>{caption}</div>
 				{msg}
-			</Alert>
+			</div>
+		);
 
+	}
+
+	getFixedMode = () => {
+		if (!this.isValid(this.props.errorMessage)) return null;
+
+		let msg = this.generateMessage();
+
+		return (
+			<Alert bsStyle="danger">
+				{msg}
+			</Alert>
 		);
 	}
 
-	getDynamicMode() {
+	getDynamicMode = () => {
 		if (!this.isValid(this.props.errorMessage)) return null;
 
-		return <div><i>DYN - {this.props.errorMessage}</i></div>;
+		toast.error(this.generateMessage());
+		return null; // toast is your message !
 	}
 
 	render() {

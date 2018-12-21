@@ -56,6 +56,25 @@
 	/* background-color: #f3f3f3; */
 }
 
+.pCenter {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 6em;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.imgCenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
 .size24 {
 	width: 24px;
 	height: 24px;
