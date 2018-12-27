@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import BaseViewComponent from '../components/base.view.component';
 import ErrorBox, { ErrorMode } from '../components/error.box.component';
 import Loading from '../components/loading.component';
-import Grid from '../components/grid.component';
+import Grid, { ActionType } from '../components/grid.component';
 
 import Api from '../client-api/api';
 import { Values } from '../client-api/api-models';
@@ -87,9 +87,11 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 					<h3>Some Values Simple List</h3>
 					<Grid
 						Columns={columns}
+						KeyField="Id"
 						DataSource={this.state.list}
 						OnRenderRow={this.onRederRow}
-						OnRenderColumn={this.onRenderColumn} />
+						OnRenderColumn={this.onRenderColumn}
+						Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]} />
 				</Col></Row>
 				<small>
 					Row of Id 4 will be blue.<br />
