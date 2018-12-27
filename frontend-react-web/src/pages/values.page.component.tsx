@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import BaseViewComponent from '../components/base.view.component';
 import ErrorBox, { ErrorMode } from '../components/error.box.component';
 import Loading from '../components/loading.component';
+import Grid from '../components/grid.component';
 
 import Api from '../client-api/api';
 import { Values } from '../client-api/api-models';
@@ -59,20 +60,24 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 	}
 
 	render() {
-
-		const loading = <Loading active={this.state.isLoading}/>
-
+		// create the Loading Indicator component
+		const loading = <Loading active={this.state.isLoading} />
+		// create the ErrorBox component
 		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-sign" mode={ErrorMode.EM_DYNAMIC} />
 
-		const listItems = this.state.list.map((d: Values) => <div>{d.Id} - {d.Name}</div>);
+		const columns = [
+			{ Field: 'Id', Title: 'Code' },
+			{ Field: 'Name', Title: 'Value Name' }
+		];
 
 		return (
 			<div>
 				{loading}{error}
 				<Row><Col md={6}>
 					<h3>Some Values Simple List</h3>
-					Test: {listItems}
+					<Grid Columns={columns} DataSource={this.state.list} />
 				</Col></Row>
+
 			</div>
 		);
 	}
