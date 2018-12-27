@@ -21,8 +21,6 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 	constructor(props: any) {
 		super(props);
 
-		this.getData = this.getData.bind(this);
-
 		this.state = {
 			list: [],
 			errorMsg: '',
@@ -54,9 +52,21 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 		return 'Some Values List';
 	}
 
-	getData(data: any) {
-		console.log("recebimento -> " + data);
+	onRederRow = (data: Object) => {
+		if (data == undefined)
+			return "danger";
+		if (data['Id'] == "4")
+			return "info"
 
+		return "";
+	}
+
+	onRenderColumn = (field: string, value: any) => {
+		if (field == 'Id' && value == '2')
+			return 'danger';
+		if (field == 'Name' && value.indexOf("Value") > 0)
+			return 'success';
+		return '';
 	}
 
 	render() {
@@ -75,9 +85,17 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 				{loading}{error}
 				<Row><Col md={6}>
 					<h3>Some Values Simple List</h3>
-					<Grid Columns={columns} DataSource={this.state.list} />
+					<Grid
+						Columns={columns}
+						DataSource={this.state.list}
+						OnRenderRow={this.onRederRow}
+						OnRenderColumn={this.onRenderColumn} />
 				</Col></Row>
-
+				<small>
+					Row of Id 4 will be blue.<br />
+					Cell of Id 2 will be red.<br />
+					Cell with Value containning "Value" will be green.
+				</small>
 			</div>
 		);
 	}
