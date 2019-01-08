@@ -7,6 +7,7 @@ export class GridColumn {
 }
 
 export type GridGetRowClass = (data: Object) => any;
+export type GridHandleDataEvent = (data: Object) => any;
 export type GridGetColumnClass = (field: string, value: any) => any;
 export enum ActionType {
 	INSERT,
@@ -14,17 +15,42 @@ export enum ActionType {
 	DELETE
 }
 
+const btnStyle = {
+	cursor: 'pointer'
+};
+
 type GridProps = {
 	Columns: GridColumn[],
 	DataSource: Array<Object>,
 	KeyField: string,
 	ReadOnly?: boolean,
+	Actions?: Array<ActionType>,
 	OnRenderRow?: GridGetRowClass,
 	OnRenderColumn?: GridGetColumnClass,
-	Actions?: Array<ActionType>
+	OnInsert?: GridHandleDataEvent,
+	OnUpdate?: GridHandleDataEvent,
+	OnDelete?: GridHandleDataEvent	
 }
 
 class Grid extends React.Component<GridProps, {}> {
+
+	handleInsert = (data: Object) => {
+		if (this.props.OnInsert != undefined) {
+			this.props.OnInsert(data);
+		}
+	}
+
+	handleUpdate = (data: Object) => {
+		if (this.props.OnUpdate != undefined) {
+			this.props.OnUpdate(data);
+		}
+	}
+
+	handleDelete =(data : Object) => {
+		if (this.props.OnDelete != undefined) {
+			this.props.OnDelete(data);
+		}
+	}
 
 	renderColumn = (fieldName: string, value: any) => {
 		return (
@@ -41,11 +67,9 @@ class Grid extends React.Component<GridProps, {}> {
 			if (this.props.Actions.indexOf(ActionType.INSERT) > -1) {
 				return (
 					<th style={{ width: 75, textAlign: 'center' }}>
-						<a href="#">
-							<Badge>
-								<Glyphicon glyph="plus" />
-							</Badge>
-						</a>
+						<Badge onClick={this.handleInsert} style={btnStyle}>
+							<Glyphicon glyph="plus" />
+						</Badge>
 					</th>
 				);
 			}
@@ -64,10 +88,10 @@ class Grid extends React.Component<GridProps, {}> {
 		let actions = [];
 
 		if (this.props.Actions.indexOf(ActionType.DELETE) > -1)
-			actions.push(<Badge><Glyphicon glyph="trash" /></Badge>)
+			actions.push(<Badge onClick={() => this.handleDelete(data)} style={btnStyle}><Glyphicon glyph="trash" /></Badge>)
 
 		if (this.props.Actions.indexOf(ActionType.UPDATE) > -1)
-			actions.push(<Badge><Glyphicon glyph="edit" /></Badge>)
+			actions.push(<Badge onClick={() => this.handleUpdate(data)} style={btnStyle}><Glyphicon glyph="edit" /></Badge>)
 
 		if (actions.length > 1)
 			actions.splice(1, 0, <span>&nbsp;|&nbsp;</span>);

@@ -40,7 +40,12 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 			},
 			(error: Error) => {
 				this.setState({
-					list: [],
+					list: [
+						{Id: 1, Name: 'Test Value for Error 1'},
+						{Id: 2, Name: 'Test Value for Error 2'},
+						{Id: 4, Name: 'Just For Blue'},
+						{Id: 5, Name: 'Just Because You Got An Error'}
+					],
 					isLoading: false,
 					errorMsg: error.message
 				});
@@ -91,7 +96,10 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 						DataSource={this.state.list}
 						OnRenderRow={this.onRederRow}
 						OnRenderColumn={this.onRenderColumn}
-						Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]} />
+						Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]}
+						OnInsert={() => alert('msg on other page!')}
+						OnDelete={(data: Object) => alert('Remove ' + data['Id'] + '?')}
+						OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} />
 				</Col></Row>
 				<small>
 					Row of Id 4 will be blue.<br />
