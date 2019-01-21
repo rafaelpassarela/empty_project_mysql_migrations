@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Row, Col } from 'react-bootstrap';
 import BaseViewComponent from '../components/base.view.component';
+import PageFrame from '../components/pageframe.component';
 import ErrorBox, { ErrorMode } from '../components/error.box.component';
 import Loading from '../components/loading.component';
 import Grid, { ActionType } from '../components/grid.component';
@@ -41,10 +41,10 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 			(error: Error) => {
 				this.setState({
 					list: [
-						{Id: 1, Name: 'Test Value for Error 1'},
-						{Id: 2, Name: 'Test Value for Error 2'},
-						{Id: 4, Name: 'Just For Blue'},
-						{Id: 5, Name: 'Just Because You Got An Error'}
+						{ Id: 1, Name: 'Test Value for Error 1' },
+						{ Id: 2, Name: 'Test Value for Error 2' },
+						{ Id: 4, Name: 'Just For Blue' },
+						{ Id: 5, Name: 'Just Because You Got An Error' }
 					],
 					isLoading: false,
 					errorMsg: error.message
@@ -86,27 +86,26 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 		];
 
 		return (
-			<div>
+			<PageFrame>
 				{loading}{error}
-				<Row><Col md={6}>
-					<h3>Some Values Simple List</h3>
-					<Grid
-						Columns={columns}
-						KeyField="Id"
-						DataSource={this.state.list}
-						OnRenderRow={this.onRederRow}
-						OnRenderColumn={this.onRenderColumn}
-						Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]}
-						OnInsert={() => alert('msg on other page!')}
-						OnDelete={(data: Object) => alert('Remove ' + data['Id'] + '?')}
-						OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} />
-				</Col></Row>
+				<h3>Some Values Simple List</h3>
+				<Grid
+					Columns={columns}
+					KeyField="Id"
+					DataSource={this.state.list}
+					OnRenderRow={this.onRederRow}
+					OnRenderColumn={this.onRenderColumn}
+					Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]}
+					OnInsert={() => alert('msg on other page!')}
+					OnDelete={(data: Object) => alert('Remove ' + data['Id'] + '?')}
+					OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} />
+
 				<small>
 					Row of Id 4 will be blue.<br />
 					Cell of Id 2 will be red.<br />
 					Cell with Value containning "Value" will be green.
 				</small>
-			</div>
+			</PageFrame>
 		);
 	}
 

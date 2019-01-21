@@ -1,5 +1,6 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
+import PageFrame from '../components/pageframe.component';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -27,7 +28,7 @@ class HomePage extends BaseViewComponent {
 
 	public render() {
 		return (
-			<div>
+			<PageFrame>
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />
@@ -38,7 +39,7 @@ class HomePage extends BaseViewComponent {
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
 				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
-			</div>
+			</PageFrame>
 		);
 	}
 }

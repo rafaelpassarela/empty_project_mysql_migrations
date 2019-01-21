@@ -1,5 +1,6 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
+import PageFrame from '../components/pageframe.component';
 
 class AboutPage extends BaseViewComponent {
 
@@ -9,9 +10,9 @@ class AboutPage extends BaseViewComponent {
 
 	render() {
 		return (
-			<div>
+			<PageFrame center={true}>
 				It's me, React!
-			</div>
+			</PageFrame>
 		);
 	}
 
