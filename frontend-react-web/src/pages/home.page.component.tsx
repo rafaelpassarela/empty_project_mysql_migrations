@@ -26,15 +26,23 @@ class HomePage extends BaseViewComponent {
 		toast.success("Success Notification !");
 	}
 
+	renderLeft = () => {
+		return <div>Left Part of Screen</div>;
+	}
+
+	renderRight = () => {
+		return <div>Right Part of Screen</div>;
+	}
+
 	public render() {
 		return (
-			<PageFrame>
+			<PageFrame onRenderLeft={this.renderLeft} onRenderRight={this.renderRight}>
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />
 					<Button bsStyle="primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
 					<Button bsStyle="success" onClick={this.handleLoad}>Load Cookie</Button>
-					<br/><br/>
+					<br /><br />
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
