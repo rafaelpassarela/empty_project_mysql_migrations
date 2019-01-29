@@ -1,8 +1,89 @@
-.pfPanel {
-	padding-top: 10px;
-	padding-bottom: 10px;	
-}
-
 .pfCenter {
 	text-align: center;
+}
+
+.pfPanel {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 8px;
+}
+
+.pfSideFrameL {
+		/*background-color: red;*/
+		border-radius: 0px;
+		margin-bottom: 20px;
+		padding: 10px;
+		left: -10px;
+		position: relative;
+		width: 110%;
+}
+
+.pfSideFrameR {
+		/*background-color: red;*/
+		border-radius: 0px;
+		margin-top: 20px;
+		padding: 10px;
+		left: -10px;
+		position: relative;
+		width: 110%;
+}
+
+@media (min-width: 768px) {
+	.pfPanel {
+		border-radius: 0px;
+	}
+	.pfSideFrameL {
+		/*background-color: green;*/
+		border-radius: 0px;
+		margin-bottom: 20px;
+		left: -10px;
+		position: relative;
+		width: 104%;
+	}
+	.pfSideFrameR {
+		/*background-color: green;*/
+		border-radius: 0px;
+		margin-top: 20px;
+		left: -10px;
+		position: relative;
+		width: 104%;
+	}	
+}
+
+@media (min-width: 992px) {
+	.pfPanel {
+		border-radius: 8px;
+	}
+	.pfSideFrameL {
+		/*background-color: yellow;*/
+		border-radius: 8px;
+		margin-bottom: 0px;
+		left: 0px;
+		position: relative;
+		width: 100%;		
+	}
+	.pfSideFrameR {
+		/*background-color: yellow;*/
+		border-radius: 8px;
+		margin-top: 0px;
+		left: 0px;
+		position: relative;
+		width: 100%;		
+	}	
+}
+
+@media (min-width: 1200px) {
+	.pfPanel {
+		border-radius: 8px;
+	}
+	.pfSideFrameL {
+		/*background-color: blue;*/
+		border-radius: 8px;
+		margin-bottom: 0px;
+	}
+	.pfSideFrameR {
+		/*background-color: blue;*/
+		border-radius: 8px;
+		margin-top: 0px;
+	}	
 }

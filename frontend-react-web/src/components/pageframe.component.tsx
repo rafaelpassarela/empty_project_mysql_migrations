@@ -12,23 +12,53 @@ type PageFrameProps = {
 	onRenderRight?: PageFrameOnRenderSides
 };
 
-class PageFrame extends React.Component<PageFrameProps, {}> {
+type PageFrameState = {
+	sizeDefault: number,
+	sizeCenter: number,
+	sizeSmall: number
+}
 
-	doOnRender = (side: string) => {
-		if (side == 'left') {
-			if (this.props.onRenderLeft != undefined) return this.props.onRenderLeft();
-		} else if (side == 'right') {
-			if (this.props.onRenderRight != undefined) return this.props.onRenderRight();
-		} else
-			console.error('Render Sides Erros: Invalid side = [' + side + ']');
+class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
-		return null;
+	constructor(props: any) {
+		super(props);
+
+		this.state = {
+			sizeDefault: 12,
+			sizeCenter: 8,
+			sizeSmall: 2
+		};
+	}
+
+	dummyColumn = () => {
+		return (
+			<Col xsHidden smHidden md={this.state.sizeSmall} lg={this.state.sizeSmall}>
+			</Col>
+		);
 	}
 
 	leftColumn = () => {
-		return (
-			<Col xsHidden smHidden md={2} lg={2}>
-				{this.doOnRender('left')}
+		return (this.props.onRenderLeft == undefined) ? this.dummyColumn() : (
+			<Col
+				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
+				md={this.state.sizeSmall} lg={this.state.sizeSmall}
+			>
+				<div className="pfSideFrameL shadow">
+					{this.props.onRenderLeft()}
+				</div>
+			</Col>
+		);
+	}
+
+	rightColumn = () => {
+		return (this.props.onRenderRight == undefined) ? this.dummyColumn() : (
+			<Col
+				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
+				md={this.state.sizeSmall} lg={this.state.sizeSmall}
+			>
+				<div className="pfSideFrameR shadow">
+					{this.props.onRenderRight()}
+				</div>
 			</Col>
 		);
 	}
@@ -43,15 +73,21 @@ class PageFrame extends React.Component<PageFrameProps, {}> {
 	render() {
 		return (
 			<Row>
-				<Col xs={12} sm={12} md={12} lg={12}>
+				<Col
+					xs={this.state.sizeDefault} sm={this.state.sizeDefault}
+					md={this.state.sizeDefault} lg={this.state.sizeDefault}>
 					<Row>
+
 						{this.leftColumn()}
-						<Col xs={12} sm={12} md={8} lg={8} className={this.getClassName()}>
+
+						<Col className={this.getClassName()}
+							xs={this.state.sizeDefault} sm={this.state.sizeDefault}
+							md={this.state.sizeCenter} lg={this.state.sizeCenter}
+						>
 							{this.props.children}
 						</Col>
-						<Col xsHidden smHidden md={2} lg={2}>
-							{this.doOnRender('right')}
-						</Col>
+
+						{this.rightColumn()}
 					</Row>
 				</Col>
 			</Row>

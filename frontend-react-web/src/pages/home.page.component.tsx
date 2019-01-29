@@ -26,17 +26,32 @@ class HomePage extends BaseViewComponent {
 		toast.success("Success Notification !");
 	}
 
+	protected getTitle(): string {
+		return 'Home Page';
+	}
+
 	renderLeft = () => {
-		return <div>Left Part of Screen</div>;
+		return (
+			<div>
+				Test of Left Part of Screen
+			</div>
+		);
 	}
 
 	renderRight = () => {
-		return <div>Right Part of Screen</div>;
+		return (
+			<div>
+				Test of Right Part of Screen
+			</div>
+		);
 	}
 
 	public render() {
 		return (
-			<PageFrame onRenderLeft={this.renderLeft} onRenderRight={this.renderRight}>
+			<PageFrame
+				onRenderLeft={this.renderLeft}
+				onRenderRight={this.renderRight}
+				>
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />

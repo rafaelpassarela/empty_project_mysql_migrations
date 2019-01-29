@@ -29,7 +29,7 @@ type GridProps = {
 	OnRenderColumn?: GridGetColumnClass,
 	OnInsert?: GridHandleDataEvent,
 	OnUpdate?: GridHandleDataEvent,
-	OnDelete?: GridHandleDataEvent	
+	OnDelete?: GridHandleDataEvent
 }
 
 class Grid extends React.Component<GridProps, {}> {
@@ -46,7 +46,7 @@ class Grid extends React.Component<GridProps, {}> {
 		}
 	}
 
-	handleDelete =(data : Object) => {
+	handleDelete = (data: Object) => {
 		if (this.props.OnDelete != undefined) {
 			this.props.OnDelete(data);
 		}
@@ -54,7 +54,7 @@ class Grid extends React.Component<GridProps, {}> {
 
 	renderColumn = (fieldName: string, value: any) => {
 		return (
-			<td className={(this.props.OnRenderColumn != undefined) ? this.props.OnRenderColumn(fieldName, value) : ''}>
+			<td key={"Column_" + fieldName} className={(this.props.OnRenderColumn != undefined) ? this.props.OnRenderColumn(fieldName, value) : ''}>
 				{value}
 			</td>
 		);
@@ -66,7 +66,7 @@ class Grid extends React.Component<GridProps, {}> {
 			// render a plus img if INSERT is present
 			if (this.props.Actions.indexOf(ActionType.INSERT) > -1) {
 				return (
-					<th style={{ width: 75, textAlign: 'center' }}>
+					<th key="actionHeaderInsert" style={{ width: 75, textAlign: 'center' }}>
 						<Badge onClick={this.handleInsert} style={btnStyle}>
 							<Glyphicon glyph="plus" />
 						</Badge>
@@ -74,7 +74,7 @@ class Grid extends React.Component<GridProps, {}> {
 				);
 			}
 			else if (this.props.Actions.length > 0) {
-				return <th style={{ width: 75 }}>&nbsp;</th>;
+				return <th key="actionHeaderInsert" style={{ width: 75 }}>&nbsp;</th>;
 			}
 		}
 
@@ -82,34 +82,42 @@ class Grid extends React.Component<GridProps, {}> {
 	}
 
 	getEditActions = (data: Object) => {
+		let actionKeyName: string = "editAction_" + data[this.props.KeyField];
+
 		if (this.props.Actions == undefined)
 			return null;
 
 		let actions = [];
 
-		if (this.props.Actions.indexOf(ActionType.DELETE) > -1)
-			actions.push(<Badge onClick={() => this.handleDelete(data)} style={btnStyle}><Glyphicon glyph="trash" /></Badge>)
+		if (this.props.Actions.indexOf(ActionType.DELETE) > -1) {
+			actions.push(<Badge key={"badge_d_" + actionKeyName} 
+				onClick={() => this.handleDelete(data)}
+				style={btnStyle}><Glyphicon glyph="trash" /></Badge>);
+		}
 
 		if (this.props.Actions.indexOf(ActionType.UPDATE) > -1)
-			actions.push(<Badge onClick={() => this.handleUpdate(data)} style={btnStyle}><Glyphicon glyph="edit" /></Badge>)
+			actions.push(<Badge key={"badge_u_" + actionKeyName} 
+				onClick={() => this.handleUpdate(data)} 
+				style={btnStyle}><Glyphicon glyph="edit" /></Badge>)
 
 		if (actions.length > 1)
-			actions.splice(1, 0, <span>&nbsp;|&nbsp;</span>);
+			actions.splice(1, 0, <span key={"badge_s_" + actionKeyName}>&nbsp;|&nbsp;</span>);
 
-		return (<td>{actions}</td>);
+		return (<td key={actionKeyName}>{actions}</td>);
 	}
 
 	render() {
-
 		const trList = [
-			this.getActionHeader(),
-			this.props.Columns.map((c: GridColumn) => <th>{c.Title}</th>)
+			this.getActionHeader(),			
+			this.props.Columns.map((c: GridColumn) => <th key={"header_" + c.Field}>{c.Title}</th>)
 		];
 
+		let rowKey: number = 0;
 		const trData = this.props.DataSource.map((ds: Object) => {
+			rowKey += 1;
 			return (
 				// render the Row
-				<tr className={(this.props.OnRenderRow != undefined) ? this.props.OnRenderRow(ds) : ''}>
+				<tr key={rowKey} className={(this.props.OnRenderRow != undefined) ? this.props.OnRenderRow(ds) : ''}>
 					{this.getEditActions(ds)}
 					{this.props.Columns.map((c: GridColumn) => {
 						// for each column, render a TD element
@@ -117,7 +125,6 @@ class Grid extends React.Component<GridProps, {}> {
 					})}
 				</tr>
 			);
-
 		});
 
 		return (
