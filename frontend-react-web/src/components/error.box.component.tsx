@@ -52,7 +52,7 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 		let msg = this.generateMessage();
 
 		return (
-			<Alert bsStyle="danger">
+			<Alert variant="danger">
 				{msg}
 			</Alert>
 		);
