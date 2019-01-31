@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Glyphicon, Badge } from 'react-bootstrap';
+import Glyphicon from './glyphicon.component';
+import { Badge } from 'react-bootstrap';
 
 export class GridColumn {
 	Field: string;
@@ -92,7 +93,7 @@ class Grid extends React.Component<GridProps, {}> {
 		if (this.props.Actions.indexOf(ActionType.DELETE) > -1) {
 			actions.push(<Badge key={"badge_d_" + actionKeyName} 
 				onClick={() => this.handleDelete(data)}
-				style={btnStyle}><Glyphicon glyph="trash" /></Badge>);
+				style={btnStyle}><Glyphicon glyph="trash-alt" /></Badge>);
 		}
 
 		if (this.props.Actions.indexOf(ActionType.UPDATE) > -1)

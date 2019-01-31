@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { RegisterGlyph } from './components/glyph.register';
 import { Row, Col } from 'react-bootstrap';
 
 // all site styles
@@ -15,6 +16,12 @@ import FooterComponent from './components/footer/footer.component';
 
 class App extends React.Component {
 
+	constructor(props: any) {
+		super(props);
+
+		RegisterGlyph();
+	}
+
 	public render() {
 
 		// console.log("App.ts LOG test");
@@ -24,7 +31,7 @@ class App extends React.Component {
 			<Router>
 				<div className="defaultAppStyle" >
 					<HeaderComponent />
-					<Row style={{'marginRight': -10}}>
+					<Row style={{ 'marginRight': -10 }}>
 						<Col lg={12} md={12} sm={12} xs={12}>
 							<div className="din-content">
 								<RouterPlaceHolder />

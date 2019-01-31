@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Alert, Glyphicon } from 'react-bootstrap';
+import Glyphicon from './glyphicon.component';
+import { Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 export enum ErrorMode {
@@ -21,7 +22,8 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 	}
 
 	generateMessage = () => {
-		let icon = (this.isValid(this.props.icon)) ? <Glyphicon glyph={String(this.props.icon)} style={{ paddingRight: 10 }} /> : null;
+		let icon = (this.isValid(this.props.icon)) ?
+			<Glyphicon glyph={String(this.props.icon)} style={{ paddingRight: 10 }} /> : null;
 
 		let caption = null;
 		if (this.isValid(this.props.caption)) {
