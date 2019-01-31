@@ -40,12 +40,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 			},
 			(error: Error) => {
 				this.setState({
-					list: [
-						{ Id: 1, Name: 'Test Value for Error 1' },
-						{ Id: 2, Name: 'Test Value for Error 2' },
-						{ Id: 4, Name: 'Just For Blue' },
-						{ Id: 5, Name: 'Just Because You Got An Error' }
-					],
+					list: [],
 					isLoading: false,
 					errorMsg: error.message
 				});
