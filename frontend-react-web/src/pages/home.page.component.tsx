@@ -1,8 +1,8 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
+import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
@@ -55,8 +55,8 @@ class HomePage extends BaseViewComponent {
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />
-					<Button bsStyle="primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
-					<Button bsStyle="success" onClick={this.handleLoad}>Load Cookie</Button>
+					<Button variant="outline-primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
+					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>
 					<br /><br />
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>

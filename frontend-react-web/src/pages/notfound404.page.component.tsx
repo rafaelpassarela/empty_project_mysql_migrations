@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
 
 import '../inc/App.css';
 
@@ -52,7 +52,7 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 
 		return (
 			<PageFrame center={true}>
-				<Alert bsStyle="danger">
+				<Alert variant="danger">
 					Oops, an error occurred ! !
 								</Alert>
 				<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} />

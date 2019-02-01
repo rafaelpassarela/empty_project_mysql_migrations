@@ -47,7 +47,7 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
 				md={this.state.sizeSmall} lg={this.state.sizeSmall}
 			>
-				<div className="pfSideFrameL shadow">
+				<div className="pf-side-frame-l app-shadow">
 					{this.props.onRenderLeft()}
 				</div>
 			</Col>
@@ -60,7 +60,7 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
 				md={this.state.sizeSmall} lg={this.state.sizeSmall}
 			>
-				<div className="pfSideFrameR shadow">
+				<div className="pf-side-frame-r app-shadow">
 					{this.props.onRenderRight()}
 				</div>
 			</Col>
@@ -68,9 +68,9 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 	}
 
 	getClassName = (): string => {
-		let res = 'shadow pfPanel';
+		let res = 'app-shadow pf-panel';
 		if (this.props.center != undefined && this.props.center === true)
-			res += ' pfCenter';
+			res += ' pf-center';
 		return res;
 	}
 

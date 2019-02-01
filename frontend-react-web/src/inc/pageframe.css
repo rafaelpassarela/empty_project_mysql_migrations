@@ -1,14 +1,14 @@
-.pfCenter {
+.pf-center {
 	text-align: center;
 }
 
-.pfPanel {
+.pf-panel {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 8px;
 }
 
-.pfSideFrameL {
+.pf-side-frame-l {
 		/*background-color: red;*/
 		border-radius: 0px;
 		margin-bottom: 20px;
@@ -18,7 +18,7 @@
 		width: 110%;
 }
 
-.pfSideFrameR {
+.pf-side-frame-r {
 		/*background-color: red;*/
 		border-radius: 0px;
 		margin-top: 20px;
@@ -29,10 +29,10 @@
 }
 
 @media (min-width: 768px) {
-	.pfPanel {
+	.pf-panel {
 		border-radius: 0px;
 	}
-	.pfSideFrameL {
+	.pf-side-frame-l {
 		/*background-color: green;*/
 		border-radius: 0px;
 		margin-bottom: 20px;
@@ -40,7 +40,7 @@
 		position: relative;
 		width: 104%;
 	}
-	.pfSideFrameR {
+	.pf-side-frame-r {
 		/*background-color: green;*/
 		border-radius: 0px;
 		margin-top: 20px;
@@ -51,10 +51,10 @@
 }
 
 @media (min-width: 992px) {
-	.pfPanel {
+	.pf-panel {
 		border-radius: 8px;
 	}
-	.pfSideFrameL {
+	.pf-side-frame-l {
 		/*background-color: yellow;*/
 		border-radius: 8px;
 		margin-bottom: 0px;
@@ -62,7 +62,7 @@
 		position: relative;
 		width: 100%;		
 	}
-	.pfSideFrameR {
+	.pf-side-frame-r {
 		/*background-color: yellow;*/
 		border-radius: 8px;
 		margin-top: 0px;
@@ -73,15 +73,15 @@
 }
 
 @media (min-width: 1200px) {
-	.pfPanel {
+	.pf-panel {
 		border-radius: 8px;
 	}
-	.pfSideFrameL {
+	.pf-side-frame-l {
 		/*background-color: blue;*/
 		border-radius: 8px;
 		margin-bottom: 0px;
 	}
-	.pfSideFrameR {
+	.pf-side-frame-r {
 		/*background-color: blue;*/
 		border-radius: 8px;
 		margin-top: 0px;

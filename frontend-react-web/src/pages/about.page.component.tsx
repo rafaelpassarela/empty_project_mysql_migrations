@@ -31,6 +31,7 @@ class AboutPage extends BaseViewComponent<{}, { show: boolean }> {
 		return (
 			<PageFrame center={true}>
 				It's me, React!
+				<br/>
 				<button onClick={this.onClick}>Show Modal</button>
 				<Modal show={this.state.show} element={this.getForm()} />
 			</PageFrame>
