@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
 
 // With the use of React with Typescript and React-Router, it is not possible to insert a "Link"
 // within the "NavItem" component, so that this class treats this case

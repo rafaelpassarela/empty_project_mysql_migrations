@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import '../inc/pageframe.css';
+import '../inc/restore.bootstrap.hidden.css';
 
 export type PageFrameOnRenderSides = () => any;
 
@@ -32,7 +33,10 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
 	dummyColumn = () => {
 		return (
-			<Col xsHidden smHidden md={this.state.sizeSmall} lg={this.state.sizeSmall}>
+		        // xsHidden smHidden
+			<Col className="hidden-xs-down hidden-sm-down" 
+				md={this.state.sizeSmall}
+				lg={this.state.sizeSmall}>
 			</Col>
 		);
 	}
