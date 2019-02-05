@@ -8,82 +8,77 @@
 	border-radius: 8px;
 }
 
-.pf-side-frame-l {
-		/*background-color: red;*/
-		border-radius: 0px;
-		margin-bottom: 20px;
-		padding: 10px;
-		left: -10px;
-		position: relative;
-		width: 110%;
+.pf-side {
+	border-radius: 8px;
+	padding: 10px;
 }
 
-.pf-side-frame-r {
-		/*background-color: red;*/
-		border-radius: 0px;
-		margin-top: 20px;
-		padding: 10px;
-		left: -10px;
+.pf-side-left {
 		position: relative;
-		width: 110%;
-}
-
-@media (min-width: 768px) {
-	.pf-panel {
-		border-radius: 0px;
-	}
-	.pf-side-frame-l {
-		/*background-color: green;*/
-		border-radius: 0px;
-		margin-bottom: 20px;
-		left: -10px;
-		position: relative;
-		width: 104%;
-	}
-	.pf-side-frame-r {
-		/*background-color: green;*/
-		border-radius: 0px;
-		margin-top: 20px;
-		left: -10px;
-		position: relative;
-		width: 104%;
-	}	
-}
-
-@media (min-width: 992px) {
-	.pf-panel {
-		border-radius: 8px;
-	}
-	.pf-side-frame-l {
-		/*background-color: yellow;*/
-		border-radius: 8px;
 		margin-bottom: 0px;
 		left: 0px;
-		position: relative;
-		width: 100%;		
-	}
-	.pf-side-frame-r {
-		/*background-color: yellow;*/
-		border-radius: 8px;
+		width: 100%;
+}
+
+.pf-side-right {
+		position: relative;		
 		margin-top: 0px;
 		left: 0px;
-		position: relative;
-		width: 100%;		
-	}	
+		width: 100%;
+}
+
+@media (max-width: 767px) {
+	.pf-panel {
+		border-radius: 0px;
+	}
+	.pf-side {
+		border-radius: 0px;
+	}
+	.pf-side-left {
+		left: -10px;
+		width: 110%;
+		margin-bottom: 13px;
+	}
+	.pf-side-right {
+		left: -10px;
+		width: 110%;		
+		margin-top: 13px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.pf-panel {
+		border-radius: 0px;
+	}
+	.pf-side {
+		border-radius: 0px;
+	}
+	.pf-side-left {
+		left: -10px;
+		width: 104%;
+		margin-bottom: 13px;		
+	}
+	.pf-side-right {
+		left: -10px;
+		width: 104%;		
+		margin-top: 13px;
+	}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+	.pf-panel {
+		border-radius: 8px;
+	}
+	.pf-side {
+		border-radius: 8px;
+	}
 }
 
 @media (min-width: 1200px) {
 	.pf-panel {
 		border-radius: 8px;
 	}
-	.pf-side-frame-l {
-		/*background-color: blue;*/
+	.pf-side {
 		border-radius: 8px;
-		margin-bottom: 0px;
 	}
-	.pf-side-frame-r {
-		/*background-color: blue;*/
-		border-radius: 8px;
-		margin-top: 0px;
-	}	
 }

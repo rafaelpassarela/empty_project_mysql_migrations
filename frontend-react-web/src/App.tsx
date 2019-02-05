@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import { RegisterGlyph } from './components/glyph.register';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container'
 
 // all site styles
 import './inc/App.css';
@@ -33,15 +32,13 @@ class App extends React.Component {
 			<Router>
 				<div className="defaultAppStyle" >
 					<HeaderComponent />
-					<Container>
-						<Row style={{ 'marginRight': -10 }}>
-							<Col lg={12} md={12} sm={12} xs={12}>
-								<div className="din-content">
-									<RouterPlaceHolder />
-								</div>
-							</Col>
-						</Row>
-					</Container>
+					<Row style={{ 'marginRight': -10 }}>
+						<Col lg={12} md={12} sm={12} xs={12}>
+							<div className="din-content">
+								<RouterPlaceHolder />
+							</div>
+						</Col>
+					</Row>
 					<ToastContainer
 						position="bottom-center"
 						autoClose={6000}

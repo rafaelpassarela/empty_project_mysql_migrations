@@ -51,7 +51,7 @@ class HomePage extends BaseViewComponent {
 			<PageFrame
 				onRenderLeft={this.renderLeft}
 				onRenderRight={this.renderRight}
-				>
+			>
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />

@@ -4,8 +4,12 @@
 	margin-top: 65px;
 }
 
-.navbarImg {
+.navbar-img {
 	padding: 4px;
+}
+
+.navbar-fix {
+	padding: 0rem;
 }
 
 .footer {
@@ -71,18 +75,18 @@
     margin-right: auto
 }
 
-.size24 {
+.size-24 {
 	width: 24px;
 	height: 24px;
 }
 
-.linkimg {
+.link-img {
 	-webkit-filter: grayscale(100%);
 	/* Safari 6.0 - 9.0 */
 	filter: grayscale(100%);
 }
 
-.linkimg:hover {
+.link-img:hover {
 	-webkit-filter: grayscale(0%);
 	/* Safari 6.0 - 9.0 */
 	filter: grayscale(0%);

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import '../inc/pageframe.css';
-import '../inc/restore.bootstrap.hidden.css';
 
 export type PageFrameOnRenderSides = () => any;
 
@@ -31,43 +30,23 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 		};
 	}
 
-	dummyColumn = () => {
-		return (
-		        // xsHidden smHidden
-			<Col className="hidden-xs-down hidden-sm-down" 
-				md={this.state.sizeSmall}
-				lg={this.state.sizeSmall}>
-			</Col>
-		);
-	}
-
 	leftColumn = () => {
-		return (this.props.onRenderLeft == undefined) ? this.dummyColumn() : (
-			<Col
-				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
-				md={this.state.sizeSmall} lg={this.state.sizeSmall}
-			>
-				<div className="pf-side-frame-l app-shadow">
-					{this.props.onRenderLeft()}
-				</div>
-			</Col>
+		return (this.props.onRenderLeft == undefined) ? null : (
+			<div className="pf-side-left pf-side app-shadow">
+				{this.props.onRenderLeft()}
+			</div>
 		);
 	}
 
 	rightColumn = () => {
-		return (this.props.onRenderRight == undefined) ? this.dummyColumn() : (
-			<Col
-				xs={this.state.sizeDefault} sm={this.state.sizeDefault}
-				md={this.state.sizeSmall} lg={this.state.sizeSmall}
-			>
-				<div className="pf-side-frame-r app-shadow">
-					{this.props.onRenderRight()}
-				</div>
-			</Col>
+		return (this.props.onRenderRight == undefined) ? null : (
+			<div className="pf-side-right pf-side app-shadow">
+				{this.props.onRenderRight()}
+			</div>
 		);
 	}
 
-	getClassName = (): string => {
+	getMainClassName = (): string => {
 		let res = 'app-shadow pf-panel';
 		if (this.props.center != undefined && this.props.center === true)
 			res += ' pf-center';
@@ -76,25 +55,19 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
 	render() {
 		return (
+
 			<Row>
-				<Col
-					xs={this.state.sizeDefault} sm={this.state.sizeDefault}
-					md={this.state.sizeDefault} lg={this.state.sizeDefault}>
-					<Row>
-
-						{this.leftColumn()}
-
-						<Col className={this.getClassName()}
-							xs={this.state.sizeDefault} sm={this.state.sizeDefault}
-							md={this.state.sizeCenter} lg={this.state.sizeCenter}
-						>
-							{this.props.children}
-						</Col>
-
-						{this.rightColumn()}
-					</Row>
+				<Col xs={this.state.sizeDefault} sm={this.state.sizeDefault} md={this.state.sizeDefault} lg={this.state.sizeSmall}>
+					{this.leftColumn()}
+				</Col>
+				<Col xs={this.state.sizeDefault} sm={this.state.sizeDefault} md={this.state.sizeDefault} lg={this.state.sizeCenter} className={this.getMainClassName()}>
+					{this.props.children}
+				</Col>
+				<Col xs={this.state.sizeDefault} sm={this.state.sizeDefault} md={this.state.sizeDefault} lg={this.state.sizeSmall}>
+					{this.rightColumn()}
 				</Col>
 			</Row>
+
 		);
 	}
 
