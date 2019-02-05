@@ -2,6 +2,8 @@ import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
 import Button from 'react-bootstrap/Button';
+import Glyphicon from '../components/glyphicon.component';
+
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -62,6 +64,12 @@ class HomePage extends BaseViewComponent {
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
 				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
+				<hr/>
+				Glyphicons Test: <br />
+				faPlus: <Glyphicon glyph="plus" /> <br />
+				faEdit: <Glyphicon glyph="edit" /> <br />
+				faTrashAlt: <Glyphicon glyph="trash-alt" /> <br />
+				faExclamationCircle: <Glyphicon glyph="exclamation-circle" /> <br />
 			</PageFrame>
 		);
 	}

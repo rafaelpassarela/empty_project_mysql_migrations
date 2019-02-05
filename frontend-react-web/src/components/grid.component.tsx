@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Glyphicon from './glyphicon.component';
-import { Badge } from 'react-bootstrap';
+import Badge from 'react-bootstrap/Badge';
 
 export class GridColumn {
 	Field: string;

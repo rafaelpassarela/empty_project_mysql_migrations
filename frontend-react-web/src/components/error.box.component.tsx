@@ -1,7 +1,8 @@
 import * as React from 'react';
-import Glyphicon from './glyphicon.component';
-import { Alert } from 'react-bootstrap';
+// import Glyphicon from './glyphicon.component';
+import Alert from 'react-bootstrap/Alert';
 import { toast } from 'react-toastify';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export enum ErrorMode {
 	EM_FIXED,
@@ -12,7 +13,7 @@ type ErrorComponentProp = {
 	errorMessage: string,
 	caption?: string,
 	mode?: ErrorMode
-	icon?: string // https://getbootstrap.com/docs/3.3/components/
+	icon?: IconProp
 }
 
 class ErrorBox extends React.Component<ErrorComponentProp, {}> {
@@ -22,8 +23,9 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 	}
 
 	generateMessage = () => {
-		let icon = (this.isValid(this.props.icon)) ?
-			<Glyphicon glyph={String(this.props.icon)} style={{ paddingRight: 10 }} /> : null;
+		let icon = null;
+		// let icon = (this.isValid(this.props.icon)) ?
+		// 	<Glyphicon glyph={this.props.icon} style={{ paddingRight: 10 }} /> : null;
 
 		let caption = null;
 		if (this.isValid(this.props.caption)) {

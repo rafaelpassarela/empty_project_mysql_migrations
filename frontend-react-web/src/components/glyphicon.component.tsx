@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 /*
   https://fontawesome.com/start
@@ -15,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 */
 
 type GlyphiconProps = {
-	glyph: string,
+	glyph: IconProp,
 	style?: any
 }
 
@@ -25,7 +26,7 @@ class Glyphicon extends React.Component<GlyphiconProps, {}> {
         // <FontAwesomeIcon icon="coffee" />	
         // <i className="material-icons" style={this.props.style}>{this.props.glyph}</i>
 		return (
-			<FontAwesomeIcon icon="coffee" style={this.props.style} />
+			<FontAwesomeIcon icon={this.props.glyph} style={this.props.style} />
 		);
 	}
 
