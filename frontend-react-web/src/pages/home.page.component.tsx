@@ -1,8 +1,10 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
+import Button from 'react-bootstrap/Button';
+import Glyphicon from '../components/glyphicon.component';
+
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
@@ -51,17 +53,23 @@ class HomePage extends BaseViewComponent {
 			<PageFrame
 				onRenderLeft={this.renderLeft}
 				onRenderRight={this.renderRight}
-				>
+			>
 				<p>
 					This is the default page! <br />
 					We use Boostrap. <br />
-					<Button bsStyle="primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
-					<Button bsStyle="success" onClick={this.handleLoad}>Load Cookie</Button>
+					<Button variant="outline-primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
+					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>
 					<br /><br />
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
 				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
+				<hr/>
+				Glyphicons Test: <br />
+				faPlus: <Glyphicon glyph="plus" /> <br />
+				faEdit: <Glyphicon glyph="edit" /> <br />
+				faTrashAlt: <Glyphicon glyph="trash-alt" /> <br />
+				faExclamationCircle: <Glyphicon glyph="exclamation-circle" /> <br />
 			</PageFrame>
 		);
 	}

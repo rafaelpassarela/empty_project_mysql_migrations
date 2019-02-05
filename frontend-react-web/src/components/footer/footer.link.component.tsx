@@ -23,7 +23,7 @@ class FooterLinkComponent extends React.Component<FooterLinkProps, FooterLinkSta
 	render() {
 		return (
 			<a href={this.props.href} target="_blank">
-				<img src={this.getImagePath()} className="size24 linkimg" title={this.props.title} alt={this.props.title} />
+				<img src={this.getImagePath()} className="size-24 link-img" title={this.props.title} alt={this.props.title} />
 			</a>
 		);
 	}

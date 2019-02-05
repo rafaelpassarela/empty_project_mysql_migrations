@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Glyphicon, Badge } from 'react-bootstrap';
+import Glyphicon from './glyphicon.component';
+import Badge from 'react-bootstrap/Badge';
 
 export class GridColumn {
 	Field: string;
@@ -66,15 +67,15 @@ class Grid extends React.Component<GridProps, {}> {
 			// render a plus img if INSERT is present
 			if (this.props.Actions.indexOf(ActionType.INSERT) > -1) {
 				return (
-					<th key="actionHeaderInsert" style={{ width: 75, textAlign: 'center' }}>
-						<Badge onClick={this.handleInsert} style={btnStyle}>
+					<th key="actionHeaderInsert" style={{ width: 81, textAlign: 'center' }}>
+						<Badge onClick={this.handleInsert} style={btnStyle} variant="success">
 							<Glyphicon glyph="plus" />
 						</Badge>
 					</th>
 				);
 			}
 			else if (this.props.Actions.length > 0) {
-				return <th key="actionHeaderInsert" style={{ width: 75 }}>&nbsp;</th>;
+				return <th key="actionHeaderInsert" style={{ width: 81 }}>&nbsp;</th>;
 			}
 		}
 
@@ -90,15 +91,23 @@ class Grid extends React.Component<GridProps, {}> {
 		let actions = [];
 
 		if (this.props.Actions.indexOf(ActionType.DELETE) > -1) {
-			actions.push(<Badge key={"badge_d_" + actionKeyName} 
-				onClick={() => this.handleDelete(data)}
-				style={btnStyle}><Glyphicon glyph="trash" /></Badge>);
+			actions.push(
+				<Badge
+					key={"badge_d_" + actionKeyName}
+					onClick={() => this.handleDelete(data)}
+					variant="danger"
+					style={btnStyle}> <Glyphicon glyph="trash-alt" />
+				</Badge>);
 		}
 
 		if (this.props.Actions.indexOf(ActionType.UPDATE) > -1)
-			actions.push(<Badge key={"badge_u_" + actionKeyName} 
-				onClick={() => this.handleUpdate(data)} 
-				style={btnStyle}><Glyphicon glyph="edit" /></Badge>)
+			actions.push(
+				<Badge
+					key={"badge_u_" + actionKeyName}
+					onClick={() => this.handleUpdate(data)}
+					variant="info"
+					style={btnStyle}> <Glyphicon glyph="edit" />
+				</Badge>)
 
 		if (actions.length > 1)
 			actions.splice(1, 0, <span key={"badge_s_" + actionKeyName}>&nbsp;|&nbsp;</span>);
@@ -108,7 +117,7 @@ class Grid extends React.Component<GridProps, {}> {
 
 	render() {
 		const trList = [
-			this.getActionHeader(),			
+			this.getActionHeader(),
 			this.props.Columns.map((c: GridColumn) => <th key={"header_" + c.Field}>{c.Title}</th>)
 		];
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
-import { NavItem } from 'react-bootstrap';
+import Nav from 'react-bootstrap/Nav';
 
 // With the use of React with Typescript and React-Router, it is not possible to insert a "Link"
 // within the "NavItem" component, so that this class treats this case
@@ -59,7 +59,7 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		const redirect = (validURL) ? this.state.redirectTo : null;
 
 		return (
-			<NavItem eventKey={key} href='#' onClick={this.handleClick}>{caption}{redirect}</NavItem>
+			<Nav.Link eventKey={key} href='#' onClick={this.handleClick}>{caption}{redirect}</Nav.Link>
 		);
 
 	}
