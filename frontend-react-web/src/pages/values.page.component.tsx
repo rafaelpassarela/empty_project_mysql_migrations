@@ -73,7 +73,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 		// create the Loading Indicator component
 		const loading = <Loading active={this.state.isLoading} />
 		// create the ErrorBox component
-		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_FIXED} />
+		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_DYNAMIC} />
 
 		const columns = [
 			{ Field: 'Id', Title: 'Code' },
