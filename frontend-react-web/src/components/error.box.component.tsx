@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import Glyphicon from './glyphicon.component';
+import Glyphicon from './glyphicon.component';
 import Alert from 'react-bootstrap/Alert';
 import { toast } from 'react-toastify';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -23,9 +23,9 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 	}
 
 	generateMessage = () => {
-		let icon = null;
-		// let icon = (this.isValid(this.props.icon)) ?
-		// 	<Glyphicon glyph={this.props.icon} style={{ paddingRight: 10 }} /> : null;
+
+		let icon = (this.props.icon != undefined) ?
+		 	<Glyphicon glyph={this.props.icon} style={{ paddingRight: 10 }} /> : null;
 
 		let caption = null;
 		if (this.isValid(this.props.caption)) {

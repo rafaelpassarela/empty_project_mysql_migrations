@@ -54,18 +54,18 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 
 	onRederRow = (data: Object) => {
 		if (data == undefined)
-			return "danger";
+			return "badge-danger";
 		if (data['Id'] == "4")
-			return "info"
+			return "badge-warning"
 
 		return "";
 	}
 
 	onRenderColumn = (field: string, value: any) => {
 		if (field == 'Id' && value == '2')
-			return 'danger';
+			return 'badge-danger';
 		if (field == 'Name' && value.indexOf("Value") > 0)
-			return 'success';
+			return 'badge-success';
 		return '';
 	}
 
@@ -73,7 +73,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 		// create the Loading Indicator component
 		const loading = <Loading active={this.state.isLoading} />
 		// create the ErrorBox component
-		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_DYNAMIC} />
+		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_FIXED} />
 
 		const columns = [
 			{ Field: 'Id', Title: 'Code' },
@@ -96,7 +96,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 					OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} />
 
 				<small>
-					Row of Id 4 will be blue.<br />
+					Row of Id 4 will be yellow.<br />
 					Cell of Id 2 will be red.<br />
 					Cell with Value containning "Value" will be green.
 				</small>
