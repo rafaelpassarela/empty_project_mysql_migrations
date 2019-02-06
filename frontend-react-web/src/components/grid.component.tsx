@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Glyphicon from './glyphicon.component';
 import Badge from 'react-bootstrap/Badge';
+import Table from 'react-bootstrap/Table';
 
 export class GridColumn {
 	Field: string;
@@ -67,7 +68,7 @@ class Grid extends React.Component<GridProps, {}> {
 			// render a plus img if INSERT is present
 			if (this.props.Actions.indexOf(ActionType.INSERT) > -1) {
 				return (
-					<th key="actionHeaderInsert" style={{ width: 81, textAlign: 'center' }}>
+					<th key="actionHeaderInsert" style={{ width: 68, textAlign: 'center' }}>
 						<Badge onClick={this.handleInsert} style={btnStyle} variant="success">
 							<Glyphicon glyph="plus" />
 						</Badge>
@@ -75,7 +76,7 @@ class Grid extends React.Component<GridProps, {}> {
 				);
 			}
 			else if (this.props.Actions.length > 0) {
-				return <th key="actionHeaderInsert" style={{ width: 81 }}>&nbsp;</th>;
+				return <th key="actionHeaderInsert" style={{ width: 68 }}>&nbsp;</th>;
 			}
 		}
 
@@ -137,12 +138,14 @@ class Grid extends React.Component<GridProps, {}> {
 		});
 
 		return (
-			<table className="table table-striped table-bordered table-hover table-condensed">
+			<Table bordered hover responsive="md" striped size="sm">
 				<thead><tr>{trList}</tr></thead>
 				<tbody>{trData}</tbody>
-			</table>
+			</Table>
 		);
 	}
+
+// className="table table-striped table-bordered table-hover table-condensed"
 
 }
 

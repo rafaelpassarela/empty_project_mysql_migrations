@@ -64,7 +64,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 	onRenderColumn = (field: string, value: any) => {
 		if (field == 'Id' && value == '2')
 			return 'badge-danger';
-		if (field == 'Name' && value.indexOf("Value") > 0)
+		if (field == 'Name' && value.indexOf("Value") >= 0)
 			return 'badge-success';
 		return '';
 	}
