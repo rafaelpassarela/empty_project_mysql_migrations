@@ -12,7 +12,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 	Register				Use
 	faExclamationCircle	exclamation-circle
 
-	REGISTER THE ICON ON "glyph.register.tsx" FILE!!!!
+	REGISTER THE ICON ON "configurations\glyph.register.tsx" FILE!!!!
 */
 
 type GlyphiconProps = {

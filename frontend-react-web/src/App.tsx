@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { RegisterGlyph } from './components/glyph.register';
+import { RegisterGlyph } from './configurations/glyph.register';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 

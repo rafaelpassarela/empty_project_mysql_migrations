@@ -144,9 +144,6 @@ class Grid extends React.Component<GridProps, {}> {
 			</Table>
 		);
 	}
-
-// className="table table-striped table-bordered table-hover table-condensed"
-
 }
 
 export default Grid;
