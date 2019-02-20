@@ -15,6 +15,7 @@ interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	closeButton?: boolean,
 	size?: 'sm' | 'lg',
 	centered?: boolean
+	easyClose?: boolean // if true, close the modal window on click outside or press ESC key
 }
 
 class ModalWindow extends React.Component<IModalWindowProps, {}> {
@@ -25,7 +26,6 @@ class ModalWindow extends React.Component<IModalWindowProps, {}> {
 	}
 
 	getButtonConfig(buttonType: ButtonType): ButtonConfig {
-
 		for (let i = 0; i < ButtonList.length; i++) {
 			let item = ButtonList[i];
 			if (item.btnType == buttonType)
@@ -68,9 +68,11 @@ class ModalWindow extends React.Component<IModalWindowProps, {}> {
 	render() {
 		let header = (this.props.show) ? this.getHeaderElem() : null;
 		let buttons = (this.props.show) ? this.getButtonsElem() : null;
-
+		
 		return (
 			<Modal
+				keyboard={this.props.easyClose}
+				backdrop={(this.props.easyClose) ? true : 'static'}
 				show={this.props.show}
 				centered={this.props.centered}
 				size={this.props.size}
@@ -104,7 +106,8 @@ ModalWindow.defaultProps = {
 
 	closeButton: true,
 	size: undefined,
-	centered: true
+	centered: true,
+	easyClose: true
 };
 
 export default ModalWindow;
