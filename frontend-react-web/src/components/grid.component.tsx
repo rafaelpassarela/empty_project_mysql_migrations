@@ -11,11 +11,6 @@ export class GridColumn {
 export type GridGetRowClass = (data: Object) => any;
 export type GridHandleDataEvent = (data: Object) => any;
 export type GridGetColumnClass = (field: string, value: any) => any;
-export enum ActionType {
-	INSERT,
-	UPDATE,
-	DELETE
-}
 
 const btnStyle = {
 	cursor: 'pointer'
@@ -26,7 +21,7 @@ type GridProps = {
 	DataSource: Array<Object>,
 	KeyField: string,
 	ReadOnly?: boolean,
-	Actions?: Array<ActionType>,
+	Actions?: Array<'insert' | 'update' | 'delete'>,
 	OnRenderRow?: GridGetRowClass,
 	OnRenderColumn?: GridGetColumnClass,
 	OnInsert?: GridHandleDataEvent,
@@ -66,7 +61,7 @@ class Grid extends React.Component<GridProps, {}> {
 
 		if (this.props.Actions != undefined) {
 			// render a plus img if INSERT is present
-			if (this.props.Actions.indexOf(ActionType.INSERT) > -1) {
+			if (this.props.Actions.indexOf('insert') > -1) {
 				return (
 					<th key="actionHeaderInsert" style={{ width: 68, textAlign: 'center' }}>
 						<Badge onClick={this.handleInsert} style={btnStyle} variant="success">
@@ -91,7 +86,7 @@ class Grid extends React.Component<GridProps, {}> {
 
 		let actions = [];
 
-		if (this.props.Actions.indexOf(ActionType.DELETE) > -1) {
+		if (this.props.Actions.indexOf('delete') > -1) {
 			actions.push(
 				<Badge
 					key={"badge_d_" + actionKeyName}
@@ -101,7 +96,7 @@ class Grid extends React.Component<GridProps, {}> {
 				</Badge>);
 		}
 
-		if (this.props.Actions.indexOf(ActionType.UPDATE) > -1)
+		if (this.props.Actions.indexOf('update') > -1)
 			actions.push(
 				<Badge
 					key={"badge_u_" + actionKeyName}

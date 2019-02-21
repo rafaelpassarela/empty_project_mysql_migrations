@@ -1,9 +1,9 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
-import ErrorBox, { ErrorMode } from '../components/error.box.component';
+import ErrorBox from '../components/error.box.component';
 import Loading from '../components/loading.component';
-import Grid, { ActionType } from '../components/grid.component';
+import Grid from '../components/grid.component';
 
 import Api from '../client-api/api';
 import { Values } from '../client-api/api-models';
@@ -71,9 +71,13 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 
 	render() {
 		// create the Loading Indicator component
-		const loading = <Loading active={this.state.isLoading} caption="Wait..." message="We Are Loading some Values..." />
+		const loading = <Loading 
+			active={this.state.isLoading}
+			caption="Wait..."
+			message="We Are Loading some Values..."
+			variant="primary" />
 		// create the ErrorBox component
-		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_DYNAMIC} />
+		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode="dynamic" />
 
 		const columns = [
 			{ Field: 'Id', Title: 'Code' },
@@ -90,7 +94,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 					DataSource={this.state.list}
 					OnRenderRow={this.onRederRow}
 					OnRenderColumn={this.onRenderColumn}
-					Actions={[ActionType.DELETE, ActionType.UPDATE, ActionType.INSERT]}
+					Actions={["delete", "insert", "update"]}
 					OnInsert={() => alert('msg on other page!')}
 					OnDelete={(data: Object) => alert('Remove ' + data['Id'] + '?')}
 					OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} />

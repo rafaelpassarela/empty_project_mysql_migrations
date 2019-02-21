@@ -4,19 +4,16 @@ import Alert from 'react-bootstrap/Alert';
 import { toast } from 'react-toastify';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-export enum ErrorMode {
-	EM_FIXED,
-	EM_DYNAMIC
-}
-
-type ErrorComponentProp = {
+interface IErrorComponentProp extends React.Props<IErrorComponentProp> {
 	errorMessage: string,
 	caption?: string,
-	mode?: ErrorMode
+	mode?: 'fixed' | 'dynamic',
 	icon?: IconProp
 }
 
-class ErrorBox extends React.Component<ErrorComponentProp, {}> {
+class ErrorBox extends React.Component<IErrorComponentProp, {}> {
+
+	static defaultProps: IErrorComponentProp;
 
 	isValid = (value?: string) => {
 		return (value != '' && value != undefined);
@@ -25,7 +22,7 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 	generateMessage = () => {
 
 		let icon = (this.props.icon != undefined) ?
-		 	<Glyphicon glyph={this.props.icon} style={{ paddingRight: 10 }} /> : null;
+			<Glyphicon glyph={this.props.icon} style={{ paddingRight: 10 }} /> : null;
 
 		let caption = null;
 		if (this.isValid(this.props.caption)) {
@@ -68,11 +65,15 @@ class ErrorBox extends React.Component<ErrorComponentProp, {}> {
 	}
 
 	render() {
-		let msg = (this.props.mode == ErrorMode.EM_FIXED) ? this.getFixedMode() : this.getDynamicMode();
+		let msg = (this.props.mode == 'fixed') ? this.getFixedMode() : this.getDynamicMode();
 
 		return msg;
 	}
+}
 
+ErrorBox.defaultProps = {
+	errorMessage: "",
+	mode: "dynamic"
 }
 
 export default ErrorBox;

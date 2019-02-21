@@ -8,10 +8,19 @@ import '../inc/App.css';
   https://loading.io/animation/icon/
 */
 
-interface IAboutProps extends React.Props<IAboutProps> {
+interface ILoadingProps extends React.Props<ILoadingProps> {
 	active: boolean,
 	caption?: string,
-	message?: string
+	message?: string,
+	variant?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'danger'
+    | 'warning'
+    | 'info'
+    | 'dark'
+    | 'light';
 }
 
 // use this setting to adjust your loader at center of the screen
@@ -21,13 +30,14 @@ const PositionOverlay = {
 	zIndex: 1035
 }
 
-class Loading extends React.Component<IAboutProps, {}> {
+class Loading extends React.Component<ILoadingProps, {}> {
+	static defaultProps: ILoadingProps;
 
 	getMessageFrame = () => {
 		if (this.props.message != undefined) {
 			let caption = (this.props.caption != undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
 			return (
-				<Alert variant="primary" style={{top: '80%'}}>
+				<Alert variant={this.props.variant} style={{top: '80%'}}>
 					{caption}
 					{this.props.message}
 				</Alert>
@@ -56,6 +66,11 @@ class Loading extends React.Component<IAboutProps, {}> {
 		return <span>{img}</span>;
 	}
 
+}
+
+Loading.defaultProps = {
+	active: false,
+	variant: 'primary'
 }
 
 export default Loading;
