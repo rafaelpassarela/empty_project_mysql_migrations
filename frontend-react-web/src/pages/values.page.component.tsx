@@ -71,7 +71,7 @@ class ValuesPage extends BaseViewComponent<{}, ValuesPageState> {
 
 	render() {
 		// create the Loading Indicator component
-		const loading = <Loading active={this.state.isLoading} />
+		const loading = <Loading active={this.state.isLoading} caption="Wait..." message="We Are Loading some Values..." />
 		// create the ErrorBox component
 		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode={ErrorMode.EM_DYNAMIC} />
 
