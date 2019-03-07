@@ -13,14 +13,14 @@ interface ILoadingProps extends React.Props<ILoadingProps> {
 	caption?: string,
 	message?: string,
 	variant?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'danger'
-    | 'warning'
-    | 'info'
-    | 'dark'
-    | 'light';
+	| 'primary'
+	| 'secondary'
+	| 'success'
+	| 'danger'
+	| 'warning'
+	| 'info'
+	| 'dark'
+	| 'light';
 }
 
 // use this setting to adjust your loader at center of the screen
@@ -37,7 +37,7 @@ class Loading extends React.Component<ILoadingProps, {}> {
 		if (this.props.message != undefined) {
 			let caption = (this.props.caption != undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
 			return (
-				<Alert variant={this.props.variant} style={{top: '80%'}}>
+				<Alert variant={this.props.variant} style={{ top: '80%' }}>
 					{caption}
 					{this.props.message}
 				</Alert>

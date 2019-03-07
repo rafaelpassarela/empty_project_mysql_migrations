@@ -8,6 +8,11 @@ import NavBarItemLink from './navbaritem.link.component';
 // custom logo
 import logo from '../../img/logo_small.png';
 
+type MenuIten = {
+	route: string;
+	caption: string
+}
+
 class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 
 	constructor(props: any) {
@@ -31,7 +36,19 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 		});
 	}
 
+	getMenuList = (): Array<MenuIten> => {
+		let itens = Array<MenuIten>(
+			{ route: '/', caption: 'Home' },
+			{ route: 'values', caption: 'Values' },
+			{ route: 'about', caption: 'About' }
+		);
+
+		return itens;
+	}
+
 	render() {
+		let itens = this.getMenuList();
+
 		return (
 			<div>
 				<Navbar className="app-shadow navbar-fix" fixed="top" bg="light" expand="md" expanded={this.state.expanded} onToggle={this.navbarToggle}>
@@ -44,9 +61,18 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 
 					<Navbar.Collapse>
 						<Nav className="mr-auto">
-							<NavBarItemLink eventKey={1} to="/" caption="Home" navbarControll={this.navbarItemSelect} />
-							<NavBarItemLink eventKey={1} to="/values" caption="Some Values" navbarControll={this.navbarItemSelect} />
-							<NavBarItemLink eventKey={1} to="/about" caption="About" navbarControll={this.navbarItemSelect} />
+							{
+								itens.map((item: MenuIten, idx: number) => {
+									return (
+										<NavBarItemLink
+											key={idx}
+											eventKey={1}
+											to={item.route}
+											caption={item.caption}
+											navbarControll={this.navbarItemSelect}
+										/>)
+								})
+							}
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar >

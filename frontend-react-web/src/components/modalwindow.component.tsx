@@ -107,7 +107,7 @@ ModalWindow.defaultProps = {
 	closeButton: true,
 	size: undefined,
 	centered: true,
-	easyClose: true
+	easyClose: false
 };
 
 export default ModalWindow;
