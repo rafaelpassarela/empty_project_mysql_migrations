@@ -8,7 +8,7 @@ import Nav from 'react-bootstrap/Nav';
 type NavBarItemProps = {
 	caption: string,
 	to: string,
-	eventKey: number,
+	eventKey: string | number,
 	navbarControll: Function
 };
 type NavBarItemStates = {

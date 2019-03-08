@@ -16,6 +16,10 @@ class ApiBase<T> { //implements IApi<Values>{
 
 	desenvMode : number = -1;
 
+	private translatePath(endPath?: string): string {
+		return ApiConfig.URL + this.getPath() + ((endPath != undefined) ? endPath : '');
+	}
+
 	protected isDesenvMode() : boolean {
 		if (this.desenvMode == -1) {
 			this.desenvMode = ((!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 1 : 0);
@@ -44,13 +48,13 @@ class ApiBase<T> { //implements IApi<Values>{
 		return ApiRedirect.FOLLOW;
 	}
 
-	translatePath(endPath?: string): string {
-		return ApiConfig.URL + this.getPath() + ((endPath != undefined) ? endPath : '');
-	}
-
 	public get(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, endPath?: string) {
 		this.doFetch(ApiMethod.GET, this.translatePath(endPath), dataCallback, errorCallback);
 		// return 'Get from [' + ApiConfig.URL + ']' + this.getPath();
+	}
+
+	public delete(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, endPath?: string) {
+		this.doFetch(ApiMethod.DELETE, this.translatePath(endPath), dataCallback, errorCallback);
 	}
 
 	doFetch(

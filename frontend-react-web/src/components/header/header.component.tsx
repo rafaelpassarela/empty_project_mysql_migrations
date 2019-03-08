@@ -66,7 +66,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 									return (
 										<NavBarItemLink
 											key={idx}
-											eventKey={1}
+											eventKey={item.route}
 											to={item.route}
 											caption={item.caption}
 											navbarControll={this.navbarItemSelect}

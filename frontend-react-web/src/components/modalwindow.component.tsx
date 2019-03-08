@@ -82,7 +82,7 @@ class ModalWindow extends React.Component<IModalWindowProps, {}> {
 				{header}
 
 				<Modal.Body>
-					{this.props.text}
+					<span style={{whiteSpace: "pre-line"}}>{this.props.text}</span>
 					{this.props.element}
 				</Modal.Body>
 
