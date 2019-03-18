@@ -39,6 +39,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 	getMenuList = (): Array<MenuIten> => {
 		let itens = Array<MenuIten>(
 			{ route: '/', caption: 'Home' },
+			{ route: 'valuesOLD', caption: 'Old Values' },
 			{ route: 'values', caption: 'Values' },
 			{ route: 'about', caption: 'About' }
 		);
