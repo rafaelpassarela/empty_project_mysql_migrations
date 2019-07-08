@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import BaseController from '../../components/base.controller';
+import BaseController, { BaseColumnInfo, BaseLoadingInfo } from '../../components/base.controller';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
@@ -14,11 +14,18 @@ class ValuesController extends BaseController<Values> {
 		return 'List of Values loaded from the database';
 	}
 
-	protected getLoadindInfo(): { caption: string, message: string } {
+	protected getLoadindInfo(): BaseLoadingInfo {
 		return {
 			caption: 'Wait',
 			message: 'Loading Values List...'
 		}
+	}
+
+	protected getColumnInfo(): BaseColumnInfo[] {
+		return [
+			{ fieldName: 'Id', fieldCaption: 'Code' },
+			{ fieldName: 'Name', fieldCaption: 'Value Name' }
+		];
 	}
 
 	protected getApi(): ApiValuesProxy {

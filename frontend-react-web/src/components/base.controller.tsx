@@ -3,7 +3,7 @@ import * as React from 'react';
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
-// import ErrorBox from './error.box.component';
+import ErrorBox from './error.box.component';
 import Loading from './loading.component';
 // import Grid from './grid.component';
 // import ModalWindow from './modalwindow.component';
@@ -14,12 +14,23 @@ interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseCon
 	errorMsg: string,
 }
 
+export class BaseLoadingInfo {
+	caption: string;
+	message: string;
+}
+
+export class BaseColumnInfo {
+	fieldName: string;
+	fieldCaption?: string;
+}
+
 abstract class BaseController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
 
 	// abstract methods
 	protected abstract getCaption(): string;
 	protected abstract getDescription(): string;
-	protected abstract getLoadindInfo(): { caption: string, message: string };
+	protected abstract getLoadindInfo(): BaseLoadingInfo;
+	protected abstract getColumnInfo(): BaseColumnInfo[];
 	protected abstract getApi(): ApiBase<T>;
 
 	constructor(props: any) {
@@ -52,8 +63,12 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	}
 
 	getHeader = () => {
-		let description = (this.getDescription() != '') ? <small><small>{this.getDescription()}</small></small> : null;
-		return (this.getCaption() != '') ? <h2>{this.getCaption()} {description}</h2> : null;
+		let textDesc = this.getDescription();
+		let textCaption = this.getCaption();
+
+		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
+
+		return (textCaption != '') ? <h2>{textCaption} {description}</h2> : null;
 	}
 
 	initLoading = () => {
@@ -68,9 +83,15 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		)
 	}
 
+	initErrorMessage = () => {
+		// create the ErrorBox component
+		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Error!" icon="exclamation-circle" mode="dynamic" />;
+		return error;
+	}
+
 	render() {
 		const loading = this.initLoading();
-		const error = null;
+		const error = this.initErrorMessage();
 		const message = null;
 
 		return (

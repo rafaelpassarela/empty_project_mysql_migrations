@@ -135,9 +135,10 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 			variant="primary" />
 		// -------------------- OK
 
-
+		// --------------------
 		// create the ErrorBox component
 		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode="dynamic" />
+        // -------------------- OK
 
 		// create the message place holder
 		const message = <ModalWindow
