@@ -4,8 +4,9 @@ import Badge from 'react-bootstrap/Badge';
 import Table from 'react-bootstrap/Table';
 
 export class GridColumn {
-	Field: string;
-	Title?: string;
+	fieldName: string;
+	fieldCaption?: string;
+	fieldSize?: string | number | undefined;
 }
 
 export type GridGetRowClass = (data: Object) => any;
@@ -111,10 +112,19 @@ class Grid extends React.Component<GridProps, {}> {
 		return (<td key={actionKeyName}>{actions}</td>);
 	}
 
+	getColumnWidth(col: GridColumn): string | number | undefined {
+		let size = col.fieldSize;
+		if (size == null)
+			size = undefined;
+		return size;
+	}
+
 	render() {
 		const trList = [
 			this.getActionHeader(),
-			this.props.Columns.map((c: GridColumn) => <th key={"header_" + c.Field}>{c.Title}</th>)
+			this.props.Columns.map((c: GridColumn) => 		                       
+			                       <th key={"header_" + c.fieldName} style={{ width: this.getColumnWidth(c)}}>{c.fieldCaption}</th>
+			                       )
 		];
 
 		let rowKey: number = 0;
@@ -126,7 +136,7 @@ class Grid extends React.Component<GridProps, {}> {
 					{this.getEditActions(ds)}
 					{this.props.Columns.map((c: GridColumn) => {
 						// for each column, render a TD element
-						return (this.renderColumn(c.Field, ds[c.Field]))
+						return (this.renderColumn(c.fieldName, ds[c.fieldName]))
 					})}
 				</tr>
 			);

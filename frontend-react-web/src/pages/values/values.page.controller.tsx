@@ -6,6 +6,10 @@ import { Values } from '../../client-api/api-models';
 
 class ValuesController extends BaseController<Values> {
 
+	constructor(props: any) {
+		super(props);
+	}
+
 	protected getCaption(): string {
 		return 'Value List';
 	}
@@ -23,7 +27,7 @@ class ValuesController extends BaseController<Values> {
 
 	protected getColumnInfo(): BaseColumnInfo[] {
 		return [
-			{ fieldName: 'Id', fieldCaption: 'Code' },
+			{ fieldName: 'Id', fieldCaption: 'Code', fieldSize: '15%' },
 			{ fieldName: 'Name', fieldCaption: 'Value Name' }
 		];
 	}
@@ -32,7 +36,9 @@ class ValuesController extends BaseController<Values> {
 		return Api.Values();
 	}
 
-
+	protected getTitle(): string {
+		return 'Values List';
+	}	
 }
 
 export default ValuesController;

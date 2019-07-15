@@ -5,6 +5,8 @@ import { BaseModel } from '../client-api/api-models';
 // Controls
 import ErrorBox from './error.box.component';
 import Loading from './loading.component';
+import PageFrame from './pageframe.component';
+import Grid from './grid.component';
 // import Grid from './grid.component';
 // import ModalWindow from './modalwindow.component';
 
@@ -22,6 +24,7 @@ export class BaseLoadingInfo {
 export class BaseColumnInfo {
 	fieldName: string;
 	fieldCaption?: string;
+	fieldSize?: string | number | undefined;
 }
 
 abstract class BaseController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
@@ -30,8 +33,16 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	protected abstract getCaption(): string;
 	protected abstract getDescription(): string;
 	protected abstract getLoadindInfo(): BaseLoadingInfo;
-	protected abstract getColumnInfo(): BaseColumnInfo[];
+	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
+
+	protected getTitle(): string {
+		return '';
+	}
+
+	protected getColumnID(): string {
+		return 'Id';
+	}
 
 	constructor(props: any) {
 		super(props);
@@ -44,6 +55,15 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	}
 
 	componentDidMount() {
+		let name = this.getTitle();
+		if (name != '') {
+			name = ' - ' + name;
+		} else {
+			console.error('Component Page "' + this.constructor.name + '" doesn\'t have "protected getTitle() : string" function.');
+		}
+
+		document.title = 'Mr Rafael.ca' + name;
+
 		this.getApi().get(
 			(data: any) => {
 				this.setState({
@@ -89,16 +109,34 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		return error;
 	}
 
+	getGrid = () => {
+
+		let grid = <Grid
+					Columns={this.getColumnInfo()}
+					KeyField="Id"
+					DataSource={this.state.list}
+					// OnRenderRow={this.onRederRow}
+					//OnRenderColumn={this.onRenderColumn}
+					Actions={["delete", "insert", "update"]}
+					//OnInsert={() => alert('msg on other page!')}
+					//OnDelete={this.onDelete}
+					//OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} 
+					/>;
+
+		return grid;
+	}
+
 	render() {
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
 		const message = null;
 
 		return (
-			<div>
+			<PageFrame>
 				{loading}{error}{message}
 				{this.getHeader()}
-			</div>
+				{this.getGrid()}
+			</PageFrame>		        
 		)
 	}
 

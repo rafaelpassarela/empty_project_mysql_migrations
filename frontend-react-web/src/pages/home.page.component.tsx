@@ -63,7 +63,7 @@ class HomePage extends BaseViewComponent {
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
-				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
+				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />				
 				<hr/>
 				Glyphicons Test: <br />
 				faPlus: <Glyphicon glyph="plus" /> <br />

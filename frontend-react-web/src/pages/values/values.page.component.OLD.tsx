@@ -151,14 +151,14 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 			onHandleBtnClick={this.state.msgCallbak} />
 
 		const columns = [
-			{ Field: 'Id', Title: 'Code' },
-			{ Field: 'Name', Title: 'Value Name' }
+			{ fieldName: 'Id', fieldCaption: 'Code' },
+			{ fieldName: 'Name', fieldCaption: 'Value Name' }
 		];
 
 		return (
 			<PageFrame>
 				{loading}{error}{message}
-				<h3>Some Values Simple List</h3>
+				<h2>Some Values List</h2>
 				<Grid
 					Columns={columns}
 					KeyField="Id"
