@@ -28,8 +28,6 @@ export class BaseColumnInfo {
 	fieldSize?: string | number | undefined;
 }
 
-class ModalConfig implements IModalWindowProps {};
-
 abstract class BaseController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
 
 	// abstract methods
@@ -62,7 +60,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		return "";
 	}
 
-	private messageOptions: IModalWindowProps;
+	private messageOptions = {} as IModalWindowProps;
 
 	constructor(props: any) {
 		super(props);
