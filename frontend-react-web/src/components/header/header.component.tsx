@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { HeaderLinksConfig, MenuItem } from '../../configurations/links.config';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import LoadingSmall from '../loading.small.component';
 import '../../inc/App.css';
 
 import NavBarItemLink from './navbaritem.link.component';
 // custom logo
 import logo from '../../img/logo_small.png';
 
-type MenuIten = {
-	route: string;
-	caption: string
+interface IHeaderComponentState extends React.Props<IHeaderComponentState> {
+	items: Array<MenuItem>,
+	expanded: boolean,
+	loading: boolean
 }
 
-class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
+class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 
 	constructor(props: any) {
 		super(props);
@@ -21,7 +24,10 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 		this.navbarToggle = this.navbarToggle.bind(this);
 		this.navbarItemSelect = this.navbarItemSelect.bind(this);
 
-		this.state = { expanded: false };
+		this.state = { 
+			items: HeaderLinksConfig.getItems(),
+			expanded: false, 
+			loading: false};
 	}
 
 	navbarToggle() {
@@ -36,19 +42,8 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 		});
 	}
 
-	getMenuList = (): Array<MenuIten> => {
-		let itens = Array<MenuIten>(
-			{ route: '/', caption: 'Home' },
-			{ route: 'valuesOLD', caption: 'Old Values' },
-			{ route: 'values', caption: 'Values' },
-			{ route: 'about', caption: 'About' }
-		);
-
-		return itens;
-	}
-
 	render() {
-		let itens = this.getMenuList();
+		//let itens = HeaderLinksConfig.getItems();
 
 		return (
 			<div>
@@ -63,7 +58,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 					<Navbar.Collapse>
 						<Nav className="mr-auto">
 							{
-								itens.map((item: MenuIten, idx: number) => {
+								this.state.items.map((item: MenuItem, idx: number) => {
 									return (
 										<NavBarItemLink
 											key={idx}
@@ -74,6 +69,7 @@ class HeaderComponent extends React.Component<{}, { expanded: boolean }> {
 										/>)
 								})
 							}
+							<LoadingSmall key="999" active={this.state.loading} />
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar >
