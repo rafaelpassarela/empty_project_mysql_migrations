@@ -1,4 +1,5 @@
 import * as React from 'react';
+import LocalizationConfig from '../configurations/localization.config';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
@@ -7,13 +8,13 @@ import ErrorBox from './error.box.component';
 import Loading from './loading.component';
 import PageFrame from './pageframe.component';
 import Grid from './grid.component';
-// import Grid from './grid.component';
-// import ModalWindow from './modalwindow.component';
+import ModalWindow, {IModalWindowProps} from './modalwindow.component';
 
 interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
 	isLoading: boolean,
 	errorMsg: string,
+	showMessage: boolean
 }
 
 export class BaseLoadingInfo {
@@ -27,6 +28,8 @@ export class BaseColumnInfo {
 	fieldSize?: string | number | undefined;
 }
 
+class ModalConfig implements IModalWindowProps {};
+
 abstract class BaseController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
 
 	// abstract methods
@@ -35,14 +38,31 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	protected abstract getLoadindInfo(): BaseLoadingInfo;
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
-
-	protected getTitle(): string {
-		return '';
-	}
+	protected abstract getTitle(): string;
 
 	protected getColumnID(): string {
 		return 'Id';
 	}
+
+	protected onRederRow(data: Object): string {
+		// if (data == undefined)
+		// 	return "badge-danger";
+		// if (data['Id'] == "4")
+		// 	return "badge-warning";
+
+		return "";
+	}
+
+	protected onRenderColumn(field: string, value: any) : string {
+		// if (field == 'Id' && value == '2')
+		// 	return "badge-danger";
+		// if (field == 'Name' && value.indexOf("Value") >= 0)
+		// 	return "badge-success";
+
+		return "";
+	}
+
+	private messageOptions: IModalWindowProps;
 
 	constructor(props: any) {
 		super(props);
@@ -51,18 +71,19 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 			list: [],
 			errorMsg: '',
 			isLoading: true,
+			showMessage: false
 		};
+
+		this.messageOptions.caption = "teste";
 	}
 
 	componentDidMount() {
 		let name = this.getTitle();
 		if (name != '') {
 			name = ' - ' + name;
-		} else {
-			console.error('Component Page "' + this.constructor.name + '" doesn\'t have "protected getTitle() : string" function.');
 		}
 
-		document.title = 'Mr Rafael.ca' + name;
+		document.title = LocalizationConfig.companyName + name;
 
 		this.getApi().get(
 			(data: any) => {
@@ -105,23 +126,30 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 	initErrorMessage = () => {
 		// create the ErrorBox component
-		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Error!" icon="exclamation-circle" mode="dynamic" />;
-		return error;
+		if (this.state.errorMsg != "" && this.state.errorMsg != undefined) {
+			return <ErrorBox errorMessage={this.state.errorMsg} caption="Error!" icon="exclamation-circle" mode="dynamic" />;
+		} else {
+			return null;
+		}
+	}
+
+	onDelete = (data : Object) => {
+		<ModalWindow show={false} />
 	}
 
 	getGrid = () => {
-
-		let grid = <Grid
+		let grid = 
+				<Grid
 					Columns={this.getColumnInfo()}
 					KeyField="Id"
 					DataSource={this.state.list}
-					// OnRenderRow={this.onRederRow}
-					//OnRenderColumn={this.onRenderColumn}
+					OnRenderRow={this.onRederRow}
+					OnRenderColumn={this.onRenderColumn}
 					Actions={["delete", "insert", "update"]}
 					//OnInsert={() => alert('msg on other page!')}
-					//OnDelete={this.onDelete}
+					OnDelete={this.onDelete}
 					//OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} 
-					/>;
+				/>;
 
 		return grid;
 	}

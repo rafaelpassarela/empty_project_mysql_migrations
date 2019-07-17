@@ -67,6 +67,7 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 	}
 // ---------------------------- OK	
 
+// ------------------------------
 	onRederRow = (data: Object) => {
 		if (data == undefined)
 			return "badge-danger";
@@ -75,7 +76,9 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 
 		return "";
 	}
+// ------------------------------ OK	
 
+// ------------------------------
 	onRenderColumn = (field: string, value: any) => {
 		if (field == 'Id' && value == '2')
 			return 'badge-danger';
@@ -83,6 +86,7 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 			return 'badge-success';
 		return '';
 	}
+// ------------------------------ Ok	
 
 	showMessage = (caption: string, text: string, buttons: Array<ButtonType>, callback: any) => {
 		this.setState({

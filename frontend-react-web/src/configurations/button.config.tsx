@@ -1,3 +1,5 @@
+import LocalizationConfig from './localization.config';
+
 export enum ButtonType {
 	BTN_OK,
 	BTN_YES,
@@ -26,27 +28,26 @@ export class ButtonConfig {
 		| 'outline-info'
 		| 'outline-dark'
 		| 'outline-light';
-
 }
 
 let ButtonList: Array<ButtonConfig> = [
 	{
-		text: 'Ok',
+		text: LocalizationConfig.ok,
 		variant: 'primary',
 		btnType: ButtonType.BTN_OK
 	},
 	{
-		text: 'Yes',
+		text: LocalizationConfig.yes,
 		variant: 'success',
 		btnType: ButtonType.BTN_YES
 	},
 	{
-		text: 'No',
+		text: LocalizationConfig.no,
 		variant: 'danger',
 		btnType: ButtonType.BTN_NO
 	},
 	{
-		text: 'Cancel',
+		text: LocalizationConfig.cancel,
 		variant: 'warning',
 		btnType: ButtonType.BTN_CANCEL
 	},

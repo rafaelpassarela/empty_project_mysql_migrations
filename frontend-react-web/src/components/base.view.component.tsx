@@ -1,21 +1,18 @@
 import * as React from 'react';
+import LocalizationConfig from '../configurations/localization.config';
 
-class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
+abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 
 	componentDidMount() {
 		let name = this.getTitle();
 		if (name != '') {
 			name = ' - ' + name;
-		} else {
-			console.error('Component Page "' + this.constructor.name + '" doesn\'t have "protected getTitle() : string" function.');
 		}
 
-		document.title = 'Mr Rafael.ca' + name;
+		document.title = LocalizationConfig.companyName + name;
 	}
 
-	protected getTitle(): string {
-		return '';
-	}
+	protected abstract getTitle(): string;
 
 }
 

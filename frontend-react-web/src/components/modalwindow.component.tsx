@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ButtonList, { ButtonConfig, ButtonType } from '../configurations/button.config';
 
-interface IModalWindowProps extends React.Props<IModalWindowProps> {
+export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	show: boolean,
 	onHandleClose: () => void,
 	onHandleBtnClick: (btnType: ButtonType) => void,
