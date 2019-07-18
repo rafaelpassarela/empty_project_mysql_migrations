@@ -8,13 +8,16 @@ import ErrorBox from './error.box.component';
 import Loading from './loading.component';
 import PageFrame from './pageframe.component';
 import Grid from './grid.component';
-import ModalWindow, {IModalWindowProps} from './modalwindow.component';
+import DeleteModal from './delete.modal.component';
+import {IModalWindowProps} from './modalwindow.component';
 
 interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
+	currentObject: T | null,	
 	isLoading: boolean,
 	errorMsg: string,
-	showMessage: boolean
+	showDeleteConfirmation: boolean,
+	showEditComponent: boolean
 }
 
 export class BaseLoadingInfo {
@@ -69,7 +72,9 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 			list: [],
 			errorMsg: '',
 			isLoading: true,
-			showMessage: false
+			showDeleteConfirmation: false,
+			showEditComponent: false,
+			currentObject: null
 		};
 
 		this.messageOptions.caption = "teste";
@@ -132,7 +137,18 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	}
 
 	onDelete = (data : Object) => {
-		<ModalWindow show={false} />
+		this.setState({
+			showDeleteConfirmation: true,
+			currentObject: data as T
+		})
+	}
+
+	getDeleteConfirmation = () => {
+		return (
+			<DeleteModal
+				show={this.state.showDeleteConfirmation}
+				text="Badanha"
+			/>);
 	}
 
 	getGrid = () => {
@@ -156,10 +172,11 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
 		const message = null;
+		const deleteConfirmation = (this.state.showDeleteConfirmation) ? this.getDeleteConfirmation() : null ;
 
 		return (
 			<PageFrame>
-				{loading}{error}{message}
+				{loading}{error}{message}{deleteConfirmation}
 				{this.getHeader()}
 				{this.getGrid()}
 			</PageFrame>		        

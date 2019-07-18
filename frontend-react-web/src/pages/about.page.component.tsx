@@ -2,9 +2,9 @@ import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
 import PageFrame from '../components/pageframe.component';
 import ModalWindow from '../components/modalwindow.component';
+import { ButtonType } from '../configurations/button.config';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { ButtonType } from '../configurations/button.config';
 
 interface IAboutPageState extends React.Props<IAboutPageState> {
 	show: boolean,
