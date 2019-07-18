@@ -9,11 +9,10 @@ export type MenuItem = {
 // ********* Header Items
 export class HeaderLinksConfig {
 
-	public static getItems(): Array<MenuItem> {
+	public static getFixedItems(): Array<MenuItem> {
 
 		let items = Array<MenuItem>(
 			{ route: '/', caption: 'Home' },
-			{ route: 'valuesOLD', caption: 'Old Values' },
 			{ route: 'values', caption: 'Values' },
 			{ route: 'about', caption: 'About' }
 		);

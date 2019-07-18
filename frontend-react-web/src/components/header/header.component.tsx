@@ -4,11 +4,10 @@ import { HeaderLinksConfig, MenuItem } from '../../configurations/links.config';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import LoadingSmall from '../loading.small.component';
-import '../../inc/App.css';
-
 import NavBarItemLink from './navbaritem.link.component';
 // custom logo
 import logo from '../../img/logo_small.png';
+import '../../inc/App.css';
 
 interface IHeaderComponentState extends React.Props<IHeaderComponentState> {
 	items: Array<MenuItem>,
@@ -25,7 +24,7 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 		this.navbarItemSelect = this.navbarItemSelect.bind(this);
 
 		this.state = { 
-			items: HeaderLinksConfig.getItems(),
+			items: HeaderLinksConfig.getFixedItems(),
 			expanded: false, 
 			loading: false};
 	}
@@ -43,7 +42,6 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 	}
 
 	render() {
-		//let itens = HeaderLinksConfig.getItems();
 
 		return (
 			<div>
