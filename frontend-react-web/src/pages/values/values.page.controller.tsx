@@ -27,7 +27,7 @@ class ValuesController extends BaseController<Values> {
 
 	protected getColumnInfo(): BaseColumnInfo[] {
 		return [
-			{ fieldName: 'Id', fieldCaption: 'Code', fieldSize: '15%' },
+			{ fieldName: 'Id', fieldCaption: 'Code', isKey: true, fieldSize: '15%' },
 			{ fieldName: 'Name', fieldCaption: 'Value Name' }
 		];
 	}
@@ -38,7 +38,11 @@ class ValuesController extends BaseController<Values> {
 
 	protected getTitle(): string {
 		return 'Values List';
-	}	
+	}
+
+	protected getDeleteTextMessage(object: Values) : string {
+		return 'Do you really want to remove the item?\n' + object.Id + ' - ' + object.Name;
+	}
 }
 
 export default ValuesController;

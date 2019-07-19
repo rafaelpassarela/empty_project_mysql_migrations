@@ -1,5 +1,6 @@
 import * as React from 'react';
 import LocalizationConfig from '../configurations/localization.config';
+//import { ButtonType } from '../configurations/button.config';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
@@ -9,7 +10,7 @@ import Loading from './loading.component';
 import PageFrame from './pageframe.component';
 import Grid from './grid.component';
 import DeleteModal from './delete.modal.component';
-import {IModalWindowProps} from './modalwindow.component';
+import { IModalWindowProps } from './modalwindow.component';
 
 interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
@@ -27,6 +28,7 @@ export class BaseLoadingInfo {
 
 export class BaseColumnInfo {
 	fieldName: string;
+	isKey?: boolean;
 	fieldCaption?: string;
 	fieldSize?: string | number | undefined;
 }
@@ -40,6 +42,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
 	protected abstract getTitle(): string;
+	protected abstract getDeleteTextMessage(object: T) : string;
 
 	protected getColumnID(): string {
 		return 'Id';
@@ -78,7 +81,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		};
 
 		this.messageOptions.caption = "teste";
-	}
+	}	
 
 	componentDidMount() {
 		let name = this.getTitle();
@@ -143,12 +146,58 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		})
 	}
 
+	handleDeleteClose = () => {
+		this.setState({
+			showDeleteConfirmation: false,
+			currentObject: null
+		})
+	}
+
+	handleDeleteBtnClick = () => {
+		let key = '';
+		this.getColumnInfo().filter((value: BaseColumnInfo) => {
+			if (value.isKey == true) {
+				key = (this.state.currentObject != null) ? this.state.currentObject[value.fieldName] : '';
+				return true;
+			} else
+				return false;
+			}
+		);
+
+		this.getApi().delete(
+			(data: any) => {
+				this.setState({
+					list: data,
+					isLoading: false,
+					errorMsg: ''
+				});
+			},
+			(error: Error) => {
+				this.setState({
+					list: [],
+					isLoading: false,
+					errorMsg: error.message
+				});
+			},
+			'/' + key
+		);
+
+		this.handleDeleteClose();
+	}
+
 	getDeleteConfirmation = () => {
-		return (
-			<DeleteModal
-				show={this.state.showDeleteConfirmation}
-				text="Badanha"
-			/>);
+		let modal = null;
+
+		if (this.state.showDeleteConfirmation) {
+			modal = <DeleteModal
+				show={this.state.showDeleteConfirmation}				
+				text={this.getDeleteTextMessage(this.state.currentObject as T)}
+				onHandleClose={this.handleDeleteClose}
+				onHandleDelete={this.handleDeleteBtnClick}
+			/>
+		}
+
+		return modal;
 	}
 
 	getGrid = () => {
@@ -172,7 +221,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
 		const message = null;
-		const deleteConfirmation = (this.state.showDeleteConfirmation) ? this.getDeleteConfirmation() : null ;
+		const deleteConfirmation = this.getDeleteConfirmation();
 
 		return (
 			<PageFrame>

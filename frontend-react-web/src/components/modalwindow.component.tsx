@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import Glyphicon from './glyphicon.component';
 import ButtonList, { ButtonConfig, ButtonType } from '../configurations/button.config';
 
 export interface IModalWindowProps extends React.Props<IModalWindowProps> {
@@ -11,11 +13,18 @@ export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	caption?: string,
 	text?: string,
 	element?: any,
-
+    icon?: IconProp,
 	closeButton?: boolean,
 	size?: 'sm' | 'lg',
 	centered?: boolean
 	easyClose?: boolean // if true, close the modal window on click outside or press ESC key
+}
+
+const iconDivStyle = {
+	paddingRight: 10,
+	fontSize: 46,
+	top: 7,
+	position: 'absolute'
 }
 
 class ModalWindow extends React.Component<IModalWindowProps, {}> {
@@ -36,13 +45,19 @@ class ModalWindow extends React.Component<IModalWindowProps, {}> {
 	}
 
 	getHeaderElem = (): any => {
+
+		let icon = (this.props.icon != undefined) ?
+			<Glyphicon glyph={this.props.icon} style={iconDivStyle} /> : null;
+
+		let caption = <div style={(this.props.icon != undefined) ? {position: 'absolute', left: 60} : undefined}>{this.props.caption}</div>;
+
 		let headerElem = (this.props.closeButton) ?
 			<Modal.Header closeButton>
-				<Modal.Title>{this.props.caption}</Modal.Title>
+				<Modal.Title>{icon}{caption}</Modal.Title>
 			</Modal.Header>
 			:
 			<Modal.Header>
-				<Modal.Title>{this.props.caption}</Modal.Title>
+				<Modal.Title>{icon}{caption}</Modal.Title>
 			</Modal.Header>
 			;
 

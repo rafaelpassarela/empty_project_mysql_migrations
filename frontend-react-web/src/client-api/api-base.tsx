@@ -50,7 +50,6 @@ class ApiBase<T> { //implements IApi<Values>{
 
 	public get(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, endPath?: string) {
 		this.doFetch(ApiMethod.GET, this.translatePath(endPath), dataCallback, errorCallback);
-		// return 'Get from [' + ApiConfig.URL + ']' + this.getPath();
 	}
 
 	public delete(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, endPath?: string) {
