@@ -8,37 +8,33 @@ import '../inc/App.css';
 */
 
 interface ILoadingSmallProps extends React.Props<ILoadingSmallProps> {
-	active: boolean
-}
-
-// use this setting to adjust your loader at center of the screen
-const PositionOverlay = {
-	//top: '30%',
-	//left: '52.5%',
-	zIndex: 1035
+	active: boolean,
+	marginLeft?: number,
+	marginRight?: number
 }
 
 class LoadingSmall extends React.Component<ILoadingSmallProps, {}> {
 	static defaultProps: ILoadingSmallProps;
 
 	render() {
-
-		let img = null;
 		if (this.props.active) {
-			img = (
-				<div style={PositionOverlay}>
-					<img className="imgCenter" src={LoadImageSm} alt="Loading..." />
-				</div>
-			);
+			let imageStyle = {
+				zIndex: 1034,
+				display: 'inline',
+				marginLeft: this.props.marginLeft,
+				marginRight: this.props.marginRight
+			}
+			return <img className="imgCenter" style={imageStyle} src={LoadImageSm} alt="Loading..." />
+		} else {
+			return <span />
 		}
-
-		return <span>{img}</span>;
 	}
-
 }
 
 LoadingSmall.defaultProps = {
-	active: false
+	active: false,
+	marginLeft: 10,
+	marginRight: 10
 }
 
 export default LoadingSmall;

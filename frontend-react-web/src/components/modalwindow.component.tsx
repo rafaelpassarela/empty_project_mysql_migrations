@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import LoadingSmall from './loading.small.component';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Glyphicon from './glyphicon.component';
 import ButtonList, { ButtonConfig, ButtonType } from '../configurations/button.config';
@@ -20,6 +21,11 @@ export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	easyClose?: boolean // if true, close the modal window on click outside or press ESC key
 }
 
+interface IModalWindowState extends React.Props<IModalWindowState> {
+	enabled: boolean,
+	clickedButton: ButtonType | undefined
+}
+
 const iconDivStyle = {
 	paddingRight: 10,
 	fontSize: 46,
@@ -27,11 +33,16 @@ const iconDivStyle = {
 	position: 'absolute'
 }
 
-class ModalWindow extends React.Component<IModalWindowProps, {}> {
+class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> {
 	static defaultProps: IModalWindowProps;
 
 	constructor(props: any) {
 		super(props);
+
+		this.state = {
+			enabled: true,
+			clickedButton: undefined
+		}
 	}
 
 	getButtonConfig(buttonType: ButtonType): ButtonConfig {
@@ -64,15 +75,29 @@ class ModalWindow extends React.Component<IModalWindowProps, {}> {
 		return headerElem;
 	}
 
+	handleButtonClick = (btnType: ButtonType) => {
+		this.setState({
+			enabled: false,
+			clickedButton: btnType
+		});
+
+		this.props.onHandleBtnClick(btnType);
+	}
+
 	getButtonsElem = (): any => {
+
 		let buttonsElem = this.props.buttonList.map((btn: ButtonType, btnIndex: number) => {
 			let config = this.getButtonConfig(btn);
+
+			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
+				<LoadingSmall active={true}/> : null;
 
 			return (
 				<Button key={btnIndex}
 					variant={config.variant}
-					onClick={() => this.props.onHandleBtnClick(config.btnType)}>
-					{config.text}
+					disabled={!this.state.enabled}
+					onClick={() => this.handleButtonClick(config.btnType)}>
+					{load}{config.text}
 				</Button>
 			);
 		});

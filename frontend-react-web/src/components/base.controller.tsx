@@ -166,23 +166,31 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 		this.getApi().delete(
 			(data: any) => {
+				let newList = [...this.state.list];
+				let idx = newList.indexOf(this.state.currentObject as T);				
+				if (idx != -1) {
+					newList.splice(idx, 1);				
+				}
+
 				this.setState({
-					list: data,
+					list: newList,
 					isLoading: false,
-					errorMsg: ''
+					errorMsg: '',
+					currentObject: null,
+					showDeleteConfirmation: false,
 				});
 			},
 			(error: Error) => {
 				this.setState({
 					list: [],
 					isLoading: false,
-					errorMsg: error.message
+					errorMsg: error.message,
+					currentObject: null,
+					showDeleteConfirmation: false,
 				});
 			},
 			'/' + key
-		);
-
-		this.handleDeleteClose();
+		);		
 	}
 
 	getDeleteConfirmation = () => {
