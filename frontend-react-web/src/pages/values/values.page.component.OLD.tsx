@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseViewComponent from '../../components/base.view.component';
 import PageFrame from '../../components/pageframe.component';
-import ErrorBox from '../../components/error.box.component';
+import MessageBox from '../../components/message.box.component';
 import Loading from '../../components/loading.component';
 import Grid from '../../components/grid.component';
 import ModalWindow from '../../components/modalwindow.component';
@@ -141,7 +141,7 @@ class ValuesPageOLD extends BaseViewComponent<{}, IValuesPageOLDState> {
 
 		// --------------------
 		// create the ErrorBox component
-		const error = <ErrorBox errorMessage={this.state.errorMsg} caption="Sorry!" icon="exclamation-circle" mode="dynamic" />
+		const error = <MessageBox message={this.state.errorMsg} caption="Sorry!" msgType='error' mode="dynamic" />
         // -------------------- OK
 
 		// create the message place holder
