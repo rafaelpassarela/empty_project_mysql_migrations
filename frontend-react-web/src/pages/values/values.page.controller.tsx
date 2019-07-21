@@ -40,9 +40,10 @@ class ValuesController extends BaseController<Values> {
 		return 'Values List';
 	}
 
-	protected getDeleteTextMessage(object: Values) : string {
-		return 'Do you really want to remove the item?\n' + object.Id + ' - ' + object.Name;
+	protected getCurrentItemAsString(object: Values): string {
+		return object.Id + ' - ' + object.Name;
 	}
+
 }
 
 export default ValuesController;

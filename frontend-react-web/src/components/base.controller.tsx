@@ -5,18 +5,18 @@ import LocalizationConfig from '../configurations/localization.config';
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
-import ErrorBox from './error.box.component';
+import MessageBox from './message.box.component';
 import Loading from './loading.component';
 import PageFrame from './pageframe.component';
 import Grid from './grid.component';
 import DeleteModal from './delete.modal.component';
-import { IModalWindowProps } from './modalwindow.component';
 
 interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
 	currentObject: T | null,	
 	isLoading: boolean,
-	errorMsg: string,
+	errorMsg: string | undefined,
+	message: string | undefined,
 	showDeleteConfirmation: boolean,
 	showEditComponent: boolean
 }
@@ -42,8 +42,8 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
 	protected abstract getTitle(): string;
-	protected abstract getDeleteTextMessage(object: T) : string;
-
+	protected abstract getCurrentItemAsString(object: T): string;
+	
 	protected getColumnID(): string {
 		return 'Id';
 	}
@@ -66,21 +66,18 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 		return "";
 	}
 
-	private messageOptions = {} as IModalWindowProps;
-
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
 			list: [],
 			errorMsg: '',
+			message: '',
 			isLoading: true,
 			showDeleteConfirmation: false,
 			showEditComponent: false,
 			currentObject: null
-		};
-
-		this.messageOptions.caption = "teste";
+		};		
 	}	
 
 	componentDidMount() {
@@ -91,23 +88,33 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 		document.title = LocalizationConfig.companyName + name;
 
+		this.loadList();
+	}
+
+	loadList = () => {
 		this.getApi().get(
 			(data: any) => {
 				this.setState({
 					list: data,
 					isLoading: false,
-					errorMsg: ''
+					errorMsg: undefined,
+					message: undefined,
 				});
 			},
 			(error: Error) => {
 				this.setState({
 					list: [],
 					isLoading: false,
+					message: undefined,
 					errorMsg: error.message
 				});
 			}
 		);
 	}
+
+    getDeleteTextMessage = (object: T) : string => {
+    	return LocalizationConfig.deleteConfirmation + '\n' + this.getCurrentItemAsString(object);
+    }
 
 	getHeader = () => {
 		let textDesc = this.getDescription();
@@ -132,15 +139,26 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 	initErrorMessage = () => {
 		// create the ErrorBox component
-		if (this.state.errorMsg != "" && this.state.errorMsg != undefined) {
-			return <ErrorBox errorMessage={this.state.errorMsg} caption="Error!" icon="exclamation-circle" mode="dynamic" />;
+		if (this.state.errorMsg != '' && this.state.errorMsg != undefined) {
+			return <MessageBox message={this.state.errorMsg} caption={LocalizationConfig.error} msgType='error' mode='dynamic'/>;
 		} else {
 			return null;
 		}
 	}
 
+	initInfoMessage = () => {
+		// create the InfoBox component
+		if (this.state.message != '' && this.state.message != undefined) {
+			return <MessageBox message={this.state.message} caption={LocalizationConfig.attention} msgType='info' mode='dynamic' />;
+		} else {
+			return null;
+		}
+	}	
+
 	onDelete = (data : Object) => {
 		this.setState({
+			errorMsg: undefined,
+			message: undefined,
 			showDeleteConfirmation: true,
 			currentObject: data as T
 		})
@@ -149,7 +167,9 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	handleDeleteClose = () => {
 		this.setState({
 			showDeleteConfirmation: false,
-			currentObject: null
+			currentObject: null,
+			errorMsg: undefined,
+			message: undefined
 		})
 	}
 
@@ -166,6 +186,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 		this.getApi().delete(
 			(data: any) => {
+				// remove the deleted element from the list
 				let newList = [...this.state.list];
 				let idx = newList.indexOf(this.state.currentObject as T);				
 				if (idx != -1) {
@@ -175,16 +196,17 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 				this.setState({
 					list: newList,
 					isLoading: false,
-					errorMsg: '',
+					errorMsg: undefined,
+					message: LocalizationConfig.itemWasDeleted + '\n' + this.getCurrentItemAsString(this.state.currentObject as T),
 					currentObject: null,
 					showDeleteConfirmation: false,
 				});
 			},
 			(error: Error) => {
-				this.setState({
-					list: [],
+				this.setState({					
 					isLoading: false,
 					errorMsg: error.message,
+					message: undefined,
 					currentObject: null,
 					showDeleteConfirmation: false,
 				});
@@ -228,12 +250,15 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	render() {
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
-		const message = null;
+		const message = this.initInfoMessage();		
 		const deleteConfirmation = this.getDeleteConfirmation();
 
 		return (
 			<PageFrame>
-				{loading}{error}{message}{deleteConfirmation}
+				{loading}
+				{error}
+				{message}
+				{deleteConfirmation}
 				{this.getHeader()}
 				{this.getGrid()}
 			</PageFrame>		        
