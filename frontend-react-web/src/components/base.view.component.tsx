@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PageFrame from './pageframe.component';
 import LocalizationConfig from '../configurations/localization.config';
 
 abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
@@ -13,6 +14,36 @@ abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 	}
 
 	protected abstract getTitle(): string;
+	protected abstract doRender(): any;
+
+	protected renderLeft() : any { return null; }
+	protected renderRight() : any { return null; }
+	protected isCenter() : boolean {
+		return false;
+	}
+	protected hideXS(): boolean {
+		return false;
+	}
+	protected hideSM(): boolean {
+		return false;
+	}
+
+	render() {
+		return (
+			<div>
+				<PageFrame 
+					center={this.isCenter()}
+					hideSM={this.hideSM()}
+					hideXS={this.hideXS()}
+					onRenderLeft={this.renderLeft}
+					onRenderRight={this.renderRight}
+				>
+				{this.doRender()}
+				</PageFrame>				
+			</div>
+		);
+	}
+
 
 }
 

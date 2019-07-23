@@ -1,6 +1,5 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
-import PageFrame from '../components/pageframe.component';
 import Alert from 'react-bootstrap/Alert';
 
 import '../inc/App.css';
@@ -46,12 +45,16 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 		this.getErrorImage(ERROR_IMAGE_COUNT);
 	}
 
-	render() {
+	protected isCenter() : boolean {
+		return true;
+	}
 
-		let imgName = "./img/404/404_" + this.state.imageNumber + ".gif";
+	protected doRender() : any {
+
+		let imgName = "/./img/404/404_" + this.state.imageNumber + ".gif";
 
 		return (
-			<PageFrame center={true}>
+			<div>
 				<Alert variant="danger">
 					Oops, an error occurred ! !
 								</Alert>
@@ -61,8 +64,9 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 				<h3>
 					The server indicates an error "404 Not Found".
 								</h3>
-				Probably a page that really does not exist.
-			</PageFrame>
+				Probably a page that really does not exist. <br/>
+				<small><i>"{window.location.pathname}"</i></small>
+			</div>
 		);
 	}
 

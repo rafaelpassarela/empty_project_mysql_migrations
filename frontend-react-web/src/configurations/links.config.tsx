@@ -13,8 +13,8 @@ export class HeaderLinksConfig {
 
 		let items = Array<MenuItem>(
 			{ route: '/', caption: 'Home' },
-			{ route: 'values', caption: 'Values' },
-			{ route: 'about', caption: 'About' }
+			{ route: '/values', caption: 'Values' },
+			{ route: '/about', caption: 'About' }
 		);
 
 		return items;

@@ -31,19 +31,37 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 	}
 
 	leftColumn = () => {
-		return (this.props.onRenderLeft == undefined) ? null : (
-			<div className="pf-side-left pf-side app-shadow">
-				{this.props.onRenderLeft()}
-			</div>
-		);
+		let val = null;
+		if (this.props.onRenderLeft != undefined) {
+			val = this.props.onRenderLeft(); 
+		}
+
+		if (val != null && val != undefined) {
+			return (
+				<div className="pf-side-left pf-side app-shadow">
+					{val}
+				</div>
+			);
+		} 
+
+		return null;
 	}
 
 	rightColumn = () => {
-		return (this.props.onRenderRight == undefined) ? null : (
-			<div className="pf-side-right pf-side app-shadow">
-				{this.props.onRenderRight()}
-			</div>
-		);
+		let val = null;
+		if (this.props.onRenderRight != undefined) {
+			val = this.props.onRenderRight();
+		}
+
+		if (val != null && val != undefined) {
+			return (
+				<div className="pf-side-right pf-side app-shadow">
+					{val}
+				</div>
+			);
+		}
+
+		return null;
 	}
 
 	getMainClassName = (): string => {

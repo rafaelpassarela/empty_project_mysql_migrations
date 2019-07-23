@@ -1,6 +1,5 @@
 import * as React from 'react';
 import BaseViewComponent from '../components/base.view.component';
-import PageFrame from '../components/pageframe.component';
 import ModalWindow from '../components/modalwindow.component';
 import { ButtonType } from '../configurations/button.config';
 import Form from 'react-bootstrap/Form';
@@ -73,11 +72,11 @@ class AboutPage extends BaseViewComponent<{}, IAboutPageState> {
 		} as IAboutPageState);
 	}
 
-	render() {
+	protected doRender() : any {
 		let modalResult = (this.state.modalResult != undefined) ? <div>Modal Result: {this.state.modalResult}</div> : null;
 		// {(event: any) => this.setState({ modalCaption: event.target.value })}
 		return (
-			<PageFrame center={false}>
+			<div>
 				<h1>It's me, React!</h1>
 				<hr />
 				Modal Window Params:<br />
@@ -162,7 +161,7 @@ class AboutPage extends BaseViewComponent<{}, IAboutPageState> {
 					onHandleBtnClick={this.handleBtnClick} />
 				{modalResult}
 				{"\u2764"}
-			</PageFrame>
+			</div>
 		);
 	}
 

@@ -17,7 +17,7 @@ class FooterLinkComponent extends React.Component<FooterLinkProps, FooterLinkSta
 	}
 
 	getImagePath() {
-		return "./img/" + this.props.img + ".png";
+		return "/./img/" + this.props.img + ".png";
 	}
 
 	render() {
