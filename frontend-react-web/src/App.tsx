@@ -25,7 +25,6 @@ class App extends React.Component {
 
 	public render() {
 
-		// console.log("App.ts LOG test");
 		// InitHistory();
 
 		return (
