@@ -20,7 +20,7 @@
 		Learn how to configure a non-root public URL by running `npm run build`.
 		-->
 		<!-- Latest compiled and minified Boostrap CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"/ >
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 		<!-- Font Awesome's Free CDN -->
 		<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous"> -->
 		<!-- Google Web Fonts -->
@@ -34,12 +34,23 @@
 		<![endif]-->
 
 		<title>Loading...</title>
+
+		<style type="text/css">
+			.loadApp {
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 25%;
+			}
+		</style>
 	</head>
 	<body>
 		<noscript>
 			You need to enable JavaScript to run this app.
 		</noscript>
-		<div id="root"></div>
+		<div id="root">
+			<img class="loadApp" src="./loading.gif" alt="Loading...">
+		</div>
 		<!--
 		This HTML file is a template.
 		If you open it directly in the browser, you will see an empty page.
