@@ -31,7 +31,7 @@ class Loading extends React.Component<ILoadingProps, {}> {
 		if (this.props.message != undefined) {
 			let caption = (this.props.caption != undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
 			return (
-				<Alert variant={this.props.variant} className="load-message-pos">
+				<Alert variant={this.props.variant}>
 					{caption}
 					{this.props.message}
 				</Alert>
@@ -47,10 +47,12 @@ class Loading extends React.Component<ILoadingProps, {}> {
 			img = (
 				<div>
 					<div className="screen-backdrop"></div>
-					<div className="divCenterEx load-position-overlay">
+					<div className="exactCenter load-img-overlay">
 						<p className="pCenter">
 							<img className="imgCenter" src={LoadImage} alt="Loading..." />
-						</p>
+						</p>						
+					</div>
+					<div className="exactCenter load-message-overlay">
 						{this.getMessageFrame()}
 					</div>
 				</div>
