@@ -1,0 +1,44 @@
+.load-message-pos {
+	top: 80%;
+	max-width: 90%;
+}
+
+/* use this setting to adjust your loader at center of the screen */
+.load-position-overlay {
+	top: 30%;
+	left: 52.5%;
+	max-width: 90%;
+	z-index: 1035;
+}
+
+@media (max-width: 460px) {
+	.load-message-pos {
+		/* background-color: green; */
+		max-width: 100%;
+	}
+	.load-position-overlay {
+		/* background-color: olive; */
+		left: 69%;
+		max-width: 74%;
+	}
+}
+
+@media (min-width: 461px) and (max-width: 530px) {
+	.load-message-pos {
+		/* background-color: red; */
+		max-width: 100%;
+	}
+	.load-position-overlay {
+		/* background-color: blue; */
+		/* left: 69%; */
+	}
+}
+
+@media (min-width: 531px) and (max-width: 991px) {
+	.load-message-pos {
+		/* background-color: yellow; */
+	}
+	.load-position-overlay {
+		/* background-color: pink; */
+	}
+}
