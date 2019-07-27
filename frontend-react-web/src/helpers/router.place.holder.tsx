@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 // Available pages
 import HomePage from '../pages/home.page.component';
-import ValuesController from '../pages/values/values.page.controller';
+import ValuesController from '../pages/values/values.page.grid.controller';
 import ValuesDetailComponent from '../pages/values/values.page.detail';
 import AboutPage from '../pages/about.page.component';
 import Error404Page from '../pages/notfound404.page.component';

@@ -1,12 +1,13 @@
 import * as React from 'react';
-import BaseViewComponent from '../components/base.view.component';
+import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import Alert from 'react-bootstrap/Alert';
 
 import '../inc/App.css';
 
 const ERROR_IMAGE_COUNT = 6;
 
-class Error404Page extends BaseViewComponent<{}, { imageNumber: number; imgList: Array<any> }> {
+class Error404Page<P extends IBaseViewProps, S = {}> 
+	extends BaseViewComponent<P, { imageNumber: number; imgList: Array<any> }> {
 
 	constructor(props: any) {
 		super(props);

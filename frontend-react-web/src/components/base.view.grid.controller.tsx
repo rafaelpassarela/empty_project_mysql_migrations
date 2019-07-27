@@ -1,6 +1,6 @@
 import * as React from 'react';
 import LocalizationConfig from '../configurations/localization.config';
-//import { ButtonType } from '../configurations/button.config';
+//import BaseViewComponent from './base.view.component';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
@@ -33,7 +33,7 @@ export class BaseColumnInfo {
 	fieldSize?: string | number | undefined;
 }
 
-abstract class BaseController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
+abstract class BaseViewGridController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
 
 	// abstract methods
 	protected abstract getCaption(): string;
@@ -41,7 +41,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	protected abstract getLoadindInfo(): BaseLoadingInfo;
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
-	protected abstract getTitle(): string;
+	protected abstract getPageTitle(): string;
 	protected abstract getCurrentItemAsString(object: T): string;
 	
 	protected getColumnID(): string {
@@ -81,7 +81,7 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 	}	
 
 	componentDidMount() {
-		let name = this.getTitle();
+		let name = this.getPageTitle();
 		if (name != '') {
 			name = ' - ' + name;
 		}
@@ -267,4 +267,4 @@ abstract class BaseController<T extends BaseModel> extends React.Component<{}, I
 
 }
 
-export default BaseController;
+export default BaseViewGridController;

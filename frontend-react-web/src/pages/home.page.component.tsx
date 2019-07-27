@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BaseViewComponent from '../components/base.view.component';
+import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import Button from 'react-bootstrap/Button';
 import Glyphicon from '../components/glyphicon.component';
 
@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
 
-class HomePage extends BaseViewComponent {
+class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S> {
 
 	handleSave = () => {
 		setUser('Luke');

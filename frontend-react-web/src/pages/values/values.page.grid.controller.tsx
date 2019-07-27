@@ -1,10 +1,10 @@
 // import * as React from 'react';
-import BaseController, { BaseColumnInfo, BaseLoadingInfo } from '../../components/base.controller';
+import BaseViewGridController, { BaseColumnInfo, BaseLoadingInfo } from '../../components/base.view.grid.controller';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
 
-class ValuesController extends BaseController<Values> {
+class ValuesController extends BaseViewGridController<Values> {
 
 	constructor(props: any) {
 		super(props);
@@ -36,7 +36,7 @@ class ValuesController extends BaseController<Values> {
 		return Api.Values();
 	}
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'Values List';
 	}
 

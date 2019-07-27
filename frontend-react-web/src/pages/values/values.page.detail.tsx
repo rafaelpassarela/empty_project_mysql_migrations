@@ -1,12 +1,12 @@
 import * as React from 'react';
 import BaseViewComponent from '../../components/base.view.component';
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom';
 
-interface IValuesDetailComponentState extends RouteComponentProps {
+interface IValuesDetailComponentProps extends RouteComponentProps {
 	id: any
 }
 
-class ValuesDetailComponent extends BaseViewComponent<IValuesDetailComponentState, {loadId: string}> {
+class ValuesDetailComponent extends BaseViewComponent<IValuesDetailComponentProps, {loadId: string}> {
 
 	constructor(props: any) {
 		super(props);

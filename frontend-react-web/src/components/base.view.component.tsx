@@ -1,8 +1,13 @@
 import * as React from 'react';
 import PageFrame from './pageframe.component';
 import LocalizationConfig from '../configurations/localization.config';
+import { RouteComponentProps } from 'react-router-dom';
 
-abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
+export interface IBaseViewProps extends RouteComponentProps {
+	needAuth?: boolean
+};
+
+abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React.Component<P, S>{
 
 	componentDidMount() {
 		let name = this.getTitle();
@@ -43,7 +48,6 @@ abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 			</div>
 		);
 	}
-
 
 }
 
