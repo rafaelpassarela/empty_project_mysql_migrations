@@ -18,7 +18,7 @@ interface IAboutPageState extends React.Props<IAboutPageState> {
 
 class AboutPage<P extends IBaseViewProps, S extends IAboutPageState> extends BaseViewComponent<P, S> {
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'About';
 	}
 

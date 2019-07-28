@@ -32,6 +32,18 @@ type GridProps = {
 
 class Grid extends React.Component<GridProps, {}> {
 
+	constructor(props: any) {
+		super(props);
+
+		this.handleInsert = this.handleInsert.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
+		this.renderColumn = this.renderColumn.bind(this);
+		this.getActionHeader = this.getActionHeader.bind(this);
+		this.getEditActions = this.getEditActions.bind(this);
+		this.getColumnWidth = this.getColumnWidth.bind(this);		
+	}
+
 	handleInsert = (data: Object) => {
 		if (this.props.OnInsert != undefined) {
 			this.props.OnInsert(data);

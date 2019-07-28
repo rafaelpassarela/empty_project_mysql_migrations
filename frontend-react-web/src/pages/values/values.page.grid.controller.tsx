@@ -1,17 +1,29 @@
 // import * as React from 'react';
-import BaseViewGridController, { BaseColumnInfo, BaseLoadingInfo } from '../../components/base.view.grid.controller';
+import BaseViewGridController, {
+		BaseColumnInfo, 
+		BaseLoadingInfo, 
+		IBaseControllerProps,
+		IBaseControllerState } from '../../components/base.view.grid.controller';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
+// import ValuesDetailComponent from './values.page.detail';
 
-class ValuesController extends BaseViewGridController<Values> {
+class ValuesController<
+	T,
+	P extends IBaseControllerProps,
+	S extends IBaseControllerState<Values>>
+extends BaseViewGridController<Values, P, S> {
 
 	constructor(props: any) {
 		super(props);
+
+		this.renderRight = this.renderRight.bind(this);
+		this.renderLeft = this.renderLeft.bind(this);
 	}
 
-	protected getCaption(): string {
-		return 'Value List';
+	protected getPageTitle(): string {
+		return 'Values List';
 	}
 
 	protected getDescription(): string {
@@ -36,13 +48,26 @@ class ValuesController extends BaseViewGridController<Values> {
 		return Api.Values();
 	}
 
-	protected getPageTitle(): string {
-		return 'Values List';
-	}
-
 	protected getCurrentItemAsString(object: Values): string {
 		return object.Id + ' - ' + object.Name;
 	}
+
+	// protected renderRight() : any {
+	// 	if (this.props == undefined)
+	// 		return null;
+
+	// 	let id = (this.state.currentObject != null) ? this.state.currentObject.Id : 0;
+
+	// 	return (
+	// 		<div>
+	// 			<ValuesDetailComponent id="123" key={id}
+	// 				history={this.props.history}
+	// 				location={this.props.location}
+	// 				match={this.props.match}
+	// 				currentObject={this.state.currentObject}/>
+	// 		</div> 
+	// 		);
+	// }
 
 }
 

@@ -10,7 +10,7 @@ export interface IBaseViewProps extends RouteComponentProps {
 abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React.Component<P, S>{
 
 	componentDidMount() {
-		let name = this.getTitle();
+		let name = this.getPageTitle();
 		if (name != '') {
 			name = ' - ' + name;
 		}
@@ -18,7 +18,7 @@ abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React
 		document.title = LocalizationConfig.companyName + name;
 	}
 
-	protected abstract getTitle(): string;
+	protected abstract getPageTitle(): string;
 	protected abstract doRender(): any;
 
 	protected renderLeft() : any { return null; }

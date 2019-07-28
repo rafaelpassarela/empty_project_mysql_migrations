@@ -31,7 +31,7 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 		this.getErrorImage(ERROR_IMAGE_COUNT);
 	}
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'Page Not Found (404)';
 	}
 

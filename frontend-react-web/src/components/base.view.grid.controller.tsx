@@ -1,17 +1,18 @@
 import * as React from 'react';
 import LocalizationConfig from '../configurations/localization.config';
-//import BaseViewComponent from './base.view.component';
+import BaseViewComponent, { IBaseViewProps } from './base.view.component';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
 import MessageBox from './message.box.component';
 import Loading from './loading.component';
-import PageFrame from './pageframe.component';
 import Grid from './grid.component';
 import DeleteModal from './delete.modal.component';
 
-interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
+export interface IBaseControllerProps extends IBaseViewProps{};
+
+export interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
 	currentObject: T | null,	
 	isLoading: boolean,
@@ -33,15 +34,19 @@ export class BaseColumnInfo {
 	fieldSize?: string | number | undefined;
 }
 
-abstract class BaseViewGridController<T extends BaseModel> extends React.Component<{}, IBaseControllerState<T>> {
+// abstract class BaseViewGridController<T extends BaseModel> extends 
+// React.Component<{}, IBaseControllerState<T>> {
+abstract class BaseViewGridController<
+	T extends BaseModel,
+	P extends IBaseControllerProps,
+	S extends IBaseControllerState<T>> extends BaseViewComponent<P, S> {
 
 	// abstract methods
-	protected abstract getCaption(): string;
+	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
 	protected abstract getLoadindInfo(): BaseLoadingInfo;
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
-	protected abstract getPageTitle(): string;
 	protected abstract getCurrentItemAsString(object: T): string;
 	
 	protected getColumnID(): string {
@@ -70,6 +75,7 @@ abstract class BaseViewGridController<T extends BaseModel> extends React.Compone
 		super(props);
 
 		this.state = {
+			...props,
 			list: [],
 			errorMsg: '',
 			message: '',
@@ -77,7 +83,18 @@ abstract class BaseViewGridController<T extends BaseModel> extends React.Compone
 			showDeleteConfirmation: false,
 			showEditComponent: false,
 			currentObject: null
-		};		
+		};
+
+		this.loadList = this.loadList.bind(this);
+		this.onDelete = this.onDelete.bind(this);
+		this.initErrorMessage = this.initErrorMessage.bind(this);
+		this.initInfoMessage = this.initInfoMessage.bind(this);
+		this.getHeader = this.getHeader.bind(this);
+		this.getGrid = this.getGrid.bind(this);
+		this.getDeleteConfirmation = this.getDeleteConfirmation.bind(this);
+		this.getDeleteTextMessage = this.getDeleteTextMessage.bind(this);
+		this.handleDeleteClose = this.handleDeleteClose.bind(this);
+		this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
 	}	
 
 	componentDidMount() {
@@ -118,7 +135,7 @@ abstract class BaseViewGridController<T extends BaseModel> extends React.Compone
 
 	getHeader = () => {
 		let textDesc = this.getDescription();
-		let textCaption = this.getCaption();
+		let textCaption = this.getPageTitle();
 
 		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
@@ -247,21 +264,22 @@ abstract class BaseViewGridController<T extends BaseModel> extends React.Compone
 		return grid;
 	}
 
-	render() {
+	protected doRender() : any {
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
 		const message = this.initInfoMessage();		
 		const deleteConfirmation = this.getDeleteConfirmation();
 
 		return (
-			<PageFrame>
+
+			<div>
 				{loading}
 				{error}
 				{message}
 				{deleteConfirmation}
 				{this.getHeader()}
 				{this.getGrid()}
-			</PageFrame>		        
+			</div>
 		)
 	}
 

@@ -27,7 +27,7 @@ class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S>
 		toast.success("Success Notification !");
 	}
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'Home Page';
 	}
 
