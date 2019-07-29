@@ -22,11 +22,6 @@ export interface IBaseControllerState<T extends BaseModel> extends React.Props<I
 	showEditComponent: boolean
 }
 
-export class BaseLoadingInfo {
-	caption: string;
-	message: string;
-}
-
 export class BaseColumnInfo {
 	fieldName: string;
 	isKey?: boolean;
@@ -44,7 +39,7 @@ abstract class BaseViewGridController<
 	// abstract methods
 	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
-	protected abstract getLoadindInfo(): BaseLoadingInfo;
+	protected abstract getLoadindMessage(): string;
 	protected abstract getColumnInfo(): BaseColumnInfo[];	
 	protected abstract getApi(): ApiBase<T>;
 	protected abstract getCurrentItemAsString(object: T): string;
@@ -143,13 +138,11 @@ abstract class BaseViewGridController<
 	}
 
 	initLoading = () => {
-		const info = this.getLoadindInfo();
-
 		return (
 			<Loading
 				active={this.state.isLoading}
-				caption={info.caption}
-				message={info.message}
+				caption={LocalizationConfig.waitCaption}
+				message={this.getLoadindMessage()}
 				variant="primary" />
 		)
 	}
@@ -250,14 +243,14 @@ abstract class BaseViewGridController<
 	getGrid = () => {
 		let grid = 
 				<Grid
-					Columns={this.getColumnInfo()}
-					KeyField="Id"
-					DataSource={this.state.list}
-					OnRenderRow={this.onRederRow}
-					OnRenderColumn={this.onRenderColumn}
-					Actions={["delete", "insert", "update"]}
+					columns={this.getColumnInfo()}
+					keyField="Id"
+					dataSource={this.state.list}
+					onRenderRow={this.onRederRow}
+					onRenderColumn={this.onRenderColumn}
+					actions={["delete", "insert", "update"]}
 					//OnInsert={() => alert('msg on other page!')}
-					OnDelete={this.onDelete}
+					onDelete={this.onDelete}
 					//OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} 
 				/>;
 
@@ -267,7 +260,7 @@ abstract class BaseViewGridController<
 	protected doRender() : any {
 		const loading = this.initLoading();
 		const error = this.initErrorMessage();
-		const message = this.initInfoMessage();		
+		const message = this.initInfoMessage();
 		const deleteConfirmation = this.getDeleteConfirmation();
 
 		return (

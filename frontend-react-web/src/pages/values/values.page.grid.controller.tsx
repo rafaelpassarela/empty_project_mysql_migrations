@@ -1,7 +1,6 @@
 // import * as React from 'react';
-import BaseViewGridController, {
-		BaseColumnInfo, 
-		BaseLoadingInfo, 
+import BaseViewGridController, 
+      {	BaseColumnInfo, 
 		IBaseControllerProps,
 		IBaseControllerState } from '../../components/base.view.grid.controller';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
@@ -30,11 +29,8 @@ extends BaseViewGridController<Values, P, S> {
 		return 'List of Values loaded from the database';
 	}
 
-	protected getLoadindInfo(): BaseLoadingInfo {
-		return {
-			caption: 'Wait',
-			message: 'Loading Values List...'
-		}
+	protected getLoadindMessage(): string {
+		return 'Loading Values List...';
 	}
 
 	protected getColumnInfo(): BaseColumnInfo[] {
