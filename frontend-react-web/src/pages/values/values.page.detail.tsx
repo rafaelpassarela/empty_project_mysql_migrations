@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import BaseViewDetailComponent, { ViewItems } from '../../components/base.view.detail.component';
+import BaseViewDetailComponent, { ViewDetailItem } from '../../components/base.view.detail.component';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
@@ -19,10 +19,28 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 		return 'Detailed info about Value ID ' + this.getParamID();
 	}
 
-	protected getViewItemsList() : ViewItems[] {
+	protected getViewItemsList() : ViewDetailItem[] {
 		return [
-			{required: true, fieldName: "Id", caption: "Id", type: "number"},
-			{required: true, fieldName: "Name", caption: "Description", type: "text", maxLength: 20}
+			{
+				required: true, 
+				fieldName: "Id",
+				caption: "Id",
+				type: "number",
+				disabled: false,
+				options: {
+					min: 0,
+					max: 999
+				}
+			}, {
+				required: true, 
+				fieldName: "Name",
+				caption: "Description",
+				type: "text",
+				placeHolder: "Type the Value Name",
+				options: {
+					maxLength: 20
+				}
+			}
 		];
 	}
 

@@ -125,16 +125,35 @@
 	height: 100vh;
 	background-color: #000;
 }
+
+.dummy-space {
+	min-height: 80px;
+	/* background-color: green; */
+}
+
+/*
+@media (min-width: 992px) {
+	.dummy-space {
+		display: none;
+	}
+}
+*/
+
 /*@media (min-width: 768px) {
 	NavbarImg {
 		width: 900px;
 	}
 }*/
 
-/*@media all {
+/*
+@media all {
 	.hidden-print   { display: none; }
 }
+*/
 
 @media print {
-	.hidden-print   { display: block; page-break-before: always; }
-}*/
+	.hidden-print * {
+		display: none !important;
+		/* page-break-before: always; */
+	}
+}

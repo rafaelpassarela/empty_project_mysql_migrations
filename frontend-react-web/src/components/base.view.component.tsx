@@ -44,7 +44,8 @@ abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React
 					onRenderRight={this.renderRight}
 				>
 				{this.doRender()}
-				</PageFrame>				
+				</PageFrame>
+				<div className="dummy-space hidden-print" />
 			</div>
 		);
 	}
