@@ -6,6 +6,7 @@ export class LocalizationConfig {
 	public static cancel = 'Cancel';
 	public static error = 'Error!';
 	public static attention = 'Attention!';
+	public static waitCaption = 'Wait...';
 	public static deleteCaption = 'Delete Item';
 	public static deleteConfirmation = 'Do you really want to remove the item?';
 	public static itemWasDeleted = 'The selected item was deleted!';

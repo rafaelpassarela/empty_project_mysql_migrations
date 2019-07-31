@@ -1,11 +1,16 @@
 import * as React from 'react';
 import PageFrame from './pageframe.component';
 import LocalizationConfig from '../configurations/localization.config';
+import { RouteComponentProps } from 'react-router-dom';
 
-abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
+export interface IBaseViewProps extends RouteComponentProps {
+	needAuth?: boolean
+};
+
+abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React.Component<P, S>{
 
 	componentDidMount() {
-		let name = this.getTitle();
+		let name = this.getPageTitle();
 		if (name != '') {
 			name = ' - ' + name;
 		}
@@ -13,7 +18,7 @@ abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 		document.title = LocalizationConfig.companyName + name;
 	}
 
-	protected abstract getTitle(): string;
+	protected abstract getPageTitle(): string;
 	protected abstract doRender(): any;
 
 	protected renderLeft() : any { return null; }
@@ -39,11 +44,11 @@ abstract class BaseViewComponent<P = {}, S = {}> extends React.Component<P, S>{
 					onRenderRight={this.renderRight}
 				>
 				{this.doRender()}
-				</PageFrame>				
+				</PageFrame>
+				<div className="dummy-space hidden-print" />
 			</div>
 		);
 	}
-
 
 }
 

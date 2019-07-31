@@ -21,6 +21,8 @@ class DeleteModal extends React.Component<IDeleteModalProp, IDeleteModalState> {
 
 	constructor(props: any) {
 		super(props);
+
+		this.deleteAction = this.deleteAction.bind(this);
 	}
 
 	deleteAction = (btnType: ButtonType) => {

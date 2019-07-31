@@ -1,12 +1,13 @@
 import * as React from 'react';
-import BaseViewComponent from '../components/base.view.component';
+import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import Alert from 'react-bootstrap/Alert';
 
 import '../inc/App.css';
 
 const ERROR_IMAGE_COUNT = 6;
 
-class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
+class Error404Page<P extends IBaseViewProps, S = {}> 
+	extends BaseViewComponent<P, { imageNumber: number; imgList: Array<any> }> {
 
 	constructor(props: any) {
 		super(props);
@@ -14,8 +15,14 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 		this.handleImageClick = this.handleImageClick.bind(this);
 		this.getErrorImage = this.getErrorImage.bind(this);
 
+		let list : Array<any> = new Array<any>(ERROR_IMAGE_COUNT);
+		for (let i = 1; i <= ERROR_IMAGE_COUNT; i++ ) {
+			list[i-1] = require('../img/404/404_' + i + '.gif');
+		}
+
 		this.state = {
-			imageNumber: 0
+			imageNumber: 0,
+			imgList: list
 		};
 	}
 
@@ -24,7 +31,7 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 		this.getErrorImage(ERROR_IMAGE_COUNT);
 	}
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'Page Not Found (404)';
 	}
 
@@ -51,7 +58,7 @@ class Error404Page extends BaseViewComponent<{}, { imageNumber: number }> {
 
 	protected doRender() : any {
 
-		let imgName = "/./img/404/404_" + this.state.imageNumber + ".gif";
+		let imgName = this.state.imgList[this.state.imageNumber-1];
 
 		return (
 			<div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BaseViewComponent from '../components/base.view.component';
+import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import ModalWindow from '../components/modalwindow.component';
 import { ButtonType } from '../configurations/button.config';
 import Form from 'react-bootstrap/Form';
@@ -16,9 +16,9 @@ interface IAboutPageState extends React.Props<IAboutPageState> {
 	modalSize?: 'sm' | 'lg'
 }
 
-class AboutPage extends BaseViewComponent<{}, IAboutPageState> {
+class AboutPage<P extends IBaseViewProps, S extends IAboutPageState> extends BaseViewComponent<P, S> {
 
-	protected getTitle(): string {
+	protected getPageTitle(): string {
 		return 'About';
 	}
 
@@ -26,13 +26,14 @@ class AboutPage extends BaseViewComponent<{}, IAboutPageState> {
 		super(props);
 
 		this.state = {
+			...props,
 			show: false,
+			modalResult: undefined,
 			modalCaption: 'Modal Window Test',
 			modalText: 'Here we can write about everything and create other controls...',
 			modalEasyMode: false,
 			modalCentered: true,
-			modalCloseButton: true,
-			modalResult: undefined
+			modalCloseButton: true
 		};
 	}
 

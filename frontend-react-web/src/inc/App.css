@@ -39,6 +39,17 @@
 	box-shadow: 2px 2px 15px #ccc;
 }
 
+.exactCenter {
+	width:200px;
+	height:200px;
+	position: fixed;
+	/* background-color: #00FF00; */
+	top: 50%;
+	left: 50%;
+	margin-top: -100px;
+	margin-left: -100px;
+}
+
 .divCenterEx {
 	/* z-order test */
 	/* position: absolute; */
@@ -65,7 +76,7 @@
     margin: 0;
     position: absolute;
     top: 50%;
-    left: 45%;
+    left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%)
 }
@@ -114,16 +125,35 @@
 	height: 100vh;
 	background-color: #000;
 }
+
+.dummy-space {
+	min-height: 80px;
+	/* background-color: green; */
+}
+
+/*
+@media (min-width: 992px) {
+	.dummy-space {
+		display: none;
+	}
+}
+*/
+
 /*@media (min-width: 768px) {
 	NavbarImg {
 		width: 900px;
 	}
 }*/
 
-/*@media all {
+/*
+@media all {
 	.hidden-print   { display: none; }
 }
+*/
 
 @media print {
-	.hidden-print   { display: block; page-break-before: always; }
-}*/
+	.hidden-print * {
+		display: none !important;
+		/* page-break-before: always; */
+	}
+}

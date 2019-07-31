@@ -43,6 +43,8 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 			enabled: true,
 			clickedButton: undefined
 		}
+
+		this.handleButtonClick = this.handleButtonClick.bind(this);
 	}
 
 	getButtonConfig(buttonType: ButtonType): ButtonConfig {

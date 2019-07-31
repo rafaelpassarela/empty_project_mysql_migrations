@@ -2,6 +2,7 @@ import * as React from 'react';
 import Alert from 'react-bootstrap/Alert';
 import LoadImage from '../img/loading.gif';
 import '../inc/App.css';
+import '../inc/loading.css';
 
 /* 
   You can customize your loading gif at
@@ -23,13 +24,6 @@ interface ILoadingProps extends React.Props<ILoadingProps> {
 	| 'light';
 }
 
-// use this setting to adjust your loader at center of the screen
-const PositionOverlay = {
-	top: '30%',
-	left: '52.5%',
-	zIndex: 1035
-}
-
 class Loading extends React.Component<ILoadingProps, {}> {
 	static defaultProps: ILoadingProps;
 
@@ -37,7 +31,7 @@ class Loading extends React.Component<ILoadingProps, {}> {
 		if (this.props.message != undefined) {
 			let caption = (this.props.caption != undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
 			return (
-				<Alert variant={this.props.variant} style={{ top: '80%' }}>
+				<Alert variant={this.props.variant}>
 					{caption}
 					{this.props.message}
 				</Alert>
@@ -53,10 +47,12 @@ class Loading extends React.Component<ILoadingProps, {}> {
 			img = (
 				<div>
 					<div className="screen-backdrop"></div>
-					<div className="divCenterEx" style={PositionOverlay}>
+					<div className="exactCenter load-img-overlay">
 						<p className="pCenter">
 							<img className="imgCenter" src={LoadImage} alt="Loading..." />
-						</p>
+						</p>						
+					</div>
+					<div className="exactCenter load-message-overlay">
 						{this.getMessageFrame()}
 					</div>
 				</div>
