@@ -24,11 +24,11 @@ interface IBaseViewDetailComponentState<T extends BaseModel> extends React.Props
 	currentObject: T | null,
 	isLoading: boolean,
 	errorMsg: string | undefined,
-	message: string | undefined,	
+	message: string | undefined,
 }
 
 class ViewDetailItemSelection {
-	value: number | string;
+	value: number | string
 	caption: string;
 }
 
@@ -51,12 +51,13 @@ export class ViewDetailItem {
 		| 'date'
 		| 'datetime-local'
 		| 'email'
-		| 'file'
+		| 'file'		
 		| 'month'
 		| 'number'
 		| 'password'
 		| 'radio'
 		| 'range'
+		| 'select-list'
 		| 'text' 
 		| 'tel'
 		| 'time'
@@ -141,7 +142,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				});
 			},
 			(error: Error) => {
-				this.setState({					
+				this.setState({
 					isLoading: false,
 					message: undefined,
 					errorMsg: error.message
@@ -198,19 +199,27 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			let obj = this.getCurrentItem(true);
 
 			let prop = event.target.name;
-			let value = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
+			let value = undefined;
 
-        //for multiple select -> value = [...target.selectedOptions].map(x => x.value)
+			switch (event.target.type) {
+				case "checkbox":
+					value = event.target.checked;
+					break;
+				case "select-one":
+					value = (event.target.value == -1) ? undefined : event.target.value;
+					break;
+				default:
+					value = event.target.value;
+					break;
+			}
+	        //for multiple select -> value = [...target.selectedOptions].map(x => x.value)
 
 			obj[prop] = value;
 
 			this.setState({
 				currentObject: obj
-			});
-
-			console.log(event.timeStamp + ' handleChange - ' + true);
+			});	
 		} else {
-			console.log(event.timeStamp + ' handleChange - ' + false);
 			this.canChangeObjectValues = true;
 		}
 
@@ -219,12 +228,17 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	handleKeyPress(event: any) {
 		const numKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-'];
 
-		if (event.currentTarget != undefined && numKeys.indexOf(event.key) > -1) {			
-			const maxLen = Math.max(event.currentTarget.max.length, event.currentTarget.maxLength);
-			const val = event.currentTarget.value;
+		if (event.currentTarget != undefined && numKeys.indexOf(event.key) > -1) {
+			let maxLen = Math.max(event.currentTarget.max.length, event.currentTarget.maxLength);
+			const val : string = event.currentTarget.value;
 
-			if (maxLen > 0 && val.length >= maxLen) {												
-				console.log(event.timeStamp + ' handleKeyPress - ' + false);
+			if (maxLen > 0) {
+				['.', ',', '-'].map( (char: string) => {
+					if (val.indexOf(char) >= 0) maxLen++;
+				});
+			}
+
+			if (maxLen > 0 && val.length >= maxLen) {
 				let obj = this.getCurrentItem(false);
 				obj[event.currentTarget.name] = val.substr(0, maxLen);
 				this.setState({
@@ -234,18 +248,17 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				return false;
 			}
 		}
-		console.log(event.timeStamp + ' - ' + true);
 		return true;
 	}
 
-	getFormImput(item: ViewDetailItem, object: T) : any {
+	getFormImput(item: ViewDetailItem, object: T, key?: number) : any {
 		let options = item.options || {} as ViewDetailItemOptions;
 		// let list = options.selectionItens || [] as ViewDetailItemSelection[];
 
 		switch (item.type) {
-/*		| 'color' 
-		| 'combobox'
-		| 'checkbox'
+/*		= 'color' 
+		= 'combobox'
+		= 'checkbox'
 		| 'date'
 		| 'datetime-local'
 		= 'email'
@@ -255,25 +268,60 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		= 'password'
 		| 'radio'
 		| 'range'
+		| 'select-list'
 		= 'text' 
 		| 'tel'
 		| 'time'
 		| 'textarea'
 		| 'url'
-		| 'week';			*/
-			case "checkbox":
-				return <div>{item.type}</div>
-				break;
+		| 'week';			
+		*/
 
 			case "combobox":
-				return <div>{item.type}</div>
+				const items = options.selectionItens || [];
+				items.unshift({
+					caption: item.placeHolder || '',
+					value: -1
+				});
+				return <Form.Control 
+							name={item.fieldName}
+							as="select"
+							disabled={item.disabled}
+							readOnly={item.readOnly}
+							required={item.required}
+							placeholder={item.placeHolder}
+							maxLength={options.maxLength}
+							value={object[item.fieldName]}
+							onChange={this.handleChange}
+						>
+							{items.map( (option: ViewDetailItemSelection, i: number) => {
+								return <option key={i} value={option.value}>{option.caption}</option>
+							} ) }
+						</Form.Control>
+				break;
+
+			case "checkbox":
+				return	<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
+    						<Col sm={{ span: 10, offset: 2 }}>
+      							<Form.Check 
+      								name={item.fieldName}
+      								label={item.caption}
+      								disabled={item.disabled}
+      								readOnly={item.readOnly}
+      								required={item.required}
+      								checked={[true, 'true', 't', 'yes', 'y', 1, '1'].indexOf(object[item.fieldName]) > -1}
+      								onChange={this.handleChange}
+      							/>
+    						</Col>
+  						</Form.Group>
 				break;
 
 			case "date":
 				return <div>{item.type}</div>
 				break;
 
-			case "email":			
+			case "color":
+			case "email":
 			case "password":
 			case "text":
 				return <Form.Control 
@@ -289,7 +337,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 						/>
 				break;
 			case "number":
-// <input type="number" onKeyDown="if(this.value.length==2) return false;" />			
 				return <Form.Control 
 							name={item.fieldName}
 							type={item.type}
@@ -301,7 +348,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							max={options.max}
 							value={object[item.fieldName]}
 							onChange={this.handleChange}
-							onKeyDown={this.handleKeyPress}							
+							onKeyDown={this.handleKeyPress}
 						/>
 				break;
 			case "radio":
@@ -335,18 +382,24 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		return (
 			<Form>
 				{list.map( (item: ViewDetailItem) => {
-						return (
-							<Form.Group key={key++} as={Row} controlId={"form_" + item.fieldName}>
-								<Form.Label column>
-										{item.caption}
-								</Form.Label>
-								<Col sm={10}>
-									{this.getFormImput(item, obj)}
-								</Col>									
-							</Form.Group>
-						);
+					key++;
+					let form = null;
+					if (item.type == 'checkbox') {
+						form = this.getFormImput(item, obj, key);
+					} else {
+						form = 
+						<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
+							<Form.Label column>
+								{item.caption}
+							</Form.Label>
+							<Col sm={10}>
+								{this.getFormImput(item, obj)}
+							</Col>
+						</Form.Group>
 					}
-				)}
+
+					return form;
+				} ) }
 				<Button type="submit">Sign in</Button>
 			</Form>
 /*
