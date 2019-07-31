@@ -112,6 +112,8 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		return obj;
 	}
 
+	private canChangeObjectValues : boolean = true;
+
 	componentDidMount() {
 		super.componentDidMount();
 
@@ -191,36 +193,48 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	}
 
 	handleChange(event: any) {
-		let obj = this.getCurrentItem(true);
 
-		let prop = event.target.name;
-		let value = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
+		if (this.canChangeObjectValues === true) {
+			let obj = this.getCurrentItem(true);
+
+			let prop = event.target.name;
+			let value = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
 
         //for multiple select -> value = [...target.selectedOptions].map(x => x.value)
 
-		obj[prop] = value;
+			obj[prop] = value;
 
-		this.setState({
-			currentObject: obj
-		});
+			this.setState({
+				currentObject: obj
+			});
+
+			console.log(event.timeStamp + ' handleChange - ' + true);
+		} else {
+			console.log(event.timeStamp + ' handleChange - ' + false);
+			this.canChangeObjectValues = true;
+		}
+
 	}
 
 	handleKeyPress(event: any) {
-		// <input type="number" onKeyDown="if(this.value.length==2) return false;" />
-		const numKeys = ['0', '1', '3', '4', '5', '6', '7', '8', '9', '.', ','];
+		const numKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-'];
 
-		if (event.currentTarget != undefined && numKeys.indexOf(event.key) > -1) {
-
+		if (event.currentTarget != undefined && numKeys.indexOf(event.key) > -1) {			
 			const maxLen = Math.max(event.currentTarget.max.length, event.currentTarget.maxLength);
-			if (maxLen > 0) {
-				let res = event.currentTarget.value.length < maxLen;
-				if (!res) {
-					event.key = '';
-					event.keyCode = 0;
-				}
+			const val = event.currentTarget.value;
+
+			if (maxLen > 0 && val.length >= maxLen) {												
+				console.log(event.timeStamp + ' handleKeyPress - ' + false);
+				let obj = this.getCurrentItem(false);
+				obj[event.currentTarget.name] = val.substr(0, maxLen);
+				this.setState({
+					currentObject: obj
+				});
+				this.canChangeObjectValues = false;
+				return false;
 			}
 		}
-
+		console.log(event.timeStamp + ' - ' + true);
 		return true;
 	}
 
@@ -275,7 +289,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 						/>
 				break;
 			case "number":
-//maxlength="2" for numbers
 // <input type="number" onKeyDown="if(this.value.length==2) return false;" />			
 				return <Form.Control 
 							name={item.fieldName}
@@ -288,7 +301,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							max={options.max}
 							value={object[item.fieldName]}
 							onChange={this.handleChange}
-							onKeyDown={this.handleKeyPress}
+							onKeyDown={this.handleKeyPress}							
 						/>
 				break;
 			case "radio":
