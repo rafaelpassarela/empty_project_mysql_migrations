@@ -14,7 +14,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-
 interface IBaseViewDetailComponentProps<T extends BaseModel> extends RouteComponentProps {
 	id: any,
 	currentObject: T | null
@@ -38,6 +37,7 @@ class ViewDetailItemOptions {
 	max?: number;
 	rows?: number;
 	pattern?: string;
+	radioInLine?: boolean;	
 	step?: number;
 	selectionItens?: ViewDetailItemSelection[];
 }
@@ -51,7 +51,8 @@ export class ViewDetailItem {
 		| 'date'
 		| 'datetime-local'
 		| 'email'
-		| 'file'		
+		| 'file'
+		| 'file-multiple'
 		| 'month'
 		| 'number'
 		| 'password'
@@ -208,11 +209,33 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				case "select-one":
 					value = (event.target.value == -1) ? undefined : event.target.value;
 					break;
+				case "select-multiple":
+					value = new Array<string>();
+					for (var i = 0; i < event.target.options.length; ++i) {
+						if (event.target.options[i].selected) {
+							value.push(event.target.options[i].value);
+						}
+					}
+					break;
+				case "file":
+					if (event.target.multiple == true) {
+						let list = event.target.files;
+						value = new Array<string>();
+						for (var i = 0; i < list.length; i++) {
+							let item = list.item(i);
+							if (item != null)
+								value.push(item.name);
+						}
+					} else {
+						value = event.target.files[0].name;
+					}
+					
+					break;
+
 				default:
 					value = event.target.value;
 					break;
 			}
-	        //for multiple select -> value = [...target.selectedOptions].map(x => x.value)
 
 			obj[prop] = value;
 
@@ -253,39 +276,22 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	getFormImput(item: ViewDetailItem, object: T, key?: number) : any {
 		let options = item.options || {} as ViewDetailItemOptions;
-		// let list = options.selectionItens || [] as ViewDetailItemSelection[];
+		let list = options.selectionItens || [] as ViewDetailItemSelection[];
 
 		switch (item.type) {
-/*		= 'color' 
-		= 'combobox'
-		= 'checkbox'
-		| 'date'
-		| 'datetime-local'
-		= 'email'
-		| 'file'
-		| 'month'
-		= 'number'
-		= 'password'
-		| 'radio'
-		| 'range'
-		| 'select-list'
-		= 'text' 
-		| 'tel'
-		| 'time'
-		| 'textarea'
-		| 'url'
-		| 'week';			
-		*/
-
 			case "combobox":
-				const items = options.selectionItens || [];
-				items.unshift({
-					caption: item.placeHolder || '',
-					value: -1
-				});
+			case "select-list":
+				if (item.type === "combobox") {
+					list.unshift({
+						caption: item.placeHolder || '',
+						value: -1
+					});
+				}
+
 				return <Form.Control 
 							name={item.fieldName}
 							as="select"
+							multiple={item.type === "select-list"}
 							disabled={item.disabled}
 							readOnly={item.readOnly}
 							required={item.required}
@@ -294,7 +300,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							value={object[item.fieldName]}
 							onChange={this.handleChange}
 						>
-							{items.map( (option: ViewDetailItemSelection, i: number) => {
+							{list.map( (option: ViewDetailItemSelection, i: number) => {
 								return <option key={i} value={option.value}>{option.caption}</option>
 							} ) }
 						</Form.Control>
@@ -302,28 +308,46 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 			case "checkbox":
 				return	<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
-    						<Col sm={{ span: 10, offset: 2 }}>
-      							<Form.Check 
-      								name={item.fieldName}
-      								label={item.caption}
-      								disabled={item.disabled}
-      								readOnly={item.readOnly}
-      								required={item.required}
-      								checked={[true, 'true', 't', 'yes', 'y', 1, '1'].indexOf(object[item.fieldName]) > -1}
-      								onChange={this.handleChange}
-      							/>
-    						</Col>
-  						</Form.Group>
+							<Col sm={{ span: 10, offset: 2 }}>
+								<Form.Check 
+									name={item.fieldName}
+									label={item.caption}
+									disabled={item.disabled}
+									readOnly={item.readOnly}
+									required={item.required}
+									checked={[true, 'true', 't', 'yes', 'y', 1, '1'].indexOf(object[item.fieldName]) > -1}
+									onChange={this.handleChange}
+								/>
+							</Col>
+						</Form.Group>
 				break;
 
-			case "date":
-				return <div>{item.type}</div>
+			case "file":
+			case "file-multiple":
+				return <Form.Control 
+							name={item.fieldName}
+							type="file"
+							disabled={item.disabled}
+							readOnly={item.readOnly}
+							required={item.required}
+							placeholder={item.placeHolder}
+							maxLength={options.maxLength}
+							multiple={item.type === "file-multiple"}							
+							onChange={this.handleChange}
+						/>
 				break;
 
 			case "color":
+			case "date":
+			case "datetime-local":
 			case "email":
+			case "month":
 			case "password":
+			case "tel":
+			case "time":
 			case "text":
+			case "url":
+			case "week":
 				return <Form.Control 
 							name={item.fieldName}
 							type={item.type}
@@ -337,6 +361,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 						/>
 				break;
 			case "number":
+			case "range":
 				return <Form.Control 
 							name={item.fieldName}
 							type={item.type}
@@ -351,8 +376,35 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							onKeyDown={this.handleKeyPress}
 						/>
 				break;
+
 			case "radio":
-				return <div>{item.type}</div>
+				return <fieldset key={key}>
+							<Form.Group as={Row} controlId={"form_" + item.fieldName}>
+								<Form.Label column >
+									{item.caption}
+								</Form.Label>
+								<Col sm={10} className="radio-center">
+									{
+										list.map( (optItem: ViewDetailItemSelection, i: number) => {
+											return (
+												<Form.Check 
+													key={key + '-' + i}
+													type="radio"
+													label={optItem.caption}
+													value={optItem.value}
+													name={item.fieldName}
+													disabled={item.disabled || item.readOnly}
+													id={item.fieldName + '-' + optItem.value}
+													inline={options.radioInLine}
+													checked={optItem.value == object[item.fieldName]}
+													onChange={this.handleChange}
+												/>
+											)
+										})
+									}
+								</Col>
+							</Form.Group>
+						</fieldset>
 				break;
 
 			case "textarea":
@@ -384,7 +436,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				{list.map( (item: ViewDetailItem) => {
 					key++;
 					let form = null;
-					if (item.type == 'checkbox') {
+					if (item.type == 'checkbox' || item.type == 'radio') {
 						form = this.getFormImput(item, obj, key);
 					} else {
 						form = 
@@ -402,64 +454,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				} ) }
 				<Button type="submit">Sign in</Button>
 			</Form>
-/*
-  <Form.Group as={Row} controlId="formHorizontalEmail">
-    <Form.Label column>
-      Email
-    </Form.Label>
-    <Col sm={10}>
-      <Form.Control type="email" placeholder="Email" />
-    </Col>
-  </Form.Group>
-
-  <Form.Group as={Row} controlId="formHorizontalPassword">
-    <Form.Label column>
-      Password
-    </Form.Label>
-    <Col sm={10}>
-      <Form.Control type="password" placeholder="Password" />
-    </Col>
-  </Form.Group>
-  <fieldset>
-    <Form.Group as={Row}>
-      <Form.Label column >
-        Radios
-      </Form.Label>
-      <Col sm={10}>
-        <Form.Check
-          type="radio"
-          label="first radio"
-          name="formHorizontalRadios"
-          id="formHorizontalRadios1"
-        />
-        <Form.Check
-          type="radio"
-          label="second radio"
-          name="formHorizontalRadios"
-          id="formHorizontalRadios2"
-        />
-        <Form.Check
-          type="radio"
-          label="third radio"
-          name="formHorizontalRadios"
-          id="formHorizontalRadios3"
-        />
-      </Col>
-    </Form.Group>
-  </fieldset>
-  <Form.Group as={Row} controlId="formHorizontalCheck">
-    <Col sm={{ span: 10, offset: 2 }}>
-      <Form.Check label="Remember me" />
-    </Col>
-  </Form.Group>
-
-  <Form.Group as={Row}>
-    <Col sm={{ span: 10, offset: 2 }}>
-      <Button type="submit">Sign in</Button>
-    </Col>
-  </Form.Group>
-</Form>
-*/
 		);
 	}
 
@@ -476,10 +470,10 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				{message}
 				{this.getHeader()}
 				<hr />
-				{form}
-				{JSON.stringify(this.getCurrentItem(true), null, 2)}
+				{form}				
 			</div>
 		)
+		// {JSON.stringify(this.getCurrentItem(true), null, 2)}		
 	}
 
 }

@@ -26,7 +26,8 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 				fieldName: "Id",
 				caption: "Id",
 				type: "number",
-				disabled: false,
+				disabled: true,
+				placeHolder: "Value ID",
 				options: {
 					min: 0,
 					max: 999
@@ -36,7 +37,7 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 				fieldName: "Name",
 				caption: "Description",
 				type: "text",
-				placeHolder: "Type the Value Name",
+				placeHolder: "Value Name",
 				options: {
 					maxLength: 20
 				}
@@ -51,24 +52,6 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 	protected getApi(): ApiValuesProxy {
 		return Api.Values();
 	};
-
-	// protected doRender() : any {
-	// 	let obj = this.getCurrentItem();
-	// 	let name = (obj != null) ? obj.Name : 'Nao Tem';
-	// 	let json = (obj != null) ? JSON.stringify(obj, null, 2) : '{}';
-
-	// 	return (
-	// 	<div>
-	// 		Get Item ID = <b>{this.getParamID()} </b><hr/>
-	// 		Item Name = <b>{name}</b>
-
-	// 		<input value={name} name="Name" onChange={this.handleChange}></input> <br/>
-
-	// 		{json}
-	// 	</div>
-	// 	);
-	// }	
-
 }
 
 export default ValuesDetailComponent;
