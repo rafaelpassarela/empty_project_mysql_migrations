@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import LocalizationConfig from '../configurations/localization.config';
 import BaseViewComponent from './base.view.component';
+import { ViewDetailItem, ViewDetailItemOptions, ViewDetailItemSelection, ViewDetailItemValidation } from './base.view.types';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
@@ -26,52 +27,6 @@ interface IBaseViewDetailComponentState<T extends BaseModel> extends React.Props
 	message: string | undefined,
 }
 
-class ViewDetailItemSelection {
-	value: number | string
-	caption: string;
-}
-
-class ViewDetailItemOptions {
-	maxLength?: number;
-	min?: number;
-	max?: number;
-	rows?: number;
-	pattern?: string;
-	radioInLine?: boolean;	
-	step?: number;
-	selectionItens?: ViewDetailItemSelection[];
-}
-
-export class ViewDetailItem {
-	fieldName: string;
-	caption: string;
-	type: 'color'
-		| 'combobox'
-		| 'checkbox'
-		| 'date'
-		| 'datetime-local'
-		| 'email'
-		| 'file'
-		| 'file-multiple'
-		| 'month'
-		| 'number'
-		| 'password'
-		| 'radio'
-		| 'range'
-		| 'select-list'
-		| 'text' 
-		| 'tel'
-		| 'time'
-		| 'textarea'
-		| 'url'
-		| 'week';
-	placeHolder?: string;
-	required?: boolean;
-	disabled?: boolean;
-	readOnly?: boolean;
-	options?: ViewDetailItemOptions
-}
-
 abstract class BaseViewDetailComponent<T extends BaseModel> 
 	extends BaseViewComponent<IBaseViewDetailComponentProps<T>, IBaseViewDetailComponentState<T>> {
 
@@ -90,10 +45,12 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		this.getHeader = this.getHeader.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.getParamID = this.getParamID.bind(this);
 		this.initLoading = this.initLoading.bind(this);
 		this.getDetailForm = this.getDetailForm.bind(this);
 		this.getFormImput = this.getFormImput.bind(this);
+		this.getValidationMessages = this.getValidationMessages.bind(this);
 	}
 
 	protected abstract getPageTitle(): string;
@@ -102,7 +59,13 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	protected abstract getLoadindMessage(): string;
 	protected abstract getApi(): ApiBase<T>;
 
-	protected getCurrentItem(canInitialize: boolean) : T {
+	protected canPerformSubmit(): boolean {
+		// prevent the form submit event
+		// keep it false for local process, loke call an API and pass the JSON value
+		return false;
+	}
+
+	private getCurrentItem(canInitialize: boolean) : T {
 		let obj : T;
 		obj = (this.state.currentObject || this.props.currentObject) as T;
 
@@ -195,7 +158,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	}
 
 	handleChange(event: any) {
-
 		if (this.canChangeObjectValues === true) {
 			let obj = this.getCurrentItem(true);
 
@@ -245,7 +207,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		} else {
 			this.canChangeObjectValues = true;
 		}
-
 	}
 
 	handleKeyPress(event: any) {
@@ -274,9 +235,30 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		return true;
 	}
 
+	handleSubmit(event: any) {
+		const canSubmit = this.canPerformSubmit();
+
+		if (!canSubmit || event.currentTarget.checkValidity() === false) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}
+
+	getValidationMessages(messages: ViewDetailItemValidation) {
+		const validation = [];
+		if (messages.invalidMessage != undefined) {
+			validation.push( <Form.Control.Feedback key="1" type="invalid">{messages.invalidMessage}</Form.Control.Feedback>);
+		}
+
+		if (messages.validMessage != undefined) {
+			validation.push( <Form.Control.Feedback key="2" type="valid">{messages.validMessage}</Form.Control.Feedback>);
+		}
+		return validation;
+	}
+
 	getFormImput(item: ViewDetailItem, object: T, key?: number) : any {
-		let options = item.options || {} as ViewDetailItemOptions;
-		let list = options.selectionItens || [] as ViewDetailItemSelection[];
+		const options = item.options || {} as ViewDetailItemOptions;
+		const list = options.selectionItens || [] as ViewDetailItemSelection[];
 
 		switch (item.type) {
 			case "combobox":
@@ -310,6 +292,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				return	<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
 							<Col sm={{ span: 10, offset: 2 }}>
 								<Form.Check 
+									custom
 									name={item.fieldName}
 									label={item.caption}
 									disabled={item.disabled}
@@ -318,6 +301,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 									checked={[true, 'true', 't', 'yes', 'y', 1, '1'].indexOf(object[item.fieldName]) > -1}
 									onChange={this.handleChange}
 								/>
+								{this.getValidationMessages(options.validationMessages || {} as ViewDetailItemValidation)}
 							</Col>
 						</Form.Group>
 				break;
@@ -332,7 +316,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							required={item.required}
 							placeholder={item.placeHolder}
 							maxLength={options.maxLength}
-							multiple={item.type === "file-multiple"}							
+							multiple={item.type === "file-multiple"}
 							onChange={this.handleChange}
 						/>
 				break;
@@ -388,6 +372,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 										list.map( (optItem: ViewDetailItemSelection, i: number) => {
 											return (
 												<Form.Check 
+													custom
 													key={key + '-' + i}
 													type="radio"
 													label={optItem.caption}
@@ -402,6 +387,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 											)
 										})
 									}
+									{this.getValidationMessages(options.validationMessages || {} as ViewDetailItemValidation)}
 								</Col>
 							</Form.Group>
 						</fieldset>
@@ -421,18 +407,18 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							rows={options.rows || 3}
 						/>
 				break;
-			default:				
+			default:
 				return <div>Invalid type for ViewDetailItem = {item.type}</div>;
 				break;
 		}
 	}
 
 	getDetailForm = () => {
-		let list = this.getViewItemsList();
 		let key: number = 0;
+		let list = this.getViewItemsList();
 		let obj: T = this.getCurrentItem(true);
 		return (
-			<Form>
+			<Form noValidate validated={true} onSubmit={this.handleSubmit}>
 				{list.map( (item: ViewDetailItem) => {
 					key++;
 					let form = null;
@@ -446,6 +432,9 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							</Form.Label>
 							<Col sm={10}>
 								{this.getFormImput(item, obj)}
+								{this.getValidationMessages( 
+									(item.options || {} as ViewDetailItemOptions).validationMessages 
+									|| {} as ViewDetailItemValidation)}
 							</Col>
 						</Form.Group>
 					}
@@ -470,10 +459,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				{message}
 				{this.getHeader()}
 				<hr />
-				{form}				
+				{form}
+				{JSON.stringify(this.getCurrentItem(true), null, 2)}
 			</div>
 		)
-		// {JSON.stringify(this.getCurrentItem(true), null, 2)}		
+		// {JSON.stringify(this.getCurrentItem(true), null, 2)}
 	}
 
 }

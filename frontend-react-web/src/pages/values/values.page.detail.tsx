@@ -1,5 +1,5 @@
-// import * as React from 'react';
-import BaseViewDetailComponent, { ViewDetailItem } from '../../components/base.view.detail.component';
+import BaseViewDetailComponent from '../../components/base.view.detail.component';
+import { ViewDetailItem } from '../../components/base.view.types';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
@@ -19,6 +19,14 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 		return 'Detailed info about Value ID ' + this.getParamID();
 	}
 
+	protected getLoadindMessage(): string {
+		return 'Loading Record Details...';
+	}
+
+	protected getApi(): ApiValuesProxy {
+		return Api.Values();
+	};	
+
 	protected getViewItemsList() : ViewDetailItem[] {
 		return [
 			{
@@ -30,7 +38,11 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 				placeHolder: "Value ID",
 				options: {
 					min: 0,
-					max: 999
+					max: 999,
+					validationMessages: {
+						invalidMessage: "The ID value is mandatory",
+						validMessage: "Ok"
+					}
 				}
 			}, {
 				required: true, 
@@ -39,19 +51,16 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 				type: "text",
 				placeHolder: "Value Name",
 				options: {
-					maxLength: 20
+					maxLength: 20,
+					validationMessages: {
+						invalidMessage: "Please, provide a Value Name",
+						validMessage: "Ok"
+					}
 				}
 			}
 		];
 	}
 
-	protected getLoadindMessage(): string {
-		return 'Loading Record Details...';
-	}
-
-	protected getApi(): ApiValuesProxy {
-		return Api.Values();
-	};
 }
 
 export default ValuesDetailComponent;
