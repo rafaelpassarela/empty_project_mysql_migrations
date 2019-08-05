@@ -1,0 +1,6 @@
+http://mrrafael.ca/home
+http://mrrafael.ca/about
+http://mrrafael.ca/contact
+http://mrrafael.ca/blog
+http://mrrafael.ca/blog/hello-world-first-post
+http://mrrafael.ca/blog/empty-project-mysql-and-migrations
