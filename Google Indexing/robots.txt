@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /mradmin
+
+Sitemap: http://mrrafael.ca/sitemap.xml

@@ -1,0 +1,17 @@
+Sitemap from Google
+	https://support.google.com/webmasters/answer/183668?hl=pt-BR&ref_topic=4581190
+
+
+
+Insira a seguinte linha em qualquer parte do seu arquivo robots.txt, especificando o caminho para o sitemap:
+Sitemap: http://example.com/sitemap_location.xml
+ou
+Sitemap: http://example.com/sitemap_location.txt
+
+
+Use a função "ping" para solicitar o rastreamento do seu sitemap. Envie uma solicitação HTTP GET desta forma:
+  http://www.google.com/ping?sitemap=<url_completo_do_sitemap>
+Por exemplo:
+  http://www.google.com/ping?sitemap=https://example.com/sitemap.xml
+
+
