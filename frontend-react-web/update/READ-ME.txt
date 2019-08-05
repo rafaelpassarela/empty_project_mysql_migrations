@@ -1,1 +1,0 @@
-Place the new "src" folder and run "update.bat"
