@@ -56,9 +56,13 @@ class ApiBase<T> { //implements IApi<Values>{
 		this.doFetch(ApiMethod.DELETE, this.translatePath(endPath), dataCallback, errorCallback);
 	}
 
+	public post(dataCallback : ApiDataCallback, errorCallback : ApiErrorCallback, bodyData?: T) {
+		this.doFetch(ApiMethod.POST, this.translatePath(''), dataCallback, errorCallback, bodyData);
+	}
+
 	doFetch(
 		requestMethod: ApiMethod, url: string,
-		dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, bodyData?: any) {
+		dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, bodyData?: T) {
 
 		if (this.isDesenvMode()) {
 			console.log(requestMethod + ' -> ' + url);

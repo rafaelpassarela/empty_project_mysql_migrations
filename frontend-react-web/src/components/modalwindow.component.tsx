@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import LoadingSmall from './loading.small.component';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Glyphicon from './glyphicon.component';
-import ButtonList, { ButtonConfig, ButtonType } from '../configurations/button.config';
+import { getButtonConfig, ButtonType } from '../configurations/button.config';
 
 export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	show: boolean,
@@ -12,6 +12,7 @@ export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	onHandleBtnClick: (btnType: ButtonType) => void,
 	buttonList: Array<ButtonType>,
 	caption?: string,
+	captionDetail?: string,
 	text?: string,
 	element?: any,
     icon?: IconProp,
@@ -47,22 +48,18 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 		this.handleButtonClick = this.handleButtonClick.bind(this);
 	}
 
-	getButtonConfig(buttonType: ButtonType): ButtonConfig {
-		for (let i = 0; i < ButtonList.length; i++) {
-			let item = ButtonList[i];
-			if (item.btnType == buttonType)
-				return item;
-		}
-
-		return ButtonList[0];
-	}
-
 	getHeaderElem = (): any => {
 
 		let icon = (this.props.icon != undefined) ?
 			<Glyphicon glyph={this.props.icon} style={iconDivStyle} /> : null;
 
-		let caption = <div style={(this.props.icon != undefined) ? {position: 'absolute', left: 60} : undefined}>{this.props.caption}</div>;
+		let subCaption = (this.props.captionDetail != '') ? <small><small>{this.props.captionDetail}</small></small> : null;
+
+		let caption = (
+			<div style={(this.props.icon != undefined) ? {position: 'absolute', left: 60} : undefined}>
+				{this.props.caption} {subCaption}
+			</div>
+		);
 
 		let headerElem = (this.props.closeButton) ?
 			<Modal.Header closeButton>
@@ -89,7 +86,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 	getButtonsElem = (): any => {
 
 		let buttonsElem = this.props.buttonList.map((btn: ButtonType, btnIndex: number) => {
-			let config = this.getButtonConfig(btn);
+			let config = getButtonConfig(btn);
 
 			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
 				<LoadingSmall active={true}/> : null;
@@ -104,7 +101,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 			);
 		});
 
-		return buttonsElem;
+		return (buttonsElem.length > 0) ? (<Modal.Footer>{buttonsElem}</Modal.Footer>) : null;
 	}
 
 	render() {
@@ -128,9 +125,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 					{this.props.element}
 				</Modal.Body>
 
-				<Modal.Footer>
-					{buttons}
-				</Modal.Footer>
+				{buttons}
 			</Modal>
 		)
 	}

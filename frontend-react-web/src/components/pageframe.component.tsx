@@ -8,6 +8,7 @@ type PageFrameProps = {
 	center?: boolean,
 	hideXS?: boolean,
 	hideSM?: boolean,
+	classNameOverride?: string;
 	onRenderLeft?: PageFrameOnRenderSides,
 	onRenderRight?: PageFrameOnRenderSides
 };
@@ -66,6 +67,11 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
 	getMainClassName = (): string => {
 		let res = 'app-shadow pf-panel';
+
+		if (this.props.classNameOverride != undefined) {
+			res = this.props.classNameOverride
+		}
+
 		if (this.props.center != undefined && this.props.center === true)
 			res += ' pf-center';
 		return res;

@@ -1,30 +1,37 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import LocalizationConfig from '../configurations/localization.config';
-import BaseViewComponent from './base.view.component';
+import BaseViewComponent, { IBaseViewProps } from './base.view.component';
 import { ViewDetailItem, ViewDetailItemOptions, ViewDetailItemSelection, ViewDetailItemValidation } from './base.view.types';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
 import Loading from './loading.component';
+import LoadingSmall from './loading.small.component';
 import MessageBox from './message.box.component';
+import ModalWindow from './modalwindow.component';
+import { getButtonConfig, ButtonType } from '../configurations/button.config';
 // Form Render
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-interface IBaseViewDetailComponentProps<T extends BaseModel> extends RouteComponentProps {
+interface IBaseViewDetailComponentProps<T extends BaseModel> extends IBaseViewProps /*RouteComponentProps*/ {
 	id: any,
-	currentObject: T | null
+	currentObject: T | null,
+	onSaveCallbackHandle: (message: string, isError : boolean, dataObject: T | null) => void,
+	onCloseCallbackHandle: () => void,
 }
 
 interface IBaseViewDetailComponentState<T extends BaseModel> extends React.Props<IBaseViewDetailComponentState<T>> {
 	currentObject: T | null,
 	isLoading: boolean,
+	enabled: boolean,
 	errorMsg: string | undefined,
 	message: string | undefined,
+	clickedButton: ButtonType | undefined
 }
 
 abstract class BaseViewDetailComponent<T extends BaseModel> 
@@ -36,16 +43,22 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		this.state = {
 			currentObject: this.props.currentObject,
 			isLoading: true,
+			enabled: true,
 			errorMsg: '',
-			message: ''
+			message: '',
+			clickedButton: undefined
 		}
 
+		this.canPerformSubmit = this.canPerformSubmit.bind(this);
+		this.createNewObjectFromFields = this.createNewObjectFromFields.bind(this);
 		this.getCurrentItem = this.getCurrentItem.bind(this);
 		this.loadDetailObject = this.loadDetailObject.bind(this);
+		this.saveDetailObject = this.saveDetailObject.bind(this);
 		this.getHeader = this.getHeader.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleButtonClick = this.handleButtonClick.bind(this);
 		this.getParamID = this.getParamID.bind(this);
 		this.initLoading = this.initLoading.bind(this);
 		this.getDetailForm = this.getDetailForm.bind(this);
@@ -65,37 +78,48 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		return false;
 	}
 
-	private getCurrentItem(canInitialize: boolean) : T {
-		let obj : T;
-		obj = (this.state.currentObject || this.props.currentObject) as T;
-
-		if (canInitialize && obj == undefined) {
-			let tmp = {} as T;
-			obj = obj || tmp;
-		}
-
-		return obj;
-	}
-
-	private canChangeObjectValues : boolean = true;
-
 	componentDidMount() {
 		super.componentDidMount();
 
 		let id = this.getParamID();
-		if (id != undefined) {
+		if (id != undefined && id != "") {
 			this.loadDetailObject(id);
 		} else {
 			this.setState({
 				isLoading: false,
-				currentObject: {} as T,
+				currentObject: this.getCurrentItem(true),
 				message: '',
 				errorMsg: ''
 			});
 		}
 	}
 
-	loadDetailObject = (id: any) => {
+	/* Fix: A component is changing an uncontrolled input of type text to be controlled */
+	private createNewObjectFromFields = (): T => {
+		let obj = {} as T;
+		let list = this.getViewItemsList();	
+		list.map((item: ViewDetailItem, i: number) => {
+			obj[item.fieldName] = '';
+		} );
+
+		return obj;
+	}
+
+	private getCurrentItem(canInitialize: boolean) : T {
+		let obj : T;
+		obj = (this.state.currentObject || this.props.currentObject) as T;
+
+		if (canInitialize && obj == undefined) {
+			let tmp = this.createNewObjectFromFields();
+			obj = obj || tmp;
+		}
+
+		return obj;
+	}
+
+	private canChangeObjectValues : boolean = true;	
+
+	private loadDetailObject(id: any) {
 		this.getApi().get(
 			(data: any) => {
 				this.setState({
@@ -103,30 +127,71 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					isLoading: false,
 					errorMsg: undefined,
 					message: undefined,
+					enabled: true,
 				});
 			},
 			(error: Error) => {
 				this.setState({
 					isLoading: false,
 					message: undefined,
-					errorMsg: error.message
+					errorMsg: error.message,
+					enabled: true,
 				});
 			},
 			'/' + id
 		);
 	}
 
+	private saveDetailObject() {
+		this.getApi().post(
+			(data: any) => {
+				this.setState({
+					currentObject: data,
+					isLoading: false,
+					errorMsg: undefined,
+					message: LocalizationConfig.itemWasSaved,
+					enabled: true,
+					clickedButton: undefined
+				});
+				if (this.isEmbedded()) {
+					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
+				}
+			},
+			(error: Error) => {
+				this.setState({
+					isLoading: false,
+					message: undefined,
+					errorMsg: error.message,
+					enabled: true,
+					clickedButton: undefined
+				});
+				if (this.isEmbedded()) {
+					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, true, null);
+				}
+			},
+			this.getCurrentItem(false)
+		);
+	}
+
 	getHeader = () => {
-		let textDesc = this.getDescription();
-		let textCaption = this.getPageTitle();
+		if (this.isEmbedded()) {
+			return null
+		} else {
+			let textDesc = this.getDescription();
+			let textCaption = this.getPageTitle();
 
-		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
+			let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
-		return (textCaption != '') ? <h2>{textCaption} {description}</h2> : null;
-	}	
+			return (textCaption != '') ? <div className="modal-header"><h2>{textCaption} {description}</h2></div> : null;
+		}
+	}
 
 	getParamID = () => {
-		return this.props.match.params['id'] | this.props.id;
+		if (this.props.match != undefined) {
+			return this.props.match.params['id'] | this.props.id;
+		}
+		
+		return this.props.id;
 	}
 
 	initLoading = () => {
@@ -141,8 +206,19 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	initErrorMessage = () => {
 		// create the ErrorBox component
+		if (this.state.errorMsg == "404 - Not Found") {
+			return <Redirect to="/RecordNotFound" />
+		}
+
 		if (this.state.errorMsg != '' && this.state.errorMsg != undefined) {
-			return <MessageBox message={this.state.errorMsg} caption={LocalizationConfig.error} msgType='error' mode='dynamic'/>;
+			return (
+				<MessageBox 
+					message={this.state.errorMsg}
+					caption={LocalizationConfig.error}
+					msgType='error'
+					mode='dynamic'
+				/>
+			);
 		} else {
 			return null;
 		}
@@ -275,7 +351,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							as="select"
 							multiple={item.type === "select-list"}
 							disabled={item.disabled}
-							readOnly={item.readOnly}
+							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
 							maxLength={options.maxLength}
@@ -296,7 +372,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 									name={item.fieldName}
 									label={item.caption}
 									disabled={item.disabled}
-									readOnly={item.readOnly}
+									readOnly={item.readOnly || !this.state.enabled}
 									required={item.required}
 									checked={[true, 'true', 't', 'yes', 'y', 1, '1'].indexOf(object[item.fieldName]) > -1}
 									onChange={this.handleChange}
@@ -312,7 +388,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							name={item.fieldName}
 							type="file"
 							disabled={item.disabled}
-							readOnly={item.readOnly}
+							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
 							maxLength={options.maxLength}
@@ -336,7 +412,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							name={item.fieldName}
 							type={item.type}
 							disabled={item.disabled}
-							readOnly={item.readOnly}
+							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
 							maxLength={options.maxLength}
@@ -350,7 +426,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							name={item.fieldName}
 							type={item.type}
 							disabled={item.disabled}
-							readOnly={item.readOnly}
+							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
 							min={options.min}
@@ -378,7 +454,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 													label={optItem.caption}
 													value={optItem.value}
 													name={item.fieldName}
-													disabled={item.disabled || item.readOnly}
+													disabled={item.disabled || item.readOnly || !this.state.enabled}
 													id={item.fieldName + '-' + optItem.value}
 													inline={options.radioInLine}
 													checked={optItem.value == object[item.fieldName]}
@@ -398,7 +474,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							name={item.fieldName}
 							as="textarea"
 							disabled={item.disabled}
-							readOnly={item.readOnly}
+							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
 							maxLength={options.maxLength}
@@ -441,9 +517,69 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 					return form;
 				} ) }
-				<Button type="submit">Sign in</Button>
 			</Form>
 		);
+	}
+
+	isEmbedded = (): boolean => {
+		return this.props.onSaveCallbackHandle != undefined;
+	}
+
+	handleButtonClick = (btnType: ButtonType) => {
+		this.setState({
+			enabled: false,
+			message: undefined,
+			errorMsg: undefined,
+			clickedButton: btnType
+		});
+
+		if (btnType == ButtonType.BTN_CLOSE) {
+			if (this.isEmbedded()) {
+				this.props.onCloseCallbackHandle();
+			} else {
+				this.props.history.goBack();
+			}
+		} else {
+			this.saveDetailObject();
+		}
+	}
+
+	getButtons = () => {
+		let buttonsElem = [ButtonType.BTN_SAVE, ButtonType.BTN_CLOSE].map((btn: ButtonType, btnIndex: number) => {
+			let config = getButtonConfig(btn);
+
+			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
+				<LoadingSmall active={true}/> : null;
+
+			return (
+				<Button key={btnIndex}
+					variant={config.variant}
+					disabled={!this.state.enabled}
+					onClick={() => this.handleButtonClick(config.btnType)}>
+					{load}{config.text}
+				</Button>
+			);
+		});
+
+		return (
+			<div className="modal-footer">
+				{buttonsElem}
+			</div>
+		);
+	}
+
+	modalHandleClose = () => {
+		this.setState({
+			isLoading: false,
+			message: undefined,
+			errorMsg: undefined,
+			enabled: true,
+			clickedButton: undefined
+		});
+
+		if (this.props.onCloseCallbackHandle != undefined) {
+			this.props.onCloseCallbackHandle();
+		}
 	}
 
 	protected doRender() : any {
@@ -452,17 +588,32 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		const message = this.initInfoMessage();
 		const form = (this.getCurrentItem(false) != null) ? this.getDetailForm() : null;
 
-		return (
+		let result = 
 			<div>
 				{loading}
 				{error}
 				{message}
 				{this.getHeader()}
-				<hr />
-				{form}
-				{JSON.stringify(this.getCurrentItem(true), null, 2)}
-			</div>
-		)
+				<div className={(this.isEmbedded()) ? "" : "modal-body"}>{form}</div>
+				{this.getButtons()}
+			</div>;
+
+		if (this.isEmbedded()) {
+			result = <ModalWindow
+				show={true}
+				size="lg"
+				caption={this.getPageTitle()}
+				captionDetail={this.getDescription()}
+				icon="edit"
+				centered={false}
+				element={result}
+				buttonList={[]}
+				onHandleClose={this.modalHandleClose}
+				onHandleBtnClick={undefined}
+			/>
+		}
+
+		return result
 		// {JSON.stringify(this.getCurrentItem(true), null, 2)}
 	}
 

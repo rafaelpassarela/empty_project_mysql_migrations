@@ -4,7 +4,9 @@ export enum ButtonType {
 	BTN_OK,
 	BTN_YES,
 	BTN_NO,
-	BTN_CANCEL
+	BTN_CANCEL,	
+	BTN_SAVE,
+	BTN_CLOSE,
 }
 
 export class ButtonConfig {
@@ -51,6 +53,27 @@ let ButtonList: Array<ButtonConfig> = [
 		variant: 'warning',
 		btnType: ButtonType.BTN_CANCEL
 	},
+	{
+		text: LocalizationConfig.save,
+		variant: 'success',
+		btnType: ButtonType.BTN_SAVE
+	},
+	{
+		text: LocalizationConfig.close,
+		variant: 'warning',
+		btnType: ButtonType.BTN_CLOSE
+	}
 ];
+
+export function getButtonConfig(buttonType: ButtonType): ButtonConfig {
+	for (let i = 0; i < ButtonList.length; i++) {
+		let item = ButtonList[i];
+		if (item.btnType == buttonType)
+			return item;
+	}
+
+	return ButtonList[0];
+
+}
 
 export default ButtonList;

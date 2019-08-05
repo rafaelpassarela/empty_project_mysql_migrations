@@ -25,7 +25,7 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 
 	protected getApi(): ApiValuesProxy {
 		return Api.Values();
-	};	
+	};
 
 	protected getViewItemsList() : ViewDetailItem[] {
 		return [

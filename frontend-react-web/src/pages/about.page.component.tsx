@@ -1,9 +1,9 @@
 import * as React from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import ModalWindow from '../components/modalwindow.component';
 import { ButtonType } from '../configurations/button.config';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 
 interface IAboutPageState extends React.Props<IAboutPageState> {
 	show: boolean,

@@ -4,7 +4,7 @@ import LocalizationConfig from '../configurations/localization.config';
 import { RouteComponentProps } from 'react-router-dom';
 
 export interface IBaseViewProps extends RouteComponentProps {
-	needAuth?: boolean
+	hideDummySpace?: boolean,
 };
 
 abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React.Component<P, S>{
@@ -40,16 +40,16 @@ abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React
 					center={this.isCenter()}
 					hideSM={this.hideSM()}
 					hideXS={this.hideXS()}
+					classNameOverride={this.props.hideDummySpace === true ? "" : undefined }
 					onRenderLeft={this.renderLeft}
 					onRenderRight={this.renderRight}
 				>
 				{this.doRender()}
 				</PageFrame>
-				<div className="dummy-space hidden-print" />
+				<div className={this.props.hideDummySpace === true ? "" : "dummy-space hidden-print"}/>
 			</div>
 		);
 	}
-
 }
 
 export default BaseViewComponent;

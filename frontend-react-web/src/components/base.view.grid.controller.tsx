@@ -14,7 +14,7 @@ export interface IBaseControllerProps extends IBaseViewProps{};
 
 export interface IBaseControllerState<T extends BaseModel> extends React.Props<IBaseControllerState<T>> {
 	list: Array<T>,
-	currentObject: T | null,	
+	currentObject: T | null,
 	isLoading: boolean,
 	errorMsg: string | undefined,
 	message: string | undefined,
@@ -40,9 +40,10 @@ abstract class BaseViewGridController<
 	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
 	protected abstract getLoadindMessage(): string;
-	protected abstract getColumnInfo(): BaseColumnInfo[];	
+	protected abstract getColumnInfo(): BaseColumnInfo[];
 	protected abstract getApi(): ApiBase<T>;
 	protected abstract getCurrentItemAsString(object: T): string;
+	protected abstract getDetailClassName(): any;
 	
 	protected getColumnID(): string {
 		return 'Id';
@@ -82,14 +83,20 @@ abstract class BaseViewGridController<
 
 		this.loadList = this.loadList.bind(this);
 		this.onDelete = this.onDelete.bind(this);
+		this.onEdit = this.onEdit.bind(this);
+		this.onInsert = this.onInsert.bind(this);
 		this.initErrorMessage = this.initErrorMessage.bind(this);
 		this.initInfoMessage = this.initInfoMessage.bind(this);
 		this.getHeader = this.getHeader.bind(this);
 		this.getGrid = this.getGrid.bind(this);
 		this.getDeleteConfirmation = this.getDeleteConfirmation.bind(this);
 		this.getDeleteTextMessage = this.getDeleteTextMessage.bind(this);
+		this.getEditingForm = this.getEditingForm.bind(this);
+		this.getCurrentObjectKey = this.getCurrentObjectKey.bind(this);
 		this.handleDeleteClose = this.handleDeleteClose.bind(this);
 		this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
+		this.editFormOnCloseCallback = this.editFormOnCloseCallback.bind(this);
+		this.editFormOnSaveCallback = this.editFormOnSaveCallback.bind(this);
 	}	
 
 	componentDidMount() {
@@ -134,7 +141,7 @@ abstract class BaseViewGridController<
 
 		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
-		return (textCaption != '') ? <h2>{textCaption} {description}</h2> : null;
+		return (textCaption != '') ? <div className="modal-header"><h2>{textCaption} {description}</h2></div> : null;
 	}
 
 	initLoading = () => {
@@ -174,6 +181,24 @@ abstract class BaseViewGridController<
 		})
 	}
 
+	onEdit = (data : Object) => {
+		this.setState({
+			errorMsg: undefined,
+			message: undefined,
+			showEditComponent: true,
+			currentObject: data as T
+		})
+	}
+
+	onInsert = (data : Object) => {
+		this.setState({
+			errorMsg: undefined,
+			message: undefined,
+			showEditComponent: true,
+			currentObject: null
+		})
+	}	
+
 	handleDeleteClose = () => {
 		this.setState({
 			showDeleteConfirmation: false,
@@ -183,24 +208,30 @@ abstract class BaseViewGridController<
 		})
 	}
 
-	handleDeleteBtnClick = () => {
+	getCurrentObjectKey = () => {
 		let key = '';
 		this.getColumnInfo().filter((value: BaseColumnInfo) => {
 			if (value.isKey == true) {
 				key = (this.state.currentObject != null) ? this.state.currentObject[value.fieldName] : '';
-				return true;
+				return key;
 			} else
-				return false;
+				return '-1';
 			}
 		);
+
+		return key;
+	}
+
+	handleDeleteBtnClick = () => {
+		let key = this.getCurrentObjectKey();
 
 		this.getApi().delete(
 			(data: any) => {
 				// remove the deleted element from the list
 				let newList = [...this.state.list];
-				let idx = newList.indexOf(this.state.currentObject as T);				
+				let idx = newList.indexOf(this.state.currentObject as T);
 				if (idx != -1) {
-					newList.splice(idx, 1);				
+					newList.splice(idx, 1);
 				}
 
 				this.setState({
@@ -213,7 +244,7 @@ abstract class BaseViewGridController<
 				});
 			},
 			(error: Error) => {
-				this.setState({					
+				this.setState({
 					isLoading: false,
 					errorMsg: error.message,
 					message: undefined,
@@ -225,12 +256,45 @@ abstract class BaseViewGridController<
 		);		
 	}
 
+	editFormOnSaveCallback = (message: string, isError : boolean, dataObject: T | null) => {
+		let newList = [...this.state.list];
+		// if not error, refresh the current object on the list, or insert a new one
+		if (!isError) {
+			let idx = newList.indexOf(this.state.currentObject as T);
+			if (idx != -1) {
+				newList[idx] = dataObject as T
+			} else {
+				newList.push(dataObject as T);
+			}
+		}
+
+		this.setState({
+			// errorMsg: isError ? message : undefined,
+			// message: isError ? undefined : message,
+			// message already show on the detail component
+			errorMsg: undefined,
+			message: undefined,
+			showEditComponent: false,
+			currentObject: dataObject,
+			list: newList
+		});
+	}
+
+	editFormOnCloseCallback = () => {
+		this.setState({
+			errorMsg: undefined,
+			message: undefined,
+			showEditComponent: false,
+			currentObject: null
+		})
+	}
+
 	getDeleteConfirmation = () => {
 		let modal = null;
 
 		if (this.state.showDeleteConfirmation) {
 			modal = <DeleteModal
-				show={this.state.showDeleteConfirmation}				
+				show={this.state.showDeleteConfirmation}
 				text={this.getDeleteTextMessage(this.state.currentObject as T)}
 				onHandleClose={this.handleDeleteClose}
 				onHandleDelete={this.handleDeleteBtnClick}
@@ -238,6 +302,22 @@ abstract class BaseViewGridController<
 		}
 
 		return modal;
+	}
+
+	getEditingForm = () => {
+		if (this.state.showEditComponent) {
+			let comp = React.createElement(this.getDetailClassName(), {
+				id: this.getCurrentObjectKey(),
+				currentObject: this.state.currentObject,
+				onSaveCallbackHandle: this.editFormOnSaveCallback,
+				onCloseCallbackHandle: this.editFormOnCloseCallback,
+				hideDummySpace: true
+			});
+
+			return <div>{comp}</div>;
+		}
+
+		return null;
 	}
 
 	getGrid = () => {
@@ -249,9 +329,9 @@ abstract class BaseViewGridController<
 					onRenderRow={this.onRederRow}
 					onRenderColumn={this.onRenderColumn}
 					actions={["delete", "insert", "update"]}
-					//OnInsert={() => alert('msg on other page!')}
+					onInsert={this.onInsert}
 					onDelete={this.onDelete}
-					//OnUpdate={(data: Object) => alert('Update "' + data['Name'] + '"?')} 
+					onUpdate={this.onEdit} 
 				/>;
 
 		return grid;
@@ -262,6 +342,7 @@ abstract class BaseViewGridController<
 		const error = this.initErrorMessage();
 		const message = this.initInfoMessage();
 		const deleteConfirmation = this.getDeleteConfirmation();
+		const editingForm = this.getEditingForm();
 
 		return (
 
@@ -270,8 +351,9 @@ abstract class BaseViewGridController<
 				{error}
 				{message}
 				{deleteConfirmation}
+				{editingForm}
 				{this.getHeader()}
-				{this.getGrid()}
+				<div className="modal-body">{this.getGrid()}</div>
 			</div>
 		)
 	}

@@ -1,6 +1,8 @@
 import * as React from 'react';
-import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
+import BaseViewComponent, { IBaseViewProps } from '../components/base.view.component';
+import Glyphicon from '../components/glyphicon.component';
 
 import '../inc/App.css';
 
@@ -40,7 +42,7 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 		let imgNum = (this.state == undefined) ? 0 : this.state.imageNumber;
 
 		while (imgNum == (this.state == undefined ? 0 : this.state.imageNumber)) {
-			// return a random number, from 0 to maxImg - 1;			
+			// return a random number, from 0 to maxImg - 1;
 			imgNum = Math.floor(Math.random() * maxImageCount) + 1;
 		}
 		this.setState({ imageNumber: imgNum });
@@ -64,15 +66,20 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 			<div>
 				<Alert variant="danger">
 					Oops, an error occurred ! !
-								</Alert>
+				</Alert>
 				<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} />
 				<br />
 				<small>(Image {this.state.imageNumber} of {ERROR_IMAGE_COUNT}, click image to change)</small>
 				<h3>
 					The server indicates an error "404 Not Found".
-								</h3>
+				</h3>
 				Probably a page that really does not exist. <br/>
 				<small><i>"{window.location.pathname}"</i></small>
+				<div style={{marginTop: 20}}>
+					<Button size="lg" variant="outline-warning" onClick={ () => this.props.history.goBack() }>
+						<Glyphicon glyph="arrow-circle-left" />
+					</Button>
+				</div>
 			</div>
 		);
 	}

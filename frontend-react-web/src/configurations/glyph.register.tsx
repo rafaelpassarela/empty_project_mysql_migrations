@@ -1,14 +1,15 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { 
-	faPlus,
+	faArrowCircleLeft,
 	faEdit,
-	faTrashAlt,
-	faInfoCircle,
-	faTimesCircle,
-	faQuestionCircle,
 	faExclamationCircle,
-	 } from '@fortawesome/free-solid-svg-icons';
+	faInfoCircle,
+	faPlus,
+	faQuestionCircle,
+	faTrashAlt,
+	faTimesCircle,
+	} from '@fortawesome/free-solid-svg-icons';
 
 
 /*
@@ -23,11 +24,12 @@ export function RegisterGlyph() {
 	// default icon style
 	library.add(fab)
 	// icon list
-	library.add(faPlus);
+	library.add(faArrowCircleLeft);
 	library.add(faEdit);
-	library.add(faTrashAlt);
-	library.add(faInfoCircle);
-	library.add(faTimesCircle);
-	library.add(faQuestionCircle);
 	library.add(faExclamationCircle);
+	library.add(faInfoCircle);
+	library.add(faPlus);
+	library.add(faQuestionCircle);
+	library.add(faTrashAlt);
+	library.add(faTimesCircle);
 }

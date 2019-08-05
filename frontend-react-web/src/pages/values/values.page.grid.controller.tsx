@@ -6,7 +6,7 @@ import BaseViewGridController,
 import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
-// import ValuesDetailComponent from './values.page.detail';
+import ValuesDetailComponent from './values.page.detail';
 
 class ValuesController<
 	T,
@@ -48,22 +48,9 @@ extends BaseViewGridController<Values, P, S> {
 		return object.Id + ' - ' + object.Name;
 	}
 
-	// protected renderRight() : any {
-	// 	if (this.props == undefined)
-	// 		return null;
-
-	// 	let id = (this.state.currentObject != null) ? this.state.currentObject.Id : 0;
-
-	// 	return (
-	// 		<div>
-	// 			<ValuesDetailComponent id="123" key={id}
-	// 				history={this.props.history}
-	// 				location={this.props.location}
-	// 				match={this.props.match}
-	// 				currentObject={this.state.currentObject}/>
-	// 		</div> 
-	// 		);
-	// }
+	protected getDetailClassName(): any {
+		return ValuesDetailComponent;
+	}
 
 }
 

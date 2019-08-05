@@ -38,6 +38,7 @@ class DeleteModal extends React.Component<IDeleteModalProp, IDeleteModalState> {
 			<ModalWindow 
 				show={true}
 				centered={false}
+				easyClose={true}
 				caption={this.props.caption}
 				text={this.props.text}
 				icon="exclamation-circle"
