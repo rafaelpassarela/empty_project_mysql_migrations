@@ -45,8 +45,10 @@ class App extends React.Component {
 						newestOnTop
 						closeOnClick
 						rtl={false}
-						draggable
+						draggable={true}
+						draggablePercent={60}
 						pauseOnHover={false}
+						pauseOnFocusLoss={false}
 					/>
 					<FooterComponent />
 				</div>
