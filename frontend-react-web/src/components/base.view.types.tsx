@@ -16,6 +16,7 @@ export class ViewDetailItemOptions {
 	pattern?: string;
 	radioInLine?: boolean;	
 	step?: number;
+	fileMask?: string; // ex.: ".png,.jpeg"
 	validationMessages?: ViewDetailItemValidation;	
 	selectionItens?: ViewDetailItemSelection[];
 }

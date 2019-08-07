@@ -2,7 +2,12 @@ import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 import LocalizationConfig from '../configurations/localization.config';
 import BaseViewComponent, { IBaseViewProps } from './base.view.component';
-import { ViewDetailItem, ViewDetailItemOptions, ViewDetailItemSelection, ViewDetailItemValidation } from './base.view.types';
+import {
+	ViewDetailItem, 
+	ViewDetailItemOptions,
+	ViewDetailItemSelection,
+	ViewDetailItemValidation } from './base.view.types';
+import { fileUtils, IFileModel } from '../helpers/file.utils.helper';
 // Api
 import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
@@ -236,7 +241,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	handleChange(event: any) {
 		if (this.canChangeObjectValues === true) {
 			let obj = this.getCurrentItem(true);
-
+			let updateObj = true;
 			let prop = event.target.name;
 			let value = undefined;
 
@@ -256,18 +261,42 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					}
 					break;
 				case "file":
+					updateObj = false;
 					if (event.target.multiple == true) {
+						// reset the image array
+						obj[prop] = [];
+						this.setState({
+							currentObject: obj
+						});
+
 						let list = event.target.files;
-						value = new Array<string>();
+						value = new Array<IFileModel>();
 						for (var i = 0; i < list.length; i++) {
 							let item = list.item(i);
-							if (item != null)
-								value.push(item.name);
+							if (item != null) {
+								fileUtils.asBase64(item, (val: IFileModel) => {
+									if (this.state.currentObject != null) {
+										// copy current file array
+										value = this.state.currentObject[prop];
+										// add new value to array
+										value.push(val);
+										// update the state
+										obj[prop] = value;
+										this.setState({
+											currentObject: obj
+										});
+									}
+								});
+							}
 						}
 					} else {
-						value = event.target.files[0].name;
+						fileUtils.asBase64(event.target.files[0], (val: IFileModel) => {
+							obj[prop] = val;
+							this.setState({
+								currentObject: obj
+							});
+						});
 					}
-					
 					break;
 
 				default:
@@ -275,11 +304,12 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					break;
 			}
 
-			obj[prop] = value;
-
-			this.setState({
-				currentObject: obj
-			});	
+			if (updateObj) {
+				obj[prop] = value;
+				this.setState({
+					currentObject: obj
+				});
+			}
 		} else {
 			this.canChangeObjectValues = true;
 		}
@@ -394,6 +424,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							maxLength={options.maxLength}
 							multiple={item.type === "file-multiple"}
 							onChange={this.handleChange}
+							accept={options.fileMask}
 						/>
 				break;
 
