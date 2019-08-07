@@ -43,7 +43,9 @@ export class ViewDetailItem {
 		| 'time'
 		| 'textarea'
 		| 'url'
-		| 'week';
+		| 'week'
+		| 'custom';
+	customConstructor?: () => any;
 	placeHolder?: string;
 	required?: boolean;
 	disabled?: boolean;

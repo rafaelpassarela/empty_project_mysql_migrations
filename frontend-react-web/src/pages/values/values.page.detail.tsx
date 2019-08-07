@@ -1,3 +1,4 @@
+//import * as React from 'react';
 import BaseViewDetailComponent from '../../components/base.view.detail.component';
 import { ViewDetailItem } from '../../components/base.view.types';
 import ApiValuesProxy from '../../client-api/api-values-proxy';
@@ -27,7 +28,7 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 		return Api.Values();
 	};
 
-	protected getViewItemsList() : ViewDetailItem[] {
+	protected getViewItemsList() : Array<ViewDetailItem> {
 		return [
 			{
 				required: true, 

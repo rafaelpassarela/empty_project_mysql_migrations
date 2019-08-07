@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import LocalizationConfig from '../configurations/localization.config';
 import BaseViewComponent, { IBaseViewProps } from './base.view.component';
 import {
-	ViewDetailItem, 
+	ViewDetailItem,
 	ViewDetailItemOptions,
 	ViewDetailItemSelection,
 	ViewDetailItemValidation } from './base.view.types';
@@ -73,7 +73,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
-	protected abstract getViewItemsList() : ViewDetailItem[];
+	protected abstract getViewItemsList() : Array<ViewDetailItem>;
 	protected abstract getLoadindMessage(): string;
 	protected abstract getApi(): ApiBase<T>;
 
@@ -513,6 +513,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							onChange={this.handleChange}
 							rows={options.rows || 3}
 						/>
+				break;
+			case "custom":
+				return (item.customConstructor != undefined) 
+					? item.customConstructor() 
+					: <div>Custom Input Types needs a "customConstructor()" event</div>;
 				break;
 			default:
 				return <div>Invalid type for ViewDetailItem = {item.type}</div>;
