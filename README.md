@@ -190,6 +190,11 @@ Last but not least, we have to register this new class so that Migration can cre
 ```cmd
 PM> Add-Migration PatsTable
 ```
+And you can specify the database name to apply the migration
+```
+Update-Database -ConnectionProviderName MySql.Data.MySqlClient -ConnectionString "Server=127.0.0.1;Port=3307;Database=sampleApi;Uid=root;Pwd=usbw;SslMode=none;" -verbose -script
+Add-migration PatsTable -ConnectionProviderName MySql.Data.MySqlClient -ConnectionString "Server=127.0.0.1;Port=3307;Database=sampleApi;Uid=root;Pwd=usbw;SslMode=none;"
+```
 This command will generate a new file with the `DbMigration` class containing the changes.
 ```d
 public partial class PatsTable : DbMigration {

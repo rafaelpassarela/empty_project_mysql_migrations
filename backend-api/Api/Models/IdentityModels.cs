@@ -18,7 +18,7 @@ namespace Api.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    /*public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("MyConnectionName", throwIfV1Schema: false) // DefaultConnection
@@ -30,4 +30,5 @@ namespace Api.Models
             return new ApplicationDbContext();
         }
     }
+    */
 }

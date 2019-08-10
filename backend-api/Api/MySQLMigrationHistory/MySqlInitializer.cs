@@ -22,7 +22,7 @@ namespace Api.MySQLMigrationHistory
             // query to check if MigrationHistory table is present in the database 
             using (var migrationHistoryTableExists = ((IObjectContextAdapter)context).ObjectContext.ExecuteStoreQuery<int>(sql))
             {
-                // the ExecuteStoreQuery above, will trigger the mogration process of our database
+                // the ExecuteStoreQuery above, will trigger the migration process of our database
                 // this "using" block release the DataReader associated with this Connection
             }
 
