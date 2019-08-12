@@ -308,6 +308,7 @@
     <Compile Include="PersistenceIntf\IValuesPersist.cs" />
     <Compile Include="Persistence\ValuesPersist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\RolesAndUsersDefaultProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 namespace Api.Migrations
 {
     using Api.MySQLMigrationHistory;
+    using Api.Providers;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -32,6 +33,8 @@ namespace Api.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            RolesAndUsersDefaultProvider.SetupRolesAndUsers(context);
         }
     }
 }

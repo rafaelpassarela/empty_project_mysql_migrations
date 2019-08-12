@@ -27,6 +27,10 @@ namespace Api.Models
 
     public class UserInfoViewModel
     {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
         public string Email { get; set; }
 
         public bool HasRegistered { get; set; }

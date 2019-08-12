@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.Models
 {
@@ -16,19 +17,25 @@ namespace Api.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        /* Extra fields: put here and in \Models\AccountBindingModels.cs -> RegisterBindingModel */
+        [Required]
+        [MaxLength(100)]
+        public string FirstName { get; set; }
+
+        [MaxLength(100)]
+        public string LastName { get; set; }
     }
 
-    /*public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public static class ApplicationUserHelper
     {
-        public ApplicationDbContext()
-            : base("MyConnectionName", throwIfV1Schema: false) // DefaultConnection
+        public static string FullName(this ApplicationUser user)
         {
-        }
-        
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
+            if (user == null)
+                return "";
+
+            string lastName = string.IsNullOrWhiteSpace(user.LastName) ? "" : " " + user.LastName;
+            return user.FirstName + lastName;
         }
     }
-    */
 }

@@ -22,7 +22,7 @@ namespace Api.Controllers
         public RolesController(IAppContext appContext)
         {
             _db = appContext;
-            _roleManager = new ApplicationRoleManager(new RoleStore<IdentityRole>(_db.DataContext()));
+            _roleManager = new ApplicationRoleManager(new RoleStore<IdentityRole>(_db.CurrentContext()));
         }
 
         // GET: Roles

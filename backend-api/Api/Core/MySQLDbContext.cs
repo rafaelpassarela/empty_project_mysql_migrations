@@ -43,7 +43,7 @@ namespace Api.Core
             return Database.Connection;
         }
 
-        public MySQLDbContext DataContext()
+        public MySQLDbContext CurrentContext()
         {
             return this;
         }
