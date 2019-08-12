@@ -17,6 +17,13 @@ using Api.Models;
 using Api.Providers;
 using Api.Results;
 
+/*
+var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+var currentUser = userManager.FindByName(User.Identity.GetUserName());
+
+var roleresult = userManager.AddToRole(currentUser.Id, "Nome da Role");
+ */
+
 namespace Api.Controllers
 {
     [Authorize]
@@ -62,8 +69,9 @@ namespace Api.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
-            };
+                LoginProvider = externalLogin?.LoginProvider,
+                Roles = UserManager.GetRoles(User.Identity.GetUserId())
+        };
         }
 
         // POST api/Account/Logout

@@ -5,7 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace Api.Controllers
-{
+{    
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("")]
     public class ValuesController : ApiController
@@ -26,6 +26,7 @@ namespace Api.Controllers
         }
 
         // GET api/values/5
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Get(int id)
         {
             var obj = _crud.Load(id);
@@ -52,6 +53,7 @@ namespace Api.Controllers
             throw new NotImplementedException();
         }
 
+        // DELETE: api/values/5
         public IHttpActionResult Delete(int id)
         {
             if (_crud.Delete(id))
