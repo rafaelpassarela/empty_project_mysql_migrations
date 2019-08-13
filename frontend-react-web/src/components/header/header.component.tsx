@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { HeaderLinksConfig, MenuItem } from '../../configurations/links.config';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import LoadingSmall from '../loading.small.component';
 import NavBarItemLink from './navbaritem.link.component';
 // custom logo
@@ -41,6 +42,31 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 		});
 	}
 
+	getRegularItem(item: MenuItem, idx: number, isDropDown?: boolean) : any {
+		return (
+			<NavBarItemLink
+				key={idx}
+				eventKey={item.route}
+				to={item.route}
+				caption={item.caption}
+				navbarControll={this.navbarItemSelect}
+				isDropDownItem={isDropDown}
+			/>
+		);
+	}
+
+	getDropDownItem(item: MenuItem, idx: number) : any {
+		let subItems = (item.dropDown == null) ? null : item.dropDown.map( (sub: MenuItem, subIdx: number) => {
+			return this.getRegularItem(sub, subIdx, true);
+		});
+
+		return (
+			<NavDropdown key={idx} title={item.caption} id="basic-nav-dropdown">
+				{subItems}
+			</NavDropdown>
+		);
+	}
+
 	render() {
 
 		return (
@@ -57,14 +83,10 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 						<Nav className="mr-auto">
 							{
 								this.state.items.map((item: MenuItem, idx: number) => {
-									return (
-										<NavBarItemLink
-											key={idx}
-											eventKey={item.route}
-											to={item.route}
-											caption={item.caption}
-											navbarControll={this.navbarItemSelect}
-										/>)
+									if (item.dropDown == null)
+										return this.getRegularItem(item, idx, false);
+
+									return this.getDropDownItem(item, idx);
 								})
 							}
 							<LoadingSmall key="999" active={this.state.loading} />

@@ -26,7 +26,6 @@ namespace Api.Controllers
         }
 
         // GET api/values/5
-        [Authorize(Roles = "Admin")]
         public IHttpActionResult Get(int id)
         {
             var obj = _crud.Load(id);
@@ -38,6 +37,7 @@ namespace Api.Controllers
         }
 
         // POST api/values
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Post([FromBody]Values value)
         {
             _crud.Save(value);
@@ -54,6 +54,7 @@ namespace Api.Controllers
         }
 
         // DELETE: api/values/5
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Delete(int id)
         {
             if (_crud.Delete(id))
