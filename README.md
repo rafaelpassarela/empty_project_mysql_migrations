@@ -271,3 +271,4 @@ Now, try to get a list of all pets just calling the API URL `http://localhost:57
 
 > Please ignore small differences between the code and the images in this post. 
 > This is an open source hosted on [GitHub](https://github.com/rafaelpassarela/empty_project_mysql_migrations), any suggestions are welcome.
+> Last Tag: MySQLData-v6.10.7.0
