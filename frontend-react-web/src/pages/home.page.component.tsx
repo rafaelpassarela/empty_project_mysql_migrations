@@ -6,21 +6,24 @@ import Glyphicon from '../components/glyphicon.component';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
+import { cookieStorage } from '../helpers/cookie.helper';
 
 class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S> {
 
 	handleSave = () => {
-		setUser('Luke');
+		cookieStorage.setUser('Luke');
+	};
+
+	handleErase = () => {
+		cookieStorage.removeUser();
 	};
 
 	handleLoad = () => {
-		var name = getUser();
+		var name = cookieStorage.getUser();
 		if (name != undefined)
 			window.alert(name);
 		else
 			window.alert('save first!');
-		removeUser();
 	}
 
 	toastTest = () => {
@@ -54,12 +57,13 @@ class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S>
 					This is the default page! <br />
 					We use Boostrap. <br />
 					<Button variant="outline-primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
-					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>
+					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>&nbsp;
+					<Button variant="outline-danger" onClick={this.handleErase}>Remove Cookie</Button>
 					<br /><br />
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
-				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />				
+				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
 				To <Link to="/values/4">Values ID = 4</Link> Page.<br />
 				To <Link to="/values/7">Values ID = 7</Link> Page.<br />
 				<hr/>

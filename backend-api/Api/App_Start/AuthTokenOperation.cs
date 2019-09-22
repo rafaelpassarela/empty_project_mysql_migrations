@@ -8,7 +8,7 @@ namespace Api.App_Start
     {
         public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
         {
-            swaggerDoc.paths.Add("/token", new PathItem
+            swaggerDoc.paths.Add("/api/token", new PathItem
             {
                 post = new Operation
                 {

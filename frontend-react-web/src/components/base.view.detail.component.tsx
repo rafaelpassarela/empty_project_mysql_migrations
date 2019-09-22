@@ -240,9 +240,9 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	handleChange(event: any) {
 		if (this.canChangeObjectValues === true) {
+			const prop = event.target.name;
 			let obj = this.getCurrentItem(true);
 			let updateObj = true;
-			let prop = event.target.name;
 			let value = undefined;
 
 			switch (event.target.type) {

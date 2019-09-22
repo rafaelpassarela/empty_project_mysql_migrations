@@ -4,8 +4,10 @@ import { HeaderLinksConfig, MenuItem } from '../../configurations/links.config';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import LoadingSmall from '../loading.small.component';
 import NavBarItemLink from './navbaritem.link.component';
+
+import LoadingSmall from '../loading.small.component';
+import LoginControl from '../login.control.component';
 // custom logo
 import logo from '../../img/logo_small.png';
 import '../../inc/App.css';
@@ -61,7 +63,7 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 		});
 
 		return (
-			<NavDropdown key={idx} title={item.caption} id="basic-nav-dropdown">
+			<NavDropdown key={idx} title={item.caption} id="basic-nav-dropdown-options">
 				{subItems}
 			</NavDropdown>
 		);
@@ -89,8 +91,9 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 									return this.getDropDownItem(item, idx);
 								})
 							}
-							<LoadingSmall key="999" active={this.state.loading} />
+							<LoadingSmall marginTop={17} key="999" active={this.state.loading} />
 						</Nav>
+						<LoginControl />
 					</Navbar.Collapse>
 				</Navbar >
 			</div>
