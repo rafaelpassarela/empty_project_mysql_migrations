@@ -1,13 +1,12 @@
 ﻿using Api.Models;
 using Api.PersistenceIntf;
-using System;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace Api.Controllers
-{    
+{
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [RoutePrefix("")]
+    [RoutePrefix("api/Values")]
     public class ValuesController : ApiController
     {
         private readonly IValuesPersist _crud;
@@ -18,6 +17,7 @@ namespace Api.Controllers
         }
 
         // GET api/values
+        [Route("GetAll")]
         public IHttpActionResult Get()
         {
             var list = _crud.Query();
@@ -45,12 +45,6 @@ namespace Api.Controllers
                 return Ok(value);
 
             return NotFound();
-        }
-
-        // PUT api/values/5
-        public IHttpActionResult Put([FromBody]Values value)
-        {
-            throw new NotImplementedException();
         }
 
         // DELETE: api/values/5
