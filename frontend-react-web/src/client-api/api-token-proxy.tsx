@@ -10,11 +10,26 @@
 * Generated at -> http://mrrafael.ca/swgen/                         *
 ********************************************************************/
 
-const DEV_URL = "http://localhost:57431"
-const PROD_URL= "http://mrrafael.ca:1234"
-const BASE_API = "/api/"
+import ApiBase from './api-base';
+import { ApiDataCallback, ApiErrorCallback } from './api-types';
 
-export const ApiConfig = {
-	BasePath: BASE_API,
-	URL: ((!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? DEV_URL : PROD_URL) + BASE_API
+class ApiTokenProxy extends ApiBase {
+
+	protected getPath(): string {
+		return 'token';
+	}
+
+	/**
+	* Path Name: /api/token
+	* Consumes:
+	*	- application/x-www-form-urlencoded
+	*/
+	public Token_Post(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, grant_type: string, username: string, password: string) {
+		this.post(dataCallback, errorCallback, undefined, "grant_type=" + this.encodeParams(grant_type)
+			+ "&username=" + this.encodeParams(username)
+			+ "&password=" + this.encodeParams(password));
+	}
+
 }
+
+export default ApiTokenProxy;

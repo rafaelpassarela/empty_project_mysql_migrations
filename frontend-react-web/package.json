@@ -2,7 +2,7 @@
   "name": "frontend-react-web",
   "version": "0.1.0",
   "private": true,
-  "homepage_disabled" : "http://planetgraf.com.br/teste",
+  "homepage_disabled": "http://planetgraf.com.br/teste",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.13",
     "@fortawesome/free-brands-svg-icons": "^5.7.0",
@@ -20,6 +20,7 @@
     "react-scripts-ts": "^4.0.8",
     "react-toastify": "^4.5.2",
     "simple-crypto-js": "^2.2.0",
+    "tslib": "^1.10.0",
     "universal-cookie": "^3.0.7"
   },
   "scripts": {

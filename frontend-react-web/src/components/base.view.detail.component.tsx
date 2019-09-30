@@ -9,7 +9,6 @@ import {
 	ViewDetailItemValidation } from './base.view.types';
 import { fileUtils, IFileModel } from '../helpers/file.utils.helper';
 // Api
-import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
 import Loading from './loading.component';
@@ -73,9 +72,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
-	protected abstract getViewItemsList() : Array<ViewDetailItem>;
+	protected abstract getViewItemsList(): Array<ViewDetailItem>;
 	protected abstract getLoadindMessage(): string;
-	protected abstract getApi(): ApiBase<T>;
+	protected abstract onGetItem(key: any): Promise<T>;
+	protected abstract onSaveItem(item: T): Promise<T>;
+
 
 	protected canPerformSubmit(): boolean {
 		// prevent the form submit event
@@ -125,31 +126,29 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	private canChangeObjectValues : boolean = true;	
 
 	private loadDetailObject(id: any) {
-		this.getApi().get(
-			(data: any) => {
+		this.onGetItem(id)
+			.then( (value: T) => {
 				this.setState({
-					currentObject: data,
+					currentObject: value,
 					isLoading: false,
 					errorMsg: undefined,
 					message: undefined,
 					enabled: true,
 				});
-			},
-			(error: Error) => {
+			})
+			.catch( (error: Error) => {
 				this.setState({
 					isLoading: false,
 					message: undefined,
 					errorMsg: error.message,
 					enabled: true,
 				});
-			},
-			'/' + id
-		);
+			});
 	}
 
 	private saveDetailObject() {
-		this.getApi().post(
-			(data: any) => {
+		this.onSaveItem(this.getCurrentItem(false))
+			.then((data: T) => {
 				this.setState({
 					currentObject: data,
 					isLoading: false,
@@ -159,10 +158,10 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					clickedButton: undefined
 				});
 				if (this.isEmbedded()) {
-					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
-				}
-			},
-			(error: Error) => {
+				 	this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
+				 }
+			})
+			.catch((error: Error) => {
 				this.setState({
 					isLoading: false,
 					message: undefined,
@@ -173,9 +172,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				if (this.isEmbedded()) {
 					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, true, null);
 				}
-			},
-			this.getCurrentItem(false)
-		);
+			});
 	}
 
 	getHeader = () => {
@@ -187,7 +184,15 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 			let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
-			return (textCaption != '') ? <div className="modal-header"><h2>{textCaption} {description}</h2></div> : null;
+			if (textCaption === '') {
+				return null;
+			}
+
+			return (
+				<div className="modal-header">
+					<h2>{textCaption} {description}</h2>
+				</div>
+			);
 		}
 	}
 

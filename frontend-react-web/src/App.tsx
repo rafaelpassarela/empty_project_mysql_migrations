@@ -47,6 +47,7 @@ class App extends React.Component {
 						rtl={false}
 						draggable
 						pauseOnHover={false}
+						pauseOnFocusLoss={false}
 					/>
 					<FooterComponent />
 				</div>

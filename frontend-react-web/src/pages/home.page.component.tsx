@@ -7,23 +7,37 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { cookieStorage } from '../helpers/cookie.helper';
+import { TokenResult } from '../client-api/api-models';
+import Api from '../client-api/api';
 
 class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S> {
 
 	handleSave = () => {
-		cookieStorage.setUser('Luke');
+		let val = prompt("Token:");
+		let token = new TokenResult();
+		token.access_token = val as string;
+		token.expires_in = 86399;
+		token.expires = "Tue, 01 Oct 2019 00:42:35 GMT";
+		token.issued = "Mon, 30 Sep 2019 00:42:35 GMT";
+		token.token_type = "bearer";
+		token.userName = "admin@admin.com";
+		cookieStorage.setUser(token);
 	};
 
 	handleErase = () => {
 		cookieStorage.removeUser();
+		Api.setToken(undefined);
+		window.alert("Done!")
 	};
 
 	handleLoad = () => {
-		var name = cookieStorage.getUser();
-		if (name != undefined)
-			window.alert(name);
-		else
+		var token = cookieStorage.getUser() as TokenResult;
+		if (token != undefined) {
+			window.alert(token.userName);
+			Api.setToken(token.access_token);
+		} else {
 			window.alert('save first!');
+		}
 	}
 
 	toastTest = () => {

@@ -12,16 +12,16 @@
 
 import ApiBase from './api-base';
 import { ApiDataCallback, ApiErrorCallback } from './api-types';
-import { Values } from './api-models';
+import { IdentityRole } from './api-models';
 
-class ApiValuesProxy extends ApiBase {
+class ApiRolesProxy extends ApiBase {
 
 	protected getPath(): string {
-		return 'Values';
+		return 'Roles';
 	}
 
 	/**
-	* Path Name: /api/Values/{id}
+	* Path Name: /api/Roles/{id}
 	* Consumes:
 	* Produces:
 	*	- application/json
@@ -29,12 +29,12 @@ class ApiValuesProxy extends ApiBase {
 	*	- application/xml
 	*	- text/xml
 	*/
-	public Values_Delete(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, id: number) {
+	public Roles_Delete(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, id: string) {
 		this.delete(dataCallback, errorCallback, undefined, '/' + id);
 	}
 
 	/**
-	* Path Name: /api/Values/GetAll
+	* Path Name: /api/Roles
 	* Consumes:
 	* Produces:
 	*	- application/json
@@ -42,25 +42,12 @@ class ApiValuesProxy extends ApiBase {
 	*	- application/xml
 	*	- text/xml
 	*/
-	public Values_GetAll(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback) {
-		this.get(dataCallback, errorCallback, 'GetAll', undefined);
+	public Roles_Get(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback) {
+		this.get(dataCallback, errorCallback, undefined, undefined);
 	}
 
 	/**
-	* Path Name: /api/Values/{id}
-	* Consumes:
-	* Produces:
-	*	- application/json
-	*	- text/json
-	*	- application/xml
-	*	- text/xml
-	*/
-	public Values_Get(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, id: number) {
-		this.get(dataCallback, errorCallback, undefined, '/' + id);
-	}
-
-	/**
-	* Path Name: /api/Values
+	* Path Name: /api/Roles
 	* Consumes:
 	*	- application/json
 	*	- text/json
@@ -73,10 +60,10 @@ class ApiValuesProxy extends ApiBase {
 	*	- application/xml
 	*	- text/xml
 	*/
-	public Values_Post(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, value: Values) {
-		this.post(dataCallback, errorCallback, undefined, value);
+	public Roles_Post(dataCallback: ApiDataCallback, errorCallback: ApiErrorCallback, role: IdentityRole) {
+		this.post(dataCallback, errorCallback, undefined, role);
 	}
 
 }
 
-export default ApiValuesProxy;
+export default ApiRolesProxy;

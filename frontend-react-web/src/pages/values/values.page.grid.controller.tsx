@@ -3,7 +3,6 @@ import BaseViewGridController,
       {	BaseColumnInfo, 
 		IBaseControllerProps,
 		IBaseControllerState } from '../../components/base.view.grid.controller';
-import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
 import { Values } from '../../client-api/api-models';
 import ValuesDetailComponent from './values.page.detail';
@@ -40,16 +39,36 @@ extends BaseViewGridController<Values, P, S> {
 		];
 	}
 
-	protected getApi(): ApiValuesProxy {
-		return Api.Values();
-	}
-
 	protected getCurrentItemAsString(object: Values): string {
 		return object.Id + ' - ' + object.Name;
 	}
 
 	protected getDetailClassName(): any {
 		return ValuesDetailComponent;
+	}
+
+	protected onGetAllItems() : Promise<Values[]> {
+		return new Promise<Values[]>((resolve, reject) => {			
+			Api.Values().Values_GetAll( 
+				(data: any) => {
+					resolve(data);
+				},
+				(error: Error) => {
+					reject(error);
+				});
+		});
+	}
+
+	protected onDeleteItem(key: any): Promise<boolean> {
+		return new Promise<boolean>((resolve, reject) => {
+			Api.Values().Values_Delete(
+				(data: any) => {
+					resolve(true);
+				},
+				(error: Error) => {
+					reject(error)
+				}, key);
+		});
 	}
 
 }

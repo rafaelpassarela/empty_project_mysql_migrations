@@ -7,6 +7,7 @@ import {
 	faInfoCircle,
 	faPlus,
 	faQuestionCircle,
+	faSyncAlt,
 	faTrashAlt,
 	faTimesCircle,
 	} from '@fortawesome/free-solid-svg-icons';
@@ -30,6 +31,7 @@ export function RegisterGlyph() {
 	library.add(faInfoCircle);
 	library.add(faPlus);
 	library.add(faQuestionCircle);
+	library.add(faSyncAlt);
 	library.add(faTrashAlt);
 	library.add(faTimesCircle);
 }
