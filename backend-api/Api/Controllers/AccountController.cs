@@ -321,7 +321,7 @@ namespace Api.Controllers
                         response_type = "token",
                         client_id = Startup.PublicClientId,
                         redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
-                        state = state
+                        state
                     }),
                     State = state
                 };
@@ -446,8 +446,10 @@ namespace Api.Controllers
 
             public IList<Claim> GetClaims()
             {
-                IList<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider));
+                IList<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, ProviderKey, null, LoginProvider)
+                };
 
                 if (UserName != null)
                 {

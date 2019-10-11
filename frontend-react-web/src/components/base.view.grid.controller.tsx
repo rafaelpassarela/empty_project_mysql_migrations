@@ -290,18 +290,18 @@ abstract class BaseViewGridController<
 			} else {
 				newList.push(dataObject as T);
 			}
-		}
 
-		this.setState({
-			// errorMsg: isError ? message : undefined,
-			// message: isError ? undefined : message,
-			// message already show on the detail component
-			errorMsg: undefined,
-			message: undefined,
-			showEditComponent: false,
-			currentObject: dataObject,
-			list: newList
-		});
+			this.setState({
+				// errorMsg: isError ? message : undefined,
+				// message: isError ? undefined : message,
+				// message already show on the detail component
+				errorMsg: undefined,
+				message: undefined,
+				showEditComponent: false,
+				currentObject: dataObject,
+				list: newList
+			});			
+		}
 	}
 
 	editFormOnCloseCallback = () => {

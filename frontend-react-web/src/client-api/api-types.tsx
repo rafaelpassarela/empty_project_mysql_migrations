@@ -1,7 +1,7 @@
 /********************************************************************
 *            MrRafael.ca - Swagger Generator for React              *
 * Sample Api by MrRafael.ca - v1                                    *
-* This client Api was generated on 29/09/2019 22:12:38              *
+* This client Api was generated on 06/10/2019 20:48:13              *
 *                                          Do not change this file! *
 *                                                                   *
 * Optimized for use as part of the project                          *
@@ -10,8 +10,11 @@
 * Generated at -> http://mrrafael.ca/swgen/                         *
 ********************************************************************/
 
+export class CustomErrorData extends Error {
+	data?: any;
+}
 export type ApiDataCallback = (data: any) => any;
-export type ApiErrorCallback = (error: Error) => any;
+export type ApiErrorCallback = (error: CustomErrorData) => any;
 
 export enum ApiMethod {
 	GET = "GET",

@@ -5,7 +5,7 @@ using System.Web.Http.Cors;
 
 namespace Api.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/Values")]
     public class ValuesController : ApiController
     {

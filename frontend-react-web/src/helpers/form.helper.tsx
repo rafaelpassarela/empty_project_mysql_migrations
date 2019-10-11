@@ -1,7 +1,8 @@
 class FormHelper {
 
-	public checkRequiredFields(container: HTMLElement | null, qualifiedName: "input" | "textarea") : boolean {
+	private innerTimer: number = -1;
 
+	public checkRequiredFields(container: HTMLElement | null, qualifiedName: "input" | "textarea") : boolean {
 		if (container === null) {
 			return true;
 		}
@@ -23,6 +24,21 @@ class FormHelper {
 		}
 
 		return valid;
+	}
+
+	public focusElementById(idName: string) {
+		let elem = document.getElementById( idName );
+		if (elem !== null) {
+			elem.focus();
+		}
+	}
+
+	public focusElementByIdDelayed(idName: string) {
+ 		this.innerTimer = window.setInterval(() => {
+			this.focusElementById(idName);
+			window.clearInterval(this.innerTimer);
+			this.innerTimer = -1;
+		}, 500);
 	}
 
 }

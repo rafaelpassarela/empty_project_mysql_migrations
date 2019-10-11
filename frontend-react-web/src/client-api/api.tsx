@@ -1,7 +1,7 @@
 /********************************************************************
 *            MrRafael.ca - Swagger Generator for React              *
 * Sample Api by MrRafael.ca - v1                                    *
-* This client Api was generated on 29/09/2019 22:12:38              *
+* This client Api was generated on 06/10/2019 20:48:13              *
 *                                          Do not change this file! *
 *                                                                   *
 * Optimized for use as part of the project                          *
@@ -10,6 +10,7 @@
 * Generated at -> http://mrrafael.ca/swgen/                         *
 ********************************************************************/
 
+import { CustomErrorData } from './api-types';
 import ApiAccountProxy from './api-account-proxy';
 import ApiRolesProxy from './api-roles-proxy';
 import ApiValuesProxy from './api-values-proxy';
@@ -46,3 +47,5 @@ class ApiHelper {
 const Api = new ApiHelper();
 
 export default Api;
+
+export class ErrorData extends CustomErrorData {};

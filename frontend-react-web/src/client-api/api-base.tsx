@@ -1,7 +1,7 @@
 /********************************************************************
 *            MrRafael.ca - Swagger Generator for React              *
 * Sample Api by MrRafael.ca - v1                                    *
-* This client Api was generated on 29/09/2019 22:12:38              *
+* This client Api was generated on 06/10/2019 20:48:13              *
 *                                          Do not change this file! *
 *                                                                   *
 * Optimized for use as part of the project                          *
@@ -18,7 +18,8 @@ import {
 	ApiMethod,
 	ApiRedirect,
 	ApiDataCallback,
-	ApiErrorCallback 
+	ApiErrorCallback,
+	CustomErrorData
 } from './api-types';
 
 // More about the Fetch default API
@@ -111,44 +112,92 @@ class ApiBase { //implements IApi<Values>{
 			console.log(requestMethod + " -> " + url);
 		}
 
+		let contentType: string = "application/json; charset=utf-8";
 		let data: string | undefined = undefined;
 		if (bodyData !== undefined) {
 			if ((typeof bodyData === "string" && bodyData.charAt(0) === "{")
 			 || (typeof bodyData !== "string")) {
 				data = JSON.stringify(bodyData);
 			} else {
-				data = bodyData;
+				data = bodyData.trim();
+				contentType = "application/x-www-form-urlencoded";
 			}
 		}
 
+		let header: any;
+		if (this.authToken === undefined || this.authToken === "") {
+			header = {
+				Accept: "application/json",
+				"Content-Type": contentType,
+				"Access-Control-Allow-Origin": "*"
+			};
+		} else {
+			header = {
+				Accept: "application/json",
+				"Content-Type": contentType,
+				"Access-Control-Allow-Origin": "*",
+				"Authorization": "bearer " + (this.authToken || "")
+			};			
+		}
+
+// export interface IHttpResponse<T> extends Response {
+//   parsedBody?: T;
+// }
+//		let response: any;// IHttpResponse<T>;
+
+		let done: boolean = false;
 		return fetch(url, {
 			method: requestMethod,
 			mode: this.getMode(),
 			cache: this.getCache(),
 			credentials: this.getCredentials(),
-			headers: {
-				Accept: "application/json",
-				"Content-Type": 'application/json; charset=utf-8',
-				"Access-Control-Allow-Origin": '*',
-				"Authorization": "bearer " + (this.authToken || '')
-			},
+			headers: header,
 			redirect: this.getRedirect(),
 			body: data
 		})
 			.then(response => {
 				if (response.ok) {
 					const contentType = response.headers.get("content-type");
+					done = true;
 					if (contentType && contentType.indexOf("application/json") !== -1) {
 						return response.json();
 					} else {
 						return response.text();
 					}
 				} else {
-					throw new Error(response.status + " - " + response.statusText);
+					let error = new CustomErrorData(response.status + " - " + response.statusText);
+					try {
+						response.json()
+							.then( (value: any) => {
+								done = true;
+								error.data = value;
+								if (error.data!.Message != undefined && error.data!.Message !== "") {
+									error.message += " - " + error.data.Message;
+								}
+								errorCallback(error);
+
+							})
+							.catch( (reason: any) => {
+								done = true;
+								error.data = undefined;
+								errorCallback(error);
+							});
+					} catch(e) {
+  						error.data = undefined;
+  						throw error;
+					}
+
+					return false;
 				}
 			})
-			.then(data => dataCallback(data))
-			.catch(error => errorCallback(error));
+			.then(data => {
+				if (done)
+					dataCallback(data);
+			})
+			.catch(error => {
+				if (done)
+					errorCallback(error);
+			});
 	}
 
 }

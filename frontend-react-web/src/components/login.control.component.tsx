@@ -2,53 +2,185 @@ import * as React from 'react';
 import Form from 'react-bootstrap/Form';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from 'react-bootstrap/Navbar';
-//import 'node';
-//import 'NodeJS';
 
 import { cookieStorage } from '../helpers/cookie.helper';
 import LocalizationConfig from '../configurations/localization.config';
+import ModalWindow from './modalwindow.component';
+import LoginForm from './login.form.component';
+import Api, { ErrorData } from '../client-api/api';
 
 import '../inc/login.control.css';
 
-interface ILoginControlState extends React.Props<ILoginControlState> {
-	loggedIn: boolean,
-	loginHover: boolean
+interface ILoginControlProps extends React.Props<ILoginControlProps> {
+	onBeforeShowLoginForm?: () => any
 }
 
-class LoginControl extends React.Component<{}, ILoginControlState> {
+interface ILoginControlState extends React.Props<ILoginControlState> {
+	loggedIn: boolean,
+	loginHover: boolean,
+	showLoginForm: boolean,
+	loginMessage: string,
+	userName: string,
+	formLoading: boolean,
+	onBeforeShowLoginForm?: () => any
+}
+
+class LoginControl extends React.Component<ILoginControlProps, ILoginControlState> {
 
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
+			loggedIn: this.isLoggedIn(),
 			loginHover: false,
-			loggedIn: cookieStorage.getUser() != null
+			showLoginForm: false,
+			formLoading: false,
+			loginMessage: '',
+			userName: ''
 		};
 
 		this.isLoggedIn = this.isLoggedIn.bind(this);
 		this.getUserMenu = this.getUserMenu.bind(this);
 		this.getLoginMenu = this.getLoginMenu.bind(this);
+		this.getLoginForm = this.getLoginForm.bind(this);
+		this.createTimer = this.createTimer.bind(this);
+		this.removeTimer = this.removeTimer.bind(this);
+		this.onCloseLoginForm = this.onCloseLoginForm.bind(this);
+		this.onMouseHoverLogin = this.onMouseHoverLogin.bind(this);
+		this.doShowLogin = this.doShowLogin.bind(this);
+		this.loginBtnClick = this.loginBtnClick.bind(this);
+		this.performLogin = this.performLogin.bind(this);
 	}
 
-	private checkLoginIntervalID: number;
+	private checkLoginIntervalID: number = -1;
+	private inRender: boolean = false;
 
 	componentDidMount() {
-		this.checkLoginIntervalID = window.setInterval(() => {
-			console.log(new Date().toString())
-		}, 60000); // every minute
+		this.createTimer();
+		if (this.state.loggedIn === true) {
+			let user = cookieStorage.getUser();
+			Api.setToken(user.access_token);
+			this.setState({
+				userName: user.userName
+			});
+		}
 	}
 
 	componentWillUnmount() {
-		window.clearInterval(this.checkLoginIntervalID);
+		this.removeTimer();
 	}
 
-	isLoggedIn = (): boolean => {
-		return false;
+	private createTimer() {
+		if (this.checkLoginIntervalID === -1) {
+			this.checkLoginIntervalID = window.setInterval(() => {
+				console.log(new Date().toString())
+			}, 60000); // every minute
+		}
+	}
+
+	private removeTimer() {
+		if (this.checkLoginIntervalID !== -1) {
+			window.clearInterval(this.checkLoginIntervalID);
+			this.checkLoginIntervalID = -1;
+		}
+	}
+
+	private onCloseLoginForm() {
+		this.setState({
+			showLoginForm: false,
+			loggedIn: this.isLoggedIn(),
+			formLoading: false,
+			loginMessage: ''
+		});
+		this.createTimer();
+	}
+
+	private isLoggedIn(): boolean {
+		return cookieStorage.getUser() != null;
+	}
+
+	private onMouseHoverLogin(isHover : boolean) {
+		if (!this.inRender) {
+			this.setState({
+				loginHover: isHover
+			});
+		}
+	}
+
+	private doShowLogin() {
+		if (this.props.onBeforeShowLoginForm !== undefined) {
+			this.props.onBeforeShowLoginForm();
+		}
+		this.setState({showLoginForm: true})
+	}
+
+	private performLogin(userName: string, password: string) {
+		Api.token().Token_Post(
+			(data:any) => {
+				this.setState({
+					formLoading: false,
+					showLoginForm: false,
+					loginMessage: '',
+					userName: data.userName,
+					loggedIn: data.userName !== undefined && data.userName !== ""
+				});				
+				cookieStorage.setUser(data);
+				Api.setToken(data.access_token);
+			},
+			(error:ErrorData) => {
+				let msg: string = (error.data !== null) ? error.data.error_description : error.message;
+				this.setState({
+					formLoading: false,
+					userName: '',
+					loggedIn: false,
+					loginMessage: msg
+				});
+				cookieStorage.removeUser();
+				Api.setToken(undefined);
+			},
+			"password", userName, password);
+	}
+
+	private loginBtnClick(userName: string, password: string) {
+		cookieStorage.setStorage('user-email', userName, false);
+		this.setState({
+			loginMessage: '',
+			formLoading: true
+		}, () => {
+			this.performLogin(userName, password);
+		});
+	}
+
+	getLoginForm = () => {
+		this.removeTimer();
+
+		let form = (<LoginForm loading={this.state.formLoading} onLoginBtnClick={this.loginBtnClick} />);
+		let footer = (this.state.loginMessage !== '') ? (
+			<div className="footer-message">
+				{this.state.loginMessage}
+			</div>
+		) : null;
+
+		return (
+			<ModalWindow
+				show={true}
+				size="lg"
+				customClassName="login-form"
+				caption={LocalizationConfig.logIn}
+				centered={false}
+				closeButton={!this.state.formLoading}
+				element={form}
+				footerElement={footer}
+				buttonList={[]}
+				onHandleClose={this.onCloseLoginForm}
+				onHandleBtnClick={undefined}
+			/>
+		);
 	}
 
 	getUserMenu = () : any => {
 		return (
-			<NavDropdown key={123} title="User Login" id="basic-nav-dropdown-user-login">
+			<NavDropdown key={123} title={this.state.userName} id="basic-nav-dropdown-user-login">
 			</NavDropdown>
 		);
 	}
@@ -60,8 +192,9 @@ class LoginControl extends React.Component<{}, ILoginControlState> {
 			<Navbar.Text>
 				<a
 					style={{color: linkColor}} 
-					onMouseLeave={() => this.setState({loginHover: false})}
-					onMouseEnter={() => this.setState({loginHover: true})}
+					onMouseLeave={() => this.onMouseHoverLogin(false)}
+					onMouseEnter={() => this.onMouseHoverLogin(true)}
+					onClick={() => this.doShowLogin()}
 					href="#">
 						{LocalizationConfig.logIn}
 				</a>
@@ -70,13 +203,31 @@ class LoginControl extends React.Component<{}, ILoginControlState> {
 	}
 
 	render() {
+		this.inRender = true;
 
-		const info = (this.state.loggedIn === true) ? this.getUserMenu() : this.getLoginMenu();
+		let login: any;
+		let form: any = null;
 
+		if (this.state.loggedIn === true) {
+			login = this.getUserMenu();
+		} else {
+			login = this.getLoginMenu();
+		}
+
+		// rules for the login form:
+		// - user clicked directly on "LogIn" label
+		if (this.state.showLoginForm) {
+			form = this.getLoginForm();
+		}
+
+		this.inRender = false;
 		return (
-			<Form inline style={{marginRight: 10}}>
-				{info}
-			</Form>
+			<span>
+				<Form inline style={{marginRight: 10}}>
+					{login}
+				</Form>
+				{form}
+			</span>
 		);
 	}
 

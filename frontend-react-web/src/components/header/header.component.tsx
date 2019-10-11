@@ -93,7 +93,7 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 							}
 							<LoadingSmall marginTop={17} key="999" active={this.state.loading} />
 						</Nav>
-						<LoginControl />
+						<LoginControl onBeforeShowLoginForm={this.navbarItemSelect} />
 					</Navbar.Collapse>
 				</Navbar >
 			</div>

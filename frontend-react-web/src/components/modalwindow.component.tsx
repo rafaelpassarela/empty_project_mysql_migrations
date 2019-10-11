@@ -15,9 +15,11 @@ export interface IModalWindowProps extends React.Props<IModalWindowProps> {
 	captionDetail?: string,
 	text?: string,
 	element?: any,
+	footerElement?: any,
     icon?: IconProp,
 	closeButton?: boolean,
-	size?: 'sm' | 'lg',
+	size?: 'sm' | 'lg', // | 'xl',
+	customClassName?: string,
 	centered?: boolean
 	easyClose?: boolean // if true, close the modal window on click outside or press ESC key
 }
@@ -101,7 +103,9 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 			);
 		});
 
-		return (buttonsElem.length > 0) ? (<Modal.Footer>{buttonsElem}</Modal.Footer>) : null;
+		return (buttonsElem.length > 0 || this.props.footerElement != undefined) 
+			? (<Modal.Footer>{buttonsElem}{this.props.footerElement}</Modal.Footer>) 
+			: null;
 	}
 
 	render() {
@@ -115,6 +119,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 				show={this.props.show}
 				centered={this.props.centered}
 				size={this.props.size}
+				dialogClassName={this.props.customClassName}
 				animation={true}
 				onHide={this.props.onHandleClose}>
 

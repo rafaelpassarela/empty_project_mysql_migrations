@@ -162,7 +162,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				});
 				if (this.isEmbedded()) {
 				 	this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
-				 }
+				}
 			})
 			.catch((error: Error) => {
 				this.setState({
