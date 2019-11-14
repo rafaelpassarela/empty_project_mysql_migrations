@@ -12,7 +12,9 @@ import Api, { ErrorData } from '../client-api/api';
 import '../inc/login.control.css';
 
 interface ILoginControlProps extends React.Props<ILoginControlProps> {
-	onBeforeShowLoginForm?: () => any
+	onBeforeShowLoginForm?: () => any,
+	onAfterSuccessLogin?: () => any,
+	onAfterLogout?: () => any
 }
 
 interface ILoginControlState extends React.Props<ILoginControlState> {
@@ -21,8 +23,7 @@ interface ILoginControlState extends React.Props<ILoginControlState> {
 	showLoginForm: boolean,
 	loginMessage: string,
 	userName: string,
-	formLoading: boolean,
-	onBeforeShowLoginForm?: () => any
+	formLoading: boolean
 }
 
 class LoginControl extends React.Component<ILoginControlProps, ILoginControlState> {
@@ -47,6 +48,7 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 		this.removeTimer = this.removeTimer.bind(this);
 		this.onCloseLoginForm = this.onCloseLoginForm.bind(this);
 		this.onMouseHoverLogin = this.onMouseHoverLogin.bind(this);
+		this.onLogOutMenuClick = this.onLogOutMenuClick.bind(this);
 		this.doShowLogin = this.doShowLogin.bind(this);
 		this.loginBtnClick = this.loginBtnClick.bind(this);
 		this.performLogin = this.performLogin.bind(this);
@@ -126,6 +128,9 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 				});				
 				cookieStorage.setUser(data);
 				Api.setToken(data.access_token);
+				if (this.props.onAfterSuccessLogin !== undefined) {
+					this.props.onAfterSuccessLogin();
+				}
 			},
 			(error:ErrorData) => {
 				let msg: string = (error.data !== null) ? error.data.error_description : error.message;
@@ -149,6 +154,19 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 		}, () => {
 			this.performLogin(userName, password);
 		});
+	}
+
+	private onLogOutMenuClick() {
+		this.setState({
+			userName: '',
+			loggedIn: false,
+		}, () => {
+			cookieStorage.removeUser();
+			Api.setToken(undefined);
+			if (this.props.onAfterLogout !== undefined) {
+				this.props.onAfterLogout();
+			}
+		})
 	}
 
 	getLoginForm = () => {
@@ -181,6 +199,8 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 	getUserMenu = () : any => {
 		return (
 			<NavDropdown key={123} title={this.state.userName} id="basic-nav-dropdown-user-login">
+				<NavDropdown.Divider />
+        		<NavDropdown.Item eventKey="9.99" onSelect={this.onLogOutMenuClick}>{LocalizationConfig.logOut}</NavDropdown.Item>
 			</NavDropdown>
 		);
 	}

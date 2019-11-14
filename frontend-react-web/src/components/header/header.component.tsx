@@ -25,6 +25,8 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 
 		this.navbarToggle = this.navbarToggle.bind(this);
 		this.navbarItemSelect = this.navbarItemSelect.bind(this);
+		this.onAfterLogIn = this.onAfterLogIn.bind(this);
+		this.onAfterLogOut = this.onAfterLogOut.bind(this);
 
 		this.state = { 
 			items: HeaderLinksConfig.getFixedItems(),
@@ -32,19 +34,19 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 			loading: false};
 	}
 
-	navbarToggle() {
+	private navbarToggle() {
 		this.setState({
 			expanded: !this.state.expanded
 		});
 	}
 
-	navbarItemSelect() {
+	private navbarItemSelect() {
 		this.setState({
 			expanded: false
 		});
 	}
 
-	getRegularItem(item: MenuItem, idx: number, isDropDown?: boolean) : any {
+	private getRegularItem(item: MenuItem, idx: number, isDropDown?: boolean) : any {
 		return (
 			<NavBarItemLink
 				key={idx}
@@ -57,7 +59,7 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 		);
 	}
 
-	getDropDownItem(item: MenuItem, idx: number) : any {
+	private getDropDownItem(item: MenuItem, idx: number) : any {
 		let subItems = (item.dropDown == null) ? null : item.dropDown.map( (sub: MenuItem, subIdx: number) => {
 			return this.getRegularItem(sub, subIdx, true);
 		});
@@ -67,6 +69,19 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 				{subItems}
 			</NavDropdown>
 		);
+	}
+
+	private onAfterLogOut() {
+		this.setState({
+			items: HeaderLinksConfig.getFixedItems(),
+			loading: false
+		});
+	}
+
+	private onAfterLogIn() {		
+		this.setState({loading: true}, () => {
+			alert ('Call the API to Load MenuItens for the Loggedin User');
+		});
 	}
 
 	render() {
@@ -93,7 +108,11 @@ class HeaderComponent extends React.Component<{}, IHeaderComponentState> {
 							}
 							<LoadingSmall marginTop={17} key="999" active={this.state.loading} />
 						</Nav>
-						<LoginControl onBeforeShowLoginForm={this.navbarItemSelect} />
+						<LoginControl 
+							onBeforeShowLoginForm={this.navbarItemSelect}
+							onAfterLogout={this.onAfterLogOut}
+							onAfterSuccessLogin={this.onAfterLogIn}
+						/>
 					</Navbar.Collapse>
 				</Navbar >
 			</div>
