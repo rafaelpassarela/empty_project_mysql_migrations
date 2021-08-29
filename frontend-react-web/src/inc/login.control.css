@@ -1,0 +1,48 @@
+.login-link {
+	color: rgba(0,0,0,.5)
+}
+
+.login-form-group {
+	margin: unset;
+	padding-bottom: 1rem;
+}
+
+.login-row {
+	margin-left: -40px;
+}
+
+.login-controls-row {
+	padding-right: 0px;
+}
+
+.login-controls {
+	outline: 0;
+	border-width: 0 0 1px;
+	border-radius: 0px;
+	box-shadow: unset!important;
+}
+
+.login-label {
+	padding-top: unset;
+	padding-bottom: unset;
+}
+
+.login-btn-row {
+	justify-content: flex-end;
+	padding-right: 1.84rem;
+}
+
+.login-img-col {
+	text-align: center;
+    text-align: -webkit-center;
+}
+
+.login-form {
+	width: 400px;
+}
+
+@media (max-width: 576px) {
+	.login-form {
+		width: 97%
+	}
+}

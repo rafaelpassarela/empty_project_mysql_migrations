@@ -17,7 +17,7 @@ namespace Api.App_Start
             {
                 name = "Authorization",
                 @in = "header",
-                description = "acess token",
+                description = "Acess Token",
                 required = false,
                 type = "string"
             });

@@ -5,6 +5,6 @@ namespace Api.Core
     public interface IAppContext
     {
         DbConnection Connection();
-        MySQLDbContext DataContext();
+        MySQLDbContext CurrentContext();
     }
 }

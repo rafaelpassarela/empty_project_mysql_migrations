@@ -27,6 +27,8 @@
    <package id="MySql.Data" version="6.10.7" targetFramework="net462" />
    <package id="MySql.Data.Entity" version="6.10.7" targetFramework="net462" />
  * 
+ * If needed to ReInstall nuget packages:
+   PM> Update-Package -Reinstall
  * *************************************************/
 
 namespace Api.Core

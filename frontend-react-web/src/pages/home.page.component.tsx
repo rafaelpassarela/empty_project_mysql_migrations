@@ -6,21 +6,38 @@ import Glyphicon from '../components/glyphicon.component';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { setUser, getUser, removeUser } from '../helpers/cookie.helper';
+import { cookieStorage } from '../helpers/cookie.helper';
+import { TokenResult } from '../client-api/api-models';
+import Api from '../client-api/api';
 
 class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S> {
 
 	handleSave = () => {
-		setUser('Luke');
+		let val = prompt("Token:");
+		let token = new TokenResult();
+		token.access_token = val as string;
+		token.expires_in = 86399;
+		token.expires = "Tue, 01 Oct 2019 00:42:35 GMT";
+		token.issued = "Mon, 30 Sep 2019 00:42:35 GMT";
+		token.token_type = "bearer";
+		token.userName = "admin@admin.com";
+		cookieStorage.setUser(token);
+	};
+
+	handleErase = () => {
+		cookieStorage.removeUser();
+		Api.setToken(undefined);
+		window.alert("Done!")
 	};
 
 	handleLoad = () => {
-		var name = getUser();
-		if (name != undefined)
-			window.alert(name);
-		else
+		var token = cookieStorage.getUser() as TokenResult;
+		if (token != undefined) {
+			window.alert(token.userName);
+			Api.setToken(token.access_token);
+		} else {
 			window.alert('save first!');
-		removeUser();
+		}
 	}
 
 	toastTest = () => {
@@ -54,12 +71,13 @@ class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S>
 					This is the default page! <br />
 					We use Boostrap. <br />
 					<Button variant="outline-primary" onClick={this.handleSave}>Save Cookie</Button>&nbsp;
-					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>
+					<Button variant="outline-success" onClick={this.handleLoad}>Load Cookie</Button>&nbsp;
+					<Button variant="outline-danger" onClick={this.handleErase}>Remove Cookie</Button>
 					<br /><br />
 					<Button onClick={this.toastTest}>Toast Test</Button>
 				</p>
 				To <Link to="/about">About</Link> Page. <br />
-				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />				
+				To <Link to="/PageNotFound">An Error (404)</Link> Page.<br />
 				To <Link to="/values/4">Values ID = 4</Link> Page.<br />
 				To <Link to="/values/7">Values ID = 7</Link> Page.<br />
 				<hr/>

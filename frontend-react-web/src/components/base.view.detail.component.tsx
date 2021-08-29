@@ -8,8 +8,8 @@ import {
 	ViewDetailItemSelection,
 	ViewDetailItemValidation } from './base.view.types';
 import { fileUtils, IFileModel } from '../helpers/file.utils.helper';
+import { formHelper } from '../helpers/form.helper';
 // Api
-import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
 import Loading from './loading.component';
@@ -34,6 +34,7 @@ interface IBaseViewDetailComponentState<T extends BaseModel> extends React.Props
 	currentObject: T | null,
 	isLoading: boolean,
 	enabled: boolean,
+	formValid: boolean,
 	errorMsg: string | undefined,
 	message: string | undefined,
 	clickedButton: ButtonType | undefined
@@ -49,6 +50,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			currentObject: this.props.currentObject,
 			isLoading: true,
 			enabled: true,
+			formValid: false,
 			errorMsg: '',
 			message: '',
 			clickedButton: undefined
@@ -59,6 +61,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		this.getCurrentItem = this.getCurrentItem.bind(this);
 		this.loadDetailObject = this.loadDetailObject.bind(this);
 		this.saveDetailObject = this.saveDetailObject.bind(this);
+		this.doValidateForm = this.doValidateForm.bind(this);
 		this.getHeader = this.getHeader.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -73,9 +76,10 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	protected abstract getPageTitle(): string;
 	protected abstract getDescription(): string;
-	protected abstract getViewItemsList() : Array<ViewDetailItem>;
+	protected abstract getViewItemsList(): Array<ViewDetailItem>;
 	protected abstract getLoadindMessage(): string;
-	protected abstract getApi(): ApiBase<T>;
+	protected abstract onGetItem(key: any): Promise<T>;
+	protected abstract onSaveItem(item: T): Promise<T>;
 
 	protected canPerformSubmit(): boolean {
 		// prevent the form submit event
@@ -95,7 +99,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				currentObject: this.getCurrentItem(true),
 				message: '',
 				errorMsg: ''
-			});
+			}, () => {this.doValidateForm()});
 		}
 	}
 
@@ -125,31 +129,29 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	private canChangeObjectValues : boolean = true;	
 
 	private loadDetailObject(id: any) {
-		this.getApi().get(
-			(data: any) => {
+		this.onGetItem(id)
+			.then( (value: T) => {
 				this.setState({
-					currentObject: data,
+					currentObject: value,
 					isLoading: false,
 					errorMsg: undefined,
 					message: undefined,
 					enabled: true,
-				});
-			},
-			(error: Error) => {
+				}, () => {this.doValidateForm()});
+			})
+			.catch( (error: Error) => {
 				this.setState({
 					isLoading: false,
 					message: undefined,
 					errorMsg: error.message,
 					enabled: true,
-				});
-			},
-			'/' + id
-		);
+				}, () => {this.doValidateForm()});
+			});
 	}
 
 	private saveDetailObject() {
-		this.getApi().post(
-			(data: any) => {
+		this.onSaveItem(this.getCurrentItem(false))
+			.then((data: T) => {
 				this.setState({
 					currentObject: data,
 					isLoading: false,
@@ -159,10 +161,10 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					clickedButton: undefined
 				});
 				if (this.isEmbedded()) {
-					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
+				 	this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, false, data as T);
 				}
-			},
-			(error: Error) => {
+			})
+			.catch((error: Error) => {
 				this.setState({
 					isLoading: false,
 					message: undefined,
@@ -173,9 +175,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				if (this.isEmbedded()) {
 					this.props.onSaveCallbackHandle(LocalizationConfig.itemWasSaved, true, null);
 				}
-			},
-			this.getCurrentItem(false)
-		);
+			});
 	}
 
 	getHeader = () => {
@@ -187,7 +187,15 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 			let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
-			return (textCaption != '') ? <div className="modal-header"><h2>{textCaption} {description}</h2></div> : null;
+			if (textCaption === '') {
+				return null;
+			}
+
+			return (
+				<div className="modal-header">
+					<h2>{textCaption} {description}</h2>
+				</div>
+			);
 		}
 	}
 
@@ -238,11 +246,24 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		}
 	}
 
+	doValidateForm = () => {
+		let valid: boolean = true;
+		// Get the container element
+		let container = document.getElementById(this.getFormName());
+
+		valid = formHelper.checkRequiredFields(container, "input") 
+			 && formHelper.checkRequiredFields(container, "textarea");
+
+		this.setState({
+			formValid: valid
+		});
+	}
+
 	handleChange(event: any) {
 		if (this.canChangeObjectValues === true) {
+			const prop = event.target.name;
 			let obj = this.getCurrentItem(true);
 			let updateObj = true;
-			let prop = event.target.name;
 			let value = undefined;
 
 			switch (event.target.type) {
@@ -267,7 +288,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 						obj[prop] = [];
 						this.setState({
 							currentObject: obj
-						});
+						}, () => {this.doValidateForm()});
 
 						let list = event.target.files;
 						value = new Array<IFileModel>();
@@ -284,7 +305,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 										obj[prop] = value;
 										this.setState({
 											currentObject: obj
-										});
+										}, () => {this.doValidateForm()});
 									}
 								});
 							}
@@ -294,7 +315,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							obj[prop] = val;
 							this.setState({
 								currentObject: obj
-							});
+							}, () => {this.doValidateForm()});
 						});
 					}
 					break;
@@ -308,7 +329,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				obj[prop] = value;
 				this.setState({
 					currentObject: obj
-				});
+				}, () => {this.doValidateForm()});
 			}
 		} else {
 			this.canChangeObjectValues = true;
@@ -331,9 +352,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			if (maxLen > 0 && val.length >= maxLen) {
 				let obj = this.getCurrentItem(false);
 				obj[event.currentTarget.name] = val.substr(0, maxLen);
+
 				this.setState({
 					currentObject: obj
-				});
+				}, () => {this.doValidateForm()});
+
 				this.canChangeObjectValues = false;
 				return false;
 			}
@@ -525,12 +548,17 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		}
 	}
 
+	private getFormName() : string {
+		return "formReact_" + this.getPageTitle();
+	}
+
 	getDetailForm = () => {
 		let key: number = 0;
 		let list = this.getViewItemsList();
 		let obj: T = this.getCurrentItem(true);
+
 		return (
-			<Form noValidate validated={true} onSubmit={this.handleSubmit}>
+			<Form noValidate validated={true} onSubmit={this.handleSubmit} id={this.getFormName()}>
 				{list.map( (item: ViewDetailItem) => {
 					key++;
 					let form = null;
@@ -587,10 +615,14 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
 				<LoadingSmall active={true}/> : null;
 
+			let canSave: boolean = 
+				(btn === ButtonType.BTN_SAVE) ? this.state.enabled && this.state.formValid
+											  : this.state.enabled;
+
 			return (
 				<Button key={btnIndex}
 					variant={config.variant}
-					disabled={!this.state.enabled}
+					disabled={!canSave}
 					onClick={() => this.handleButtonClick(config.btnType)}>
 					{load}{config.text}
 				</Button>
