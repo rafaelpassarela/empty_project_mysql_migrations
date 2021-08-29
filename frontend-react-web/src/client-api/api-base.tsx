@@ -77,6 +77,7 @@ class ApiBase { //implements IApi<Values>{
 				break;
 			case "object":
 				strVal = JSON.stringify(value as Object);
+				break;
 			default:
 				strVal = value as string;
 				break;

@@ -108,7 +108,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		let obj = {} as T;
 		let list = this.getViewItemsList();	
 		list.map((item: ViewDetailItem, i: number) => {
-			obj[item.fieldName] = '';
+			return obj[item.fieldName] = '';
 		} );
 
 		return obj;
@@ -118,7 +118,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		let obj : T;
 		obj = (this.state.currentObject || this.props.currentObject) as T;
 
-		if (canInitialize && obj == undefined) {
+		if (canInitialize && obj === undefined) {
 			let tmp = this.createNewObjectFromFields();
 			obj = obj || tmp;
 		}
@@ -200,7 +200,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	}
 
 	getParamID = () => {
-		if (this.props.match != undefined) {
+		if (this.props.match !== undefined) {
 			return this.props.match.params['id'] | this.props.id;
 		}
 		
@@ -219,11 +219,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	initErrorMessage = () => {
 		// create the ErrorBox component
-		if (this.state.errorMsg == "404 - Not Found") {
+		if (this.state.errorMsg === "404 - Not Found") {
 			return <Redirect to="/RecordNotFound" />
 		}
 
-		if (this.state.errorMsg != '' && this.state.errorMsg != undefined) {
+		if (this.state.errorMsg !== '' && this.state.errorMsg !== undefined) {
 			return (
 				<MessageBox 
 					message={this.state.errorMsg}
@@ -239,7 +239,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	initInfoMessage = () => {
 		// create the InfoBox component
-		if (this.state.message != '' && this.state.message != undefined) {
+		if (this.state.message !== '' && this.state.message !== undefined) {
 			return <MessageBox message={this.state.message} caption={LocalizationConfig.attention} msgType='info' mode='dynamic' />;
 		} else {
 			return null;
@@ -271,7 +271,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					value = event.target.checked;
 					break;
 				case "select-one":
-					value = (event.target.value == -1) ? undefined : event.target.value;
+					value = (event.target.value === -1) ? undefined : event.target.value;
 					break;
 				case "select-multiple":
 					value = new Array<string>();
@@ -283,7 +283,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					break;
 				case "file":
 					updateObj = false;
-					if (event.target.multiple == true) {
+					if (event.target.multiple === true) {
 						// reset the image array
 						obj[prop] = [];
 						this.setState({
@@ -296,7 +296,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							let item = list.item(i);
 							if (item != null) {
 								fileUtils.asBase64(item, (val: IFileModel) => {
-									if (this.state.currentObject != null) {
+									if (this.state.currentObject !== null) {
 										// copy current file array
 										value = this.state.currentObject[prop];
 										// add new value to array
@@ -339,13 +339,16 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	handleKeyPress(event: any) {
 		const numKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ',', '-'];
 
-		if (event.currentTarget != undefined && numKeys.indexOf(event.key) > -1) {
+		if (event.currentTarget !== undefined && numKeys.indexOf(event.key) > -1) {
 			let maxLen = Math.max(event.currentTarget.max.length, event.currentTarget.maxLength);
 			const val : string = event.currentTarget.value;
 
 			if (maxLen > 0) {
 				['.', ',', '-'].map( (char: string) => {
-					if (val.indexOf(char) >= 0) maxLen++;
+					if (val.indexOf(char) >= 0) 
+					  return maxLen++;
+					else 
+					  return maxLen;
 				});
 			}
 
@@ -375,11 +378,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	getValidationMessages(messages: ViewDetailItemValidation) {
 		const validation = [];
-		if (messages.invalidMessage != undefined) {
+		if (messages.invalidMessage !== undefined) {
 			validation.push( <Form.Control.Feedback key="1" type="invalid">{messages.invalidMessage}</Form.Control.Feedback>);
 		}
 
-		if (messages.validMessage != undefined) {
+		if (messages.validMessage !== undefined) {
 			validation.push( <Form.Control.Feedback key="2" type="valid">{messages.validMessage}</Form.Control.Feedback>);
 		}
 		return validation;
@@ -415,7 +418,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 								return <option key={i} value={option.value}>{option.caption}</option>
 							} ) }
 						</Form.Control>
-				break;
 
 			case "checkbox":
 				return	<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
