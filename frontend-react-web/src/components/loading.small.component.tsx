@@ -10,7 +10,8 @@ import '../inc/App.css';
 interface ILoadingSmallProps extends React.Props<ILoadingSmallProps> {
 	active: boolean,
 	marginLeft?: number,
-	marginRight?: number
+	marginRight?: number,
+	marginTop?: number
 }
 
 class LoadingSmall extends React.Component<ILoadingSmallProps, {}> {
@@ -22,7 +23,10 @@ class LoadingSmall extends React.Component<ILoadingSmallProps, {}> {
 				zIndex: 1034,
 				display: 'inline',
 				marginLeft: this.props.marginLeft,
-				marginRight: this.props.marginRight
+				marginRight: this.props.marginRight,
+				marginTop: this.props.marginTop,
+				width: 32,
+				height: 6
 			}
 			return <img className="imgCenter" style={imageStyle} src={LoadImageSm} alt="Loading..." />
 		} else {

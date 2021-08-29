@@ -2,13 +2,14 @@
   "name": "frontend-react-web",
   "version": "0.1.0",
   "private": true,
-  "homepage_disabled" : "http://planetgraf.com.br/teste",
+  "homepage_disabled": "http://planetgraf.com.br/teste",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.13",
     "@fortawesome/free-brands-svg-icons": "^5.7.0",
     "@fortawesome/free-regular-svg-icons": "^5.7.0",
     "@fortawesome/free-solid-svg-icons": "^5.7.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "@types/crypto-js": "^3.1.43",
     "@types/react-router-dom": "^4.3.1",
     "bootstrap": "^4.2.1",
     "react": "^16.7.0",
@@ -18,6 +19,8 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "^4.0.8",
     "react-toastify": "^4.5.2",
+    "simple-crypto-js": "^2.2.0",
+    "tslib": "^1.10.0",
     "universal-cookie": "^3.0.7"
   },
   "scripts": {

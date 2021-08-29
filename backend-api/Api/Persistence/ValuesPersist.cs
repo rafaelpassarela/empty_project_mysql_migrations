@@ -39,9 +39,9 @@ namespace Api.Persistence
 
         public Values Save(Values item)
         {
-            _context.DataContext().Values.AddOrUpdate(item);
-            //_context.DataContext().Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
-            _context.DataContext().SaveChanges();
+            _context.CurrentContext().Values.AddOrUpdate(item);
+            //_context.CurrentContext().Entry(item).State = item.Id == 0 ? EntityState.Added : EntityState.Modified;
+            _context.CurrentContext().SaveChanges();
             return item;
         }
     }

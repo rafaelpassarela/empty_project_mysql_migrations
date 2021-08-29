@@ -3,7 +3,8 @@ import FooterLinkComponent from '../components/footer/footer.link.component';
 
 export type MenuItem = {
 	route: string;
-	caption: string
+	caption: string,
+	dropDown?: Array<MenuItem>
 }
 
 // ********* Header Items
@@ -14,7 +15,13 @@ export class HeaderLinksConfig {
 		let items = Array<MenuItem>(
 			{ route: '/', caption: 'Home' },
 			{ route: '/values', caption: 'Values' },
-			{ route: '/about', caption: 'About' }
+			{ route: '', caption: 'List', dropDown: [
+				{route: '/values/2', caption: 'Values 2'},
+				{route: '/values/3', caption: 'Values 3'},
+				{route: '', caption: '-'},
+				{route: '/TestPage', caption: 'Not Found'}
+			]},
+			{ route: '/about', caption: 'About' },
 		);
 
 		return items;

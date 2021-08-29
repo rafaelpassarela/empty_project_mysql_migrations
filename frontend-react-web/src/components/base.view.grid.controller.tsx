@@ -2,13 +2,14 @@ import * as React from 'react';
 import LocalizationConfig from '../configurations/localization.config';
 import BaseViewComponent, { IBaseViewProps } from './base.view.component';
 // Api
-import ApiBase from '../client-api/api-base';
 import { BaseModel } from '../client-api/api-models';
 // Controls
 import MessageBox from './message.box.component';
 import Loading from './loading.component';
 import Grid from './grid.component';
 import DeleteModal from './delete.modal.component';
+import Badge from 'react-bootstrap/Badge';
+import Glyphicon from './glyphicon.component';
 
 export interface IBaseControllerProps extends IBaseViewProps{};
 
@@ -41,9 +42,10 @@ abstract class BaseViewGridController<
 	protected abstract getDescription(): string;
 	protected abstract getLoadindMessage(): string;
 	protected abstract getColumnInfo(): BaseColumnInfo[];
-	protected abstract getApi(): ApiBase<T>;
 	protected abstract getCurrentItemAsString(object: T): string;
 	protected abstract getDetailClassName(): any;
+	protected abstract onGetAllItems(): Promise<T[]>;
+	protected abstract onDeleteItem(key: any): Promise<boolean>;
 	
 	protected getColumnID(): string {
 		return 'Id';
@@ -95,6 +97,7 @@ abstract class BaseViewGridController<
 		this.getCurrentObjectKey = this.getCurrentObjectKey.bind(this);
 		this.handleDeleteClose = this.handleDeleteClose.bind(this);
 		this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
+		this.handleRefreshBtnClick = this.handleRefreshBtnClick.bind(this);
 		this.editFormOnCloseCallback = this.editFormOnCloseCallback.bind(this);
 		this.editFormOnSaveCallback = this.editFormOnSaveCallback.bind(this);
 	}	
@@ -111,24 +114,23 @@ abstract class BaseViewGridController<
 	}
 
 	loadList = () => {
-		this.getApi().get(
-			(data: any) => {
+		this.onGetAllItems()
+			.then( (items: T[]) => {
 				this.setState({
-					list: data,
+					list: items,
 					isLoading: false,
 					errorMsg: undefined,
-					message: undefined,
+					message: undefined
 				});
-			},
-			(error: Error) => {
+			})
+			.catch( (error: Error) => {
 				this.setState({
 					list: [],
 					isLoading: false,
 					message: undefined,
 					errorMsg: error.message
 				});
-			}
-		);
+			});
 	}
 
     getDeleteTextMessage = (object: T) : string => {
@@ -141,7 +143,24 @@ abstract class BaseViewGridController<
 
 		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
 
-		return (textCaption != '') ? <div className="modal-header"><h2>{textCaption} {description}</h2></div> : null;
+		if (textCaption === '') {
+			return null
+		}
+
+		let reloadBtn = (
+			<span>
+				<Badge style={{cursor: 'pointer'}} variant="info" onClick={() => this.handleRefreshBtnClick()}>
+					<Glyphicon glyph="sync-alt" />
+				</Badge>	
+			</span>
+		);
+
+		return (
+			<div className="modal-header">				
+				<h2>{textCaption} {description}</h2>
+				{reloadBtn}
+			</div>
+		);
 	}
 
 	initLoading = () => {
@@ -208,7 +227,7 @@ abstract class BaseViewGridController<
 		})
 	}
 
-	getCurrentObjectKey = () => {
+	getCurrentObjectKey = () : string => {
 		let key = '';
 		this.getColumnInfo().filter((value: BaseColumnInfo) => {
 			if (value.isKey == true) {
@@ -222,11 +241,18 @@ abstract class BaseViewGridController<
 		return key;
 	}
 
+	handleRefreshBtnClick = () => {
+		this.setState({
+			errorMsg: '',
+			message: '',
+			isLoading: true,
+		}, () => this.loadList());
+	}
+
 	handleDeleteBtnClick = () => {
 		let key = this.getCurrentObjectKey();
-
-		this.getApi().delete(
-			(data: any) => {
+		this.onDeleteItem(key)
+			.then((value: boolean) => {
 				// remove the deleted element from the list
 				let newList = [...this.state.list];
 				let idx = newList.indexOf(this.state.currentObject as T);
@@ -242,8 +268,8 @@ abstract class BaseViewGridController<
 					currentObject: null,
 					showDeleteConfirmation: false,
 				});
-			},
-			(error: Error) => {
+			})
+			.catch((error: Error) => {
 				this.setState({
 					isLoading: false,
 					errorMsg: error.message,
@@ -251,9 +277,7 @@ abstract class BaseViewGridController<
 					currentObject: null,
 					showDeleteConfirmation: false,
 				});
-			},
-			'/' + key
-		);		
+			});
 	}
 
 	editFormOnSaveCallback = (message: string, isError : boolean, dataObject: T | null) => {
@@ -266,18 +290,18 @@ abstract class BaseViewGridController<
 			} else {
 				newList.push(dataObject as T);
 			}
-		}
 
-		this.setState({
-			// errorMsg: isError ? message : undefined,
-			// message: isError ? undefined : message,
-			// message already show on the detail component
-			errorMsg: undefined,
-			message: undefined,
-			showEditComponent: false,
-			currentObject: dataObject,
-			list: newList
-		});
+			this.setState({
+				// errorMsg: isError ? message : undefined,
+				// message: isError ? undefined : message,
+				// message already show on the detail component
+				errorMsg: undefined,
+				message: undefined,
+				showEditComponent: false,
+				currentObject: dataObject,
+				list: newList
+			});			
+		}
 	}
 
 	editFormOnCloseCallback = () => {

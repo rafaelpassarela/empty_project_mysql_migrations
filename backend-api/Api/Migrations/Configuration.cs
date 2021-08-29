@@ -1,5 +1,7 @@
 namespace Api.Migrations
 {
+    using Api.MySQLMigrationHistory;
+    using Api.Providers;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -9,10 +11,12 @@ namespace Api.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
+            ContextKey = "Api.Migrations";
 
             SetSqlGenerator("MySql.Data.MySqlClient", new MySql.Data.Entity.MySqlMigrationSqlGenerator());
+            SetHistoryContextFactory("MySql.Data.MySqlClient", (conn, schema) => new MySqlHistoryContext(conn, schema));
         }
 
         protected override void Seed(Core.MySQLDbContext context)
@@ -29,6 +33,8 @@ namespace Api.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            RolesAndUsersDefaultProvider.SetupRolesAndUsers(context);
         }
     }
 }

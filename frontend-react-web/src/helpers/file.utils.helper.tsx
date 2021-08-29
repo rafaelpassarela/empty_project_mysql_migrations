@@ -7,10 +7,14 @@ export interface IFileModel {
 
 class FileUtils {
 
-	public asBase64(file: File, callback: (fileModel: IFileModel | null) => void) {
+	private doReadFile(file: File, callback: (fileModel: IFileModel | null) => void, asText: boolean) {
 		if (file != undefined) {
 			let reader = new FileReader();
-			reader.readAsDataURL(file);
+			if (asText === true) {
+				reader.readAsText(file);
+			} else {
+				reader.readAsDataURL(file);
+			}
 			reader.onload = function () {
 				callback({
 					name: file.name,
@@ -19,7 +23,7 @@ class FileUtils {
 					data: reader.result } as IFileModel
 				);
 			};
-			reader.onerror = function (error) {				
+			reader.onerror = function (error) {
 				callback({
 					name: file.name,
 					size: file.size,
@@ -28,6 +32,14 @@ class FileUtils {
 				);
 			};
 		}
+	}
+
+	public asBase64(file: File, callback: (fileModel: IFileModel | null) => void) {
+		this.doReadFile(file, callback, false);
+	}
+
+	public asString(file: File, callback: (fileModel: IFileModel | null) => void) {
+		this.doReadFile(file, callback, true);
 	}
 
 }

@@ -1,13 +1,12 @@
 ﻿using Api.Models;
 using Api.PersistenceIntf;
-using System;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace Api.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [RoutePrefix("")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [RoutePrefix("api/Values")]
     public class ValuesController : ApiController
     {
         private readonly IValuesPersist _crud;
@@ -18,6 +17,7 @@ namespace Api.Controllers
         }
 
         // GET api/values
+        [Route("GetAll")]
         public IHttpActionResult Get()
         {
             var list = _crud.Query();
@@ -37,6 +37,7 @@ namespace Api.Controllers
         }
 
         // POST api/values
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Post([FromBody]Values value)
         {
             _crud.Save(value);
@@ -46,12 +47,8 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        // PUT api/values/5
-        public IHttpActionResult Put([FromBody]Values value)
-        {
-            throw new NotImplementedException();
-        }
-
+        // DELETE: api/values/5
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Delete(int id)
         {
             if (_crud.Delete(id))

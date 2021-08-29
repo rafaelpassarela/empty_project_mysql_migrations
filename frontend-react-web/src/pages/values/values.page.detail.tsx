@@ -1,8 +1,7 @@
 //import * as React from 'react';
 import BaseViewDetailComponent from '../../components/base.view.detail.component';
-import { ViewDetailItem } from '../../components/base.view.types';
-import ApiValuesProxy from '../../client-api/api-values-proxy';
 import Api from '../../client-api/api';
+import { ViewDetailItem } from '../../components/base.view.types';
 import { Values } from '../../client-api/api-models';
 
 
@@ -23,10 +22,6 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 	protected getLoadindMessage(): string {
 		return 'Loading Record Details...';
 	}
-
-	protected getApi(): ApiValuesProxy {
-		return Api.Values();
-	};
 
 	protected getViewItemsList() : Array<ViewDetailItem> {
 		return [
@@ -61,6 +56,33 @@ class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 			}
 		];
 	}
+
+	protected onGetItem(key: any): Promise<Values>{
+		return new Promise<Values>((resolve, reject) => {
+			Api.Values().Values_Get(
+				(data: any) => {
+					resolve(data);
+				},
+				(error: Error) => {
+					reject(error)
+				},
+				key);
+		});
+	}
+
+	protected onSaveItem(item: Values): Promise<Values>{
+		return new Promise<Values>((resolve, reject) => {
+			Api.Values().Values_Post(
+				(data: any) => {
+					resolve(data);
+				},
+				(error: Error) => {
+					reject(error);
+				},
+				item
+			);
+		});
+	};
 
 }
 

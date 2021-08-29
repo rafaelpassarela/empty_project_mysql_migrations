@@ -25,6 +25,13 @@
 	bottom: 0;
 }
 
+.footer-message {
+	padding-right: 0.84rem;
+	font-size: small;
+    font-variant: petite-caps;
+    color: #dc3545;
+}
+
 .footerLinksLeft {
 	text-align: left;
 }
