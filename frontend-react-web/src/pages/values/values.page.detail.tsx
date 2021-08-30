@@ -7,9 +7,9 @@ import { Values } from '../../client-api/api-models';
 
 class ValuesDetailComponent extends BaseViewDetailComponent<Values> {
 
-	constructor(props: any) {
-		super(props);
-	}
+	// constructor(props: any) {
+	// 	super(props);
+	// }
 
 	protected getPageTitle(): string {
 		return 'Value Detail' ;

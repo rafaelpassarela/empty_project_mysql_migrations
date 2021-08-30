@@ -11,7 +11,7 @@ abstract class BaseViewComponent<P extends IBaseViewProps, S = {}> extends React
 
 	componentDidMount() {
 		let name = this.getPageTitle();
-		if (name != '') {
+		if (name !== '') {
 			name = ' - ' + name;
 		}
 

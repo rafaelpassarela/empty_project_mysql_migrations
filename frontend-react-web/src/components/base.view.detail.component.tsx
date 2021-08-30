@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
+import * as queryString from 'query-string';
 import LocalizationConfig from '../configurations/localization.config';
 import BaseViewComponent, { IBaseViewProps } from './base.view.component';
 import {
@@ -22,6 +23,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { parse } from 'path-to-regexp';
 
 interface IBaseViewDetailComponentProps<T extends BaseModel> extends IBaseViewProps /*RouteComponentProps*/ {
 	id: any,
@@ -91,7 +93,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		super.componentDidMount();
 
 		let id = this.getParamID();
-		if (id != undefined && id != "") {
+		if (id !== undefined && id !== "") {
 			this.loadDetailObject(id);
 		} else {
 			this.setState({
@@ -105,13 +107,14 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	/* Fix: A component is changing an uncontrolled input of type text to be controlled */
 	private createNewObjectFromFields = (): T => {
-		let obj = {} as T;
+		let obj: {[index: string]:any} = {} as T;
+		// let obj = {} as T;
 		let list = this.getViewItemsList();	
 		list.map((item: ViewDetailItem, i: number) => {
 			return obj[item.fieldName] = '';
 		} );
 
-		return obj;
+		return obj as T;
 	}
 
 	private getCurrentItem(canInitialize: boolean) : T {
@@ -185,7 +188,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			let textDesc = this.getDescription();
 			let textCaption = this.getPageTitle();
 
-			let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
+			let description = (textDesc !== '') ? <small><small>{textDesc}</small></small> : null;
 
 			if (textCaption === '') {
 				return null;
@@ -201,7 +204,13 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 
 	getParamID = () => {
 		if (this.props.match !== undefined) {
-			return this.props.match.params['id'] | this.props.id;
+			console.log(this.props.match.params);
+			const parsed = queryString.parse(window.location.search);
+
+			console.log(parsed);
+			console.log(parsed.id);
+
+			return (parsed.id == null) ? this.props.id : parsed.id;
 		}
 		
 		return this.props.id;
@@ -262,7 +271,8 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	handleChange(event: any) {
 		if (this.canChangeObjectValues === true) {
 			const prop = event.target.name;
-			let obj = this.getCurrentItem(true);
+			let obj: {[index: string]:any} = this.getCurrentItem(true);
+			// let obj = this.getCurrentItem(true);
 			let updateObj = true;
 			let value = undefined;
 
@@ -282,42 +292,43 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					}
 					break;
 				case "file":
-					updateObj = false;
-					if (event.target.multiple === true) {
-						// reset the image array
-						obj[prop] = [];
-						this.setState({
-							currentObject: obj
-						}, () => {this.doValidateForm()});
+					console.log('need to refactor the File type')
+					// updateObj = false;
+					// if (event.target.multiple === true) {
+					// 	// reset the image array
+					// 	obj[prop] = [];
+					// 	this.setState({
+					// 		currentObject: obj
+					// 	}, () => {this.doValidateForm()});
 
-						let list = event.target.files;
-						value = new Array<IFileModel>();
-						for (var i = 0; i < list.length; i++) {
-							let item = list.item(i);
-							if (item != null) {
-								fileUtils.asBase64(item, (val: IFileModel) => {
-									if (this.state.currentObject !== null) {
-										// copy current file array
-										value = this.state.currentObject[prop];
-										// add new value to array
-										value.push(val);
-										// update the state
-										obj[prop] = value;
-										this.setState({
-											currentObject: obj
-										}, () => {this.doValidateForm()});
-									}
-								});
-							}
-						}
-					} else {
-						fileUtils.asBase64(event.target.files[0], (val: IFileModel) => {
-							obj[prop] = val;
-							this.setState({
-								currentObject: obj
-							}, () => {this.doValidateForm()});
-						});
-					}
+					// 	let list = event.target.files;
+					// 	value = new Array<IFileModel>();
+					// 	for (var i = 0; i < list.length; i++) {
+					// 		let item = list.item(i);
+					// 		if (item != null) {
+					// 			fileUtils.asBase64(item, (val: IFileModel) => {
+					// 				if (this.state.currentObject !== null) {
+					// 					// copy current file array
+					// 					value = this.state.currentObject[prop];
+					// 					// add new value to array
+					// 					value.push(val);
+					// 					// update the state
+					// 					obj[prop] = value;
+					// 					this.setState({
+					// 						currentObject: obj
+					// 					}, () => {this.doValidateForm()});
+					// 				}
+					// 			});
+					// 		}
+					// 	}
+					// } else {
+					// 	fileUtils.asBase64(event.target.files[0], (val: IFileModel) => {
+					// 		obj[prop] = val;
+					// 		this.setState({
+					// 			currentObject: obj
+					// 		}, () => {this.doValidateForm()});
+					// 	});
+					// }
 					break;
 
 				default:
@@ -328,7 +339,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			if (updateObj) {
 				obj[prop] = value;
 				this.setState({
-					currentObject: obj
+					currentObject: obj as T
 				}, () => {this.doValidateForm()});
 			}
 		} else {
@@ -353,11 +364,11 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			}
 
 			if (maxLen > 0 && val.length >= maxLen) {
-				let obj = this.getCurrentItem(false);
+				let obj: {[index: string]:any} = this.getCurrentItem(false);
 				obj[event.currentTarget.name] = val.substr(0, maxLen);
 
 				this.setState({
-					currentObject: obj
+					currentObject: obj as T
 				}, () => {this.doValidateForm()});
 
 				this.canChangeObjectValues = false;
@@ -402,7 +413,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 					});
 				}
 
-				return <Form.Control 
+				return <Form.Control
 							name={item.fieldName}
 							as="select"
 							multiple={item.type === "select-list"}
@@ -410,7 +421,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							readOnly={item.readOnly || !this.state.enabled}
 							required={item.required}
 							placeholder={item.placeHolder}
-							maxLength={options.maxLength}
 							value={object[item.fieldName]}
 							onChange={this.handleChange}
 						>
@@ -435,7 +445,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 								{this.getValidationMessages(options.validationMessages || {} as ViewDetailItemValidation)}
 							</Col>
 						</Form.Group>
-				break;
 
 			case "file":
 			case "file-multiple":
@@ -451,7 +460,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							onChange={this.handleChange}
 							accept={options.fileMask}
 						/>
-				break;
 
 			case "color":
 			case "date":
@@ -475,7 +483,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							value={object[item.fieldName]}
 							onChange={this.handleChange}
 						/>
-				break;
+
 			case "number":
 			case "range":
 				return <Form.Control 
@@ -491,7 +499,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							onChange={this.handleChange}
 							onKeyDown={this.handleKeyPress}
 						/>
-				break;
 
 			case "radio":
 				return <fieldset key={key}>
@@ -513,7 +520,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 													disabled={item.disabled || item.readOnly || !this.state.enabled}
 													id={item.fieldName + '-' + optItem.value}
 													inline={options.radioInLine}
-													checked={optItem.value == object[item.fieldName]}
+													checked={optItem.value === object[item.fieldName]}
 													onChange={this.handleChange}
 												/>
 											)
@@ -523,7 +530,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 								</Col>
 							</Form.Group>
 						</fieldset>
-				break;
 
 			case "textarea":
 				return <Form.Control
@@ -538,15 +544,12 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 							onChange={this.handleChange}
 							rows={options.rows || 3}
 						/>
-				break;
 			case "custom":
-				return (item.customConstructor != undefined) 
+				return (item.customConstructor !== undefined) 
 					? item.customConstructor() 
 					: <div>Custom Input Types needs a "customConstructor()" event</div>;
-				break;
 			default:
 				return <div>Invalid type for ViewDetailItem = {item.type}</div>;
-				break;
 		}
 	}
 
@@ -564,7 +567,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				{list.map( (item: ViewDetailItem) => {
 					key++;
 					let form = null;
-					if (item.type == 'checkbox' || item.type == 'radio') {
+					if (item.type === 'checkbox' || item.type === 'radio') {
 						form = this.getFormImput(item, obj, key);
 					} else {
 						form = 
@@ -588,7 +591,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 	}
 
 	isEmbedded = (): boolean => {
-		return this.props.onSaveCallbackHandle != undefined;
+		return this.props.onSaveCallbackHandle !== undefined;
 	}
 
 	handleButtonClick = (btnType: ButtonType) => {
@@ -599,7 +602,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			clickedButton: btnType
 		});
 
-		if (btnType == ButtonType.BTN_CLOSE) {
+		if (btnType === ButtonType.BTN_CLOSE) {
 			if (this.isEmbedded()) {
 				this.props.onCloseCallbackHandle();
 			} else {
@@ -614,7 +617,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 		let buttonsElem = [ButtonType.BTN_SAVE, ButtonType.BTN_CLOSE].map((btn: ButtonType, btnIndex: number) => {
 			let config = getButtonConfig(btn);
 
-			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
+			let load = (!this.state.enabled && config.btnType === this.state.clickedButton) ? 
 				<LoadingSmall active={true}/> : null;
 
 			let canSave: boolean = 
@@ -647,7 +650,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 			clickedButton: undefined
 		});
 
-		if (this.props.onCloseCallbackHandle != undefined) {
+		if (this.props.onCloseCallbackHandle !== undefined) {
 			this.props.onCloseCallbackHandle();
 		}
 	}

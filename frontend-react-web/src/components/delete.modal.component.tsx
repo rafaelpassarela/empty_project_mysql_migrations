@@ -26,7 +26,7 @@ class DeleteModal extends React.Component<IDeleteModalProp, IDeleteModalState> {
 	}
 
 	deleteAction = (btnType: ButtonType) => {
-		if (btnType == ButtonType.BTN_YES) {
+		if (btnType === ButtonType.BTN_YES) {
 			this.props.onHandleDelete();
 		} else {
 			this.props.onHandleClose();

@@ -36,13 +36,13 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		this.setState({
 			redirectTo: destination
 		});
-		if (this.props.navbarControll != undefined) {
+		if (this.props.navbarControll !== undefined) {
 			this.props.navbarControll();
 		}
 	}
 
 	componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
-		if (this.state.redirectTo != undefined) {
+		if (this.state.redirectTo !== undefined) {
 			this.setState({
 				redirectTo: undefined
 			});
@@ -55,8 +55,8 @@ class NavBarItemLink extends React.Component<NavBarItemProps, NavBarItemStates> 
 		const key = this.props.eventKey;
 
 		const validURL =
-			(this.state.redirectTo != undefined) &&
-			(this.state.to != window.location.pathname);
+			(this.state.redirectTo !== undefined) &&
+			(this.state.to !== window.location.pathname);
 
 		const redirect = (validURL) ? this.state.redirectTo : null;
 

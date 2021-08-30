@@ -15,7 +15,7 @@ class FormHelper {
 				// deal with inputs[i] element.
 				let elem = inputs[i];
 				if (elem.required && !elem.disabled) {
-					valid = elem.value != undefined && elem.value.trim() != "";
+					valid = elem.value !== undefined && elem.value.trim() !== "";
 					if (!valid) {
 						break;
 					}

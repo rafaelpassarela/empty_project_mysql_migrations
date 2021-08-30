@@ -10,7 +10,17 @@
 * Generated at -> http://mrrafael.ca/swgen/                         *
 ********************************************************************/
 
+// interface IBaseModel extends Record<string,any> {
+// 	Id: number;
+// }
+
+// export class BaseModel implements IBaseModel {
+// 	[x: string]: any;
+// 	Id: number;
+// }
+
 export class BaseModel {
+	[key: string]: any,
 	Id: number;
 }
 

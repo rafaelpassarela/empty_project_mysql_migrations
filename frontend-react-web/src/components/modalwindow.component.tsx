@@ -52,13 +52,13 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 
 	getHeaderElem = (): any => {
 
-		let icon = (this.props.icon != undefined) ?
+		let icon = (this.props.icon !== undefined) ?
 			<Glyphicon glyph={this.props.icon} style={iconDivStyle} /> : null;
 
-		let subCaption = (this.props.captionDetail != '') ? <small><small>{this.props.captionDetail}</small></small> : null;
+		let subCaption = (this.props.captionDetail !== '') ? <small><small>{this.props.captionDetail}</small></small> : null;
 
 		let caption = (
-			<div style={(this.props.icon != undefined) ? {position: 'absolute', left: 60} : undefined}>
+			<div style={(this.props.icon !== undefined) ? {position: 'absolute', left: 60} : undefined}>
 				{this.props.caption} {subCaption}
 			</div>
 		);
@@ -90,7 +90,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 		let buttonsElem = this.props.buttonList.map((btn: ButtonType, btnIndex: number) => {
 			let config = getButtonConfig(btn);
 
-			let load = (!this.state.enabled && config.btnType == this.state.clickedButton) ? 
+			let load = (!this.state.enabled && config.btnType === this.state.clickedButton) ? 
 				<LoadingSmall active={true}/> : null;
 
 			return (
@@ -103,7 +103,7 @@ class ModalWindow extends React.Component<IModalWindowProps, IModalWindowState> 
 			);
 		});
 
-		return (buttonsElem.length > 0 || this.props.footerElement != undefined) 
+		return (buttonsElem.length > 0 || this.props.footerElement !== undefined) 
 			? (<Modal.Footer>{buttonsElem}{this.props.footerElement}</Modal.Footer>) 
 			: null;
 	}

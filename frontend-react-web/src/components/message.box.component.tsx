@@ -16,7 +16,7 @@ class MessageBox extends React.Component<IMessageBoxComponentProp, {}> {
 	static defaultProps: IMessageBoxComponentProp;
 
 	isValid = (value?: string) => {
-		return (value != '' && value != undefined);
+		return (value !== '' && value !== undefined);
 	}
 
 	getMessage = () : any => {		
@@ -114,7 +114,7 @@ class MessageBox extends React.Component<IMessageBoxComponentProp, {}> {
 	}
 
 	render() {
-		let msg = (this.props.mode == 'fixed') ? this.getFixedMode() : this.getDynamicMode();
+		let msg = (this.props.mode === 'fixed') ? this.getFixedMode() : this.getDynamicMode();
 
 		return msg;
 	}

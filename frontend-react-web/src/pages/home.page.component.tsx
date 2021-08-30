@@ -32,7 +32,7 @@ class HomePage<P extends IBaseViewProps, S = {}> extends BaseViewComponent<P, S>
 
 	handleLoad = () => {
 		var token = cookieStorage.getUser() as TokenResult;
-		if (token != undefined) {
+		if (token !== undefined) {
 			window.alert(token.userName);
 			Api.setToken(token.access_token);
 		} else {

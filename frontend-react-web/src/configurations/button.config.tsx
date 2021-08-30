@@ -68,7 +68,7 @@ let ButtonList: Array<ButtonConfig> = [
 export function getButtonConfig(buttonType: ButtonType): ButtonConfig {
 	for (let i = 0; i < ButtonList.length; i++) {
 		let item = ButtonList[i];
-		if (item.btnType == buttonType)
+		if (item.btnType === buttonType)
 			return item;
 	}
 

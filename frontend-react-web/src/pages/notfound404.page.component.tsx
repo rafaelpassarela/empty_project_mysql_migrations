@@ -19,7 +19,7 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 
 		let list : Array<any> = new Array<any>(ERROR_IMAGE_COUNT);
 		for (let i = 1; i <= ERROR_IMAGE_COUNT; i++ ) {
-			list[i-1] = require('../img/404/404_' + i + '.gif');
+			list[i-1] = require('../img/404/404_' + i + '.gif').default;
 		}
 
 		this.state = {
@@ -39,9 +39,9 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 
 	getErrorImage(maxImageCount: number): number {
 
-		let imgNum = (this.state == undefined) ? 0 : this.state.imageNumber;
+		let imgNum = (this.state === undefined) ? 0 : this.state.imageNumber;
 
-		while (imgNum == (this.state == undefined ? 0 : this.state.imageNumber)) {
+		while (imgNum === (this.state === undefined ? 0 : this.state.imageNumber)) {
 			// return a random number, from 0 to maxImg - 1;
 			imgNum = Math.floor(Math.random() * maxImageCount) + 1;
 		}
@@ -67,7 +67,7 @@ class Error404Page<P extends IBaseViewProps, S = {}>
 				<Alert variant="danger">
 					Oops, an error occurred ! !
 				</Alert>
-				<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} />
+				<img src={imgName} className="notFoundImage" onClick={this.handleImageClick} alt="Page Not Found"/>
 				<br />
 				<small>(Image {this.state.imageNumber} of {ERROR_IMAGE_COUNT}, click image to change)</small>
 				<h3>

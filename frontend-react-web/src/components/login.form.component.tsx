@@ -52,7 +52,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
 	}
 
 	private handleKeyUp(event: any) {
-		if (event.keyCode == 13) {
+		if (event.keyCode === 13) {
 			if (event.target.name === "loginUser") {
 				formHelper.focusElementById("formLogin_pwd");
 				return;
@@ -85,13 +85,13 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
 	}
 
 	render() {
-		let imgLogin = require('../img/login.png');
+		let imgLogin = require('../img/login.png').default;
 
 		return (
 			<Form id="login_form" noValidate validated={true} onSubmit={this.handleSubmit}>
 				<Container><Row className="login-row">
 					<Col sm={4} className="login-img-col">
-						<img src={imgLogin}/>
+						<img src={imgLogin} alt="Login"/>
 					</Col>
 					<Col sm={8} className="login-controls-row">
 						<Form.Group as={Row} className="login-form-group" controlId="formLogin_user">

@@ -33,11 +33,11 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
 	leftColumn = () => {
 		let val = null;
-		if (this.props.onRenderLeft != undefined) {
+		if (this.props.onRenderLeft !== undefined) {
 			val = this.props.onRenderLeft(); 
 		}
 
-		if (val != null && val != undefined) {
+		if (val != null && val !== undefined) {
 			return (
 				<div className="pf-side-left pf-side app-shadow">
 					{val}
@@ -50,11 +50,11 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 
 	rightColumn = () => {
 		let val = null;
-		if (this.props.onRenderRight != undefined) {
+		if (this.props.onRenderRight !== undefined) {
 			val = this.props.onRenderRight();
 		}
 
-		if (val != null && val != undefined) {
+		if (val != null && val !== undefined) {
 			return (
 				<div className="pf-side-right pf-side app-shadow">
 					{val}
@@ -68,11 +68,11 @@ class PageFrame extends React.Component<PageFrameProps, PageFrameState> {
 	getMainClassName = (): string => {
 		let res = 'app-shadow pf-panel';
 
-		if (this.props.classNameOverride != undefined) {
+		if (this.props.classNameOverride !== undefined) {
 			res = this.props.classNameOverride
 		}
 
-		if (this.props.center != undefined && this.props.center === true)
+		if (this.props.center !== undefined && this.props.center === true)
 			res += ' pf-center';
 		return res;
 	}

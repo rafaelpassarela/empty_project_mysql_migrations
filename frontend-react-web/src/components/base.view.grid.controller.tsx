@@ -104,7 +104,7 @@ abstract class BaseViewGridController<
 
 	componentDidMount() {
 		let name = this.getPageTitle();
-		if (name != '') {
+		if (name !== '') {
 			name = ' - ' + name;
 		}
 
@@ -141,7 +141,7 @@ abstract class BaseViewGridController<
 		let textDesc = this.getDescription();
 		let textCaption = this.getPageTitle();
 
-		let description = (textDesc != '') ? <small><small>{textDesc}</small></small> : null;
+		let description = (textDesc !== '') ? <small><small>{textDesc}</small></small> : null;
 
 		if (textCaption === '') {
 			return null
@@ -175,7 +175,7 @@ abstract class BaseViewGridController<
 
 	initErrorMessage = () => {
 		// create the ErrorBox component
-		if (this.state.errorMsg != '' && this.state.errorMsg != undefined) {
+		if (this.state.errorMsg !== '' && this.state.errorMsg !== undefined) {
 			return <MessageBox message={this.state.errorMsg} caption={LocalizationConfig.error} msgType='error' mode='dynamic'/>;
 		} else {
 			return null;
@@ -184,7 +184,7 @@ abstract class BaseViewGridController<
 
 	initInfoMessage = () => {
 		// create the InfoBox component
-		if (this.state.message != '' && this.state.message != undefined) {
+		if (this.state.message !== '' && this.state.message !== undefined) {
 			return <MessageBox message={this.state.message} caption={LocalizationConfig.attention} msgType='info' mode='dynamic' />;
 		} else {
 			return null;
@@ -230,7 +230,7 @@ abstract class BaseViewGridController<
 	getCurrentObjectKey = () : string => {
 		let key = '';
 		this.getColumnInfo().filter((value: BaseColumnInfo) => {
-			if (value.isKey == true) {
+			if (value.isKey === true) {
 				key = (this.state.currentObject != null) ? this.state.currentObject[value.fieldName] : '';
 				return key;
 			} else
@@ -256,7 +256,7 @@ abstract class BaseViewGridController<
 				// remove the deleted element from the list
 				let newList = [...this.state.list];
 				let idx = newList.indexOf(this.state.currentObject as T);
-				if (idx != -1) {
+				if (idx !== -1) {
 					newList.splice(idx, 1);
 				}
 
@@ -285,7 +285,7 @@ abstract class BaseViewGridController<
 		// if not error, refresh the current object on the list, or insert a new one
 		if (!isError) {
 			let idx = newList.indexOf(this.state.currentObject as T);
-			if (idx != -1) {
+			if (idx !== -1) {
 				newList[idx] = dataObject as T
 			} else {
 				newList.push(dataObject as T);

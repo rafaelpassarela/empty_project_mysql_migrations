@@ -68,13 +68,14 @@ class AboutPage<P extends IBaseViewProps, S extends IAboutPageState> extends Bas
 		let prop = event.target.name;
 		let value = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
 
-		this.setState({
-			[prop]: value
-		} as IAboutPageState);
+		let localState: {[index : string] : any} = this.state;
+		localState[prop] = value;
+
+		this.setState(localState as IAboutPageState);
 	}
 
 	protected doRender() : any {
-		let modalResult = (this.state.modalResult != undefined) ? <div>Modal Result: {this.state.modalResult}</div> : null;
+		let modalResult = (this.state.modalResult !== undefined) ? <div>Modal Result: {this.state.modalResult}</div> : null;
 		// {(event: any) => this.setState({ modalCaption: event.target.value })}
 		return (
 			<div>
@@ -101,7 +102,7 @@ class AboutPage<P extends IBaseViewProps, S extends IAboutPageState> extends Bas
 							name="modalText"
 							as="textarea"
 							placeholder="Text Message"
-							rows="3"
+							rows={3}
 							value={this.state.modalText}
 							onChange={this.handleChange} />
 					</Form.Group>

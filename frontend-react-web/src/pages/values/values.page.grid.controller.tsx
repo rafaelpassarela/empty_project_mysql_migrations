@@ -8,7 +8,7 @@ import { Values } from '../../client-api/api-models';
 import ValuesDetailComponent from './values.page.detail';
 
 class ValuesController<
-	T,
+	//T,
 	P extends IBaseControllerProps,
 	S extends IBaseControllerState<Values>>
 extends BaseViewGridController<Values, P, S> {

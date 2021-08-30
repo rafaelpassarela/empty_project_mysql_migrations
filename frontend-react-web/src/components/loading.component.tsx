@@ -28,8 +28,8 @@ class Loading extends React.Component<ILoadingProps, {}> {
 	static defaultProps: ILoadingProps;
 
 	getMessageFrame = () => {
-		if (this.props.message != undefined) {
-			let caption = (this.props.caption != undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
+		if (this.props.message !== undefined) {
+			let caption = (this.props.caption !== undefined) ? <Alert.Heading>{this.props.caption}</Alert.Heading> : null;
 			return (
 				<Alert variant={this.props.variant}>
 					{caption}

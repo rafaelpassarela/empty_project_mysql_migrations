@@ -45,26 +45,26 @@ class Grid extends React.Component<GridProps, {}> {
 	}
 
 	handleInsert = (data: Object) => {
-		if (this.props.onInsert != undefined) {
+		if (this.props.onInsert !== undefined) {
 			this.props.onInsert(data);
 		}
 	}
 
 	handleUpdate = (data: Object) => {
-		if (this.props.onUpdate != undefined) {
+		if (this.props.onUpdate !== undefined) {
 			this.props.onUpdate(data);
 		}
 	}
 
 	handleDelete = (data: Object) => {
-		if (this.props.onDelete != undefined) {
+		if (this.props.onDelete !== undefined) {
 			this.props.onDelete(data);
 		}
 	}
 
 	renderColumn = (fieldName: string, value: any) => {
 		return (
-			<td key={"Column_" + fieldName} className={(this.props.onRenderColumn != undefined) ? this.props.onRenderColumn(fieldName, value) : ''}>
+			<td key={"Column_" + fieldName} className={(this.props.onRenderColumn !== undefined) ? this.props.onRenderColumn(fieldName, value) : ''}>
 				{value}
 			</td>
 		);
@@ -72,7 +72,7 @@ class Grid extends React.Component<GridProps, {}> {
 
 	getActionHeader = () => {
 
-		if (this.props.actions != undefined) {
+		if (this.props.actions !== undefined) {
 			// render a plus img if INSERT is present
 			if (this.props.actions.indexOf('insert') > -1) {
 				return (
@@ -92,9 +92,10 @@ class Grid extends React.Component<GridProps, {}> {
 	}
 
 	getEditActions = (data: Object) => {
-		let actionKeyName: string = "editAction_" + data[this.props.keyField];
+		let localData: {[index: string] : any} = data;
+		let actionKeyName: string = "editAction_" + localData[this.props.keyField];
 
-		if (this.props.actions == undefined)
+		if (this.props.actions === undefined)
 			return null;
 
 		let actions = [];
@@ -141,14 +142,15 @@ class Grid extends React.Component<GridProps, {}> {
 
 		let rowKey: number = 0;
 		const trData = this.props.dataSource.map((ds: Object) => {
+			let localDS : {[index: string]:any} = ds;
 			rowKey += 1;
 			return (
 				// render the Row
-				<tr key={rowKey} className={(this.props.onRenderRow != undefined) ? this.props.onRenderRow(ds) : ''}>
+				<tr key={rowKey} className={(this.props.onRenderRow !== undefined) ? this.props.onRenderRow(ds) : ''}>
 					{this.getEditActions(ds)}
 					{this.props.columns.map((c: GridColumn) => {
 						// for each column, render a TD element
-						return (this.renderColumn(c.fieldName, ds[c.fieldName]))
+						return (this.renderColumn(c.fieldName, localDS[c.fieldName]))
 					})}
 				</tr>
 			);
