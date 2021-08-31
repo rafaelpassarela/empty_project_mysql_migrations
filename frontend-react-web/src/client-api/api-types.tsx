@@ -13,8 +13,8 @@
 export class CustomErrorData extends Error {
 	data?: any;
 }
-export type ApiDataCallback = (data: any) => any;
-export type ApiErrorCallback = (error: CustomErrorData) => any;
+export type ApiDataCallback = (data: any, done?: boolean) => any;
+export type ApiErrorCallback = (error: CustomErrorData, done?: boolean) => any;
 
 export enum ApiMethod {
 	GET = "GET",

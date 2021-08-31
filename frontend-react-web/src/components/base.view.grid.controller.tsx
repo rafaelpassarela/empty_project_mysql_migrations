@@ -149,7 +149,7 @@ abstract class BaseViewGridController<
 
 		let reloadBtn = (
 			<span>
-				<Badge style={{cursor: 'pointer'}} variant="info" onClick={() => this.handleRefreshBtnClick()}>
+				<Badge style={{cursor: 'pointer'}} bg="info" onClick={() => this.handleRefreshBtnClick()}>
 					<Glyphicon glyph="sync-alt" />
 				</Badge>	
 			</span>
@@ -369,7 +369,6 @@ abstract class BaseViewGridController<
 		const editingForm = this.getEditingForm();
 
 		return (
-
 			<div>
 				{loading}
 				{error}

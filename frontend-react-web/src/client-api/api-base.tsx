@@ -43,7 +43,7 @@ class ApiBase { //implements IApi<Values>{
 			this.desenvMode = ((!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? 1 : 0);
 		}
 
-		return this.desenvMode == 1;
+		return this.desenvMode === 1;
 	}
 
 	protected getPath(): string {
@@ -172,16 +172,16 @@ class ApiBase { //implements IApi<Values>{
 							.then( (value: any) => {
 								done = true;
 								error.data = value;
-								if (error.data!.Message != undefined && error.data!.Message !== "") {
+								if (error.data!.Message !== undefined && error.data!.Message !== "") {
 									error.message += " - " + error.data.Message;
 								}
-								errorCallback(error);
+								errorCallback(error, done);
 
 							})
 							.catch( (reason: any) => {
 								done = true;
 								error.data = undefined;
-								errorCallback(error);
+								errorCallback(error, done);
 							});
 					} catch(e) {
   						error.data = undefined;
@@ -192,12 +192,10 @@ class ApiBase { //implements IApi<Values>{
 				}
 			})
 			.then(data => {
-				if (done)
-					dataCallback(data);
+				dataCallback(data, done);
 			})
 			.catch(error => {
-				if (done)
-					errorCallback(error);
+				errorCallback(error, done);
 			});
 	}
 

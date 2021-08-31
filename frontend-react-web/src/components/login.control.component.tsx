@@ -2,6 +2,7 @@ import * as React from 'react';
 import Form from 'react-bootstrap/Form';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button'
 
 import { cookieStorage } from '../helpers/cookie.helper';
 import LocalizationConfig from '../configurations/localization.config';
@@ -133,7 +134,7 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 				}
 			},
 			(error:ErrorData) => {
-				let msg: string = (error.data !== null) ? error.data.error_description : error.message;
+				let msg: string = (error.data !== null && error.data !== undefined) ? error.data.error_description : error.message;
 				this.setState({
 					formLoading: false,
 					userName: '',
@@ -210,14 +211,14 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 
 		return (
 			<Navbar.Text>
-				<a
-					style={{color: linkColor}} 
+				<Button 
+					variant="link"
+					style={{color: linkColor, textDecoration: 'none'}}
 					onMouseLeave={() => this.onMouseHoverLogin(false)}
 					onMouseEnter={() => this.onMouseHoverLogin(true)}
-					onClick={() => this.doShowLogin()}
-					href="#">
+					onClick={() => this.doShowLogin()}>
 						{LocalizationConfig.logIn}
-				</a>
+				</Button>
 			</Navbar.Text>
 		);
 	}
@@ -243,7 +244,7 @@ class LoginControl extends React.Component<ILoginControlProps, ILoginControlStat
 		this.inRender = false;
 		return (
 			<span>
-				<Form inline style={{marginRight: 10}}>
+				<Form style={{marginRight: 10}}>
 					{login}
 				</Form>
 				{form}

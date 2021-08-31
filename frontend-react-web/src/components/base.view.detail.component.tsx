@@ -433,7 +433,6 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 				return	<Form.Group key={key} as={Row} controlId={"form_" + item.fieldName}>
 							<Col sm={{ span: 10, offset: 2 }}>
 								<Form.Check 
-									custom
 									name={item.fieldName}
 									label={item.caption}
 									disabled={item.disabled}
@@ -510,8 +509,7 @@ abstract class BaseViewDetailComponent<T extends BaseModel>
 									{
 										list.map( (optItem: ViewDetailItemSelection, i: number) => {
 											return (
-												<Form.Check 
-													custom
+												<Form.Check
 													key={key + '-' + i}
 													type="radio"
 													label={optItem.caption}

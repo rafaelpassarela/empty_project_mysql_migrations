@@ -77,7 +77,7 @@ class Grid extends React.Component<GridProps, {}> {
 			if (this.props.actions.indexOf('insert') > -1) {
 				return (
 					<th key="actionHeaderInsert" style={{ width: 68, textAlign: 'center' }}>
-						<Badge onClick={this.handleInsert} style={btnStyle} variant="success">
+						<Badge onClick={this.handleInsert} style={btnStyle} bg="success">
 							<Glyphicon glyph="plus" />
 						</Badge>
 					</th>
@@ -105,7 +105,7 @@ class Grid extends React.Component<GridProps, {}> {
 				<Badge
 					key={"badge_d_" + actionKeyName}
 					onClick={() => this.handleDelete(data)}
-					variant="danger"
+					bg="danger"
 					style={btnStyle}> <Glyphicon glyph="trash-alt" />
 				</Badge>);
 		}
@@ -115,7 +115,7 @@ class Grid extends React.Component<GridProps, {}> {
 				<Badge
 					key={"badge_u_" + actionKeyName}
 					onClick={() => this.handleUpdate(data)}
-					variant="info"
+					bg="info"
 					style={btnStyle}> <Glyphicon glyph="edit" />
 				</Badge>)
 
